@@ -2,9 +2,15 @@ var gulp = require('gulp'),
   jshint = require('gulp-jshint'),
   stylish = require('jshint-stylish'),
   autoprefix = require('gulp-autoprefixer'),
-  minifyCSS = require('gulp-minify-css');
+  minifyCSS = require('gulp-minify-css'),
+  rename = require('gulp-rename'),
+  del = require('del');
 
 
+
+gulp.task('deleteMin', function(){
+  del(['./public/assets/css/min/*'], function(err){});
+});
 
 gulp.task('lint', function(){
   return  gulp
@@ -20,3 +26,6 @@ gulp.task('styles', function(){
     .pipe(minifyCSS())
     .pipe(gulp.dest('./public/assets/css/min/'));
 });
+
+
+gulp.task('default', ['deleteMin', 'styles', 'lint']);
