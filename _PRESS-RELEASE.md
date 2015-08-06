@@ -18,16 +18,19 @@ Once the project moves into development, the press release can be used as a touc
 
 ## Heading ##
   > Name the product in a way the reader (i.e. your target customers) will understand.
-
+  Sorts playlists to curate music to fit your party's current energy, and incorporates
+  suggestions from your friends into your playlist
 ## Sub-Heading ##
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
+  >Party hosts can cut out the stress of managing guest requests and DJ-ing, collecting requests from guests using a simple energy dial to play the right type of song at the right time.
 
 ## Summary ##
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  
 
 ## Problem ##
   > Describe the problem your product solves.
-
+  
 ## Solution ##
   > Describe how your product elegantly solves the problem.
 

@@ -4,9 +4,9 @@
 
 ## Team
 
-  - __Product Owner__: teamMember
-  - __Scrum Master__: teamMember
-  - __Development Team Members__: teamMember, teamMember
+  - __Product Owner__: Brendan Dugan
+  - __Scrum Master__: Jason Green
+  - __Development Team Members__: Ricky Hendrawan(Lieutenant Scrum Master), Shu Yoshioka
 
 ## Table of Contents
 
