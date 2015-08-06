@@ -3,7 +3,7 @@
 GET user/:id/playlists
 * For getting a list of playlists
 * Takes one argument: user.id
-* Returns [ { name : <str>, playlistId: <int>}, ... ]
+* Returns [ { name : <str>, playlistId: <str>}, ... ]
 
 GET playlist/:id/queue/:turntness
 * For getting a list of songs in a playlist

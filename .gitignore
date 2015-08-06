@@ -24,3 +24,6 @@ APIs/keys
 
 # bower
 bower_components
+
+# Minified CSS
+public/assets/css/min
