@@ -24,6 +24,7 @@ gulp.task('styles', function(){
     .src('./public/assets/css/*.css')
     .pipe(autoprefix(['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12.1']))
     .pipe(minifyCSS())
+    .pipe(rename({'suffix': '.min'}))
     .pipe(gulp.dest('./public/assets/css/min/'));
 });
 
