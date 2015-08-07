@@ -7,8 +7,8 @@
 angular.module('turntify', [
   'turntify.services',
   'turntify.signin',
-  'turntify.play',
-  'turntify.playlistControl',
+  'turntify.player',
+  'turntify.modifyPlaylist',
   'ui.router'
 ])
 
@@ -37,10 +37,10 @@ angular.module('turntify', [
   })
   // This view is nested within the player view, and contains the turntometer
   // and the playlist selector
-  .state('player.playlistControl', {
-    url: '/playlistControl',
-    templateUrl: './app/playlistControl/playlistControl.html',
-    controller: 'PlayerControlController as playerControl'
+  .state('player.modifyPlaylist', {
+    url: '/modifyPlaylist',
+    templateUrl: './app/modifyPlaylist/modifyPlaylist.html',
+    controller: 'ModifyPlaylistController as modifyPlaylist'
   });
 
 })
