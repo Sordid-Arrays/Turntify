@@ -9,6 +9,7 @@ var config = require('../config.js');
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var spotify = require('../middlewares/spotify.js');
 
 
 var generateRandomString = function(length) {
@@ -38,7 +39,8 @@ router.get('/login', function(req, res) {
       scope: scope,
       redirect_uri: redirect_uri,
       state: state
-    }));
+    })
+  );
 });
 
 router.get('/callback', function(req, res) {
@@ -77,31 +79,14 @@ router.get('/callback', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        var options = {
-          url: 'https://api.spotify.com/v1/me',
-          headers: { 'Authorization': 'Bearer ' + access_token },
-          json: true
-        };
-
-        // use the access token to access the Spotify API
-        request.get(options, function(error, response, body) {
-          var userId = body.id;
-          options.url = 'https://api.spotify.com/v1/users/' + userId + '/playlists';
-
-          //request to get playlist on logged in user
-          request.get(options, function(error, response, body) {
-            var albumArr = [];
-            for (var i = 0; i < body.items.length; i++) {
-              albumArr.push({name: body.items[i].name, playlistId: body.items[i].id});
-            }
-
-            console.log(access_token);
-            res.cookie('OAuth', 'access_token');
-            res.json({playlist: albumArr});
-          });
+        spotify.getUser(access_token)
+        .then(function(user){
+          return spotify.getUserPlaylist(user.id, access_token);
+        })
+        .then(function(playListArr) {
+          res.cookie('OAuth', access_token);
+          res.json({playlist: playListArr});
         });
-
-        //res.json({token: access_token});
 
         // we can also pass the token to the browser to make requests from there
         // res.redirect('/#' +
@@ -148,6 +133,8 @@ router.get('/refresh_token', function(req, res) {
 */
 router.get('/user/:id/playlist', function(req,res) {
   var access_token = req.cookies[tokenKey];
+  var target_id = parseInt(req.params.id);
+
 
 
 });
