@@ -5,7 +5,7 @@
 * any logic/data filters longer than a couple lines should be required in another factory file
 */
 angular.module('turntify.services', [])
-.factory('RequestService', function($http, $state, $rootScope, $cookies, UserService /*logic files injected here*/) {
+.factory('RequestService', function($http, $state, $rootScope, UserService /*logic files injected here*/) {
   //posts, gets, puts, etc.
 
   var getListOfPlaylists = function(){
@@ -48,6 +48,7 @@ angular.module('turntify.services', [])
 
   return {
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
-    getListOfPlaylists: getListOfPlaylists
+    getListOfPlaylists: getListOfPlaylists,
+    getQueue: getQueue
   };
 });

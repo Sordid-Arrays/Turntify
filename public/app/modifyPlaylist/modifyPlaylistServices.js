@@ -7,8 +7,12 @@ angular.module('turntify.modifyPlaylist')
     return RequestService.getListOfPlaylists();
   };
 
+  var getQueue = function(playlistId){
+    return RequestService.getQueue(playlistId);
+  };
 
   return {
-    getListOfPlaylists: getListOfPlaylists
+    getListOfPlaylists: getListOfPlaylists,
+    getQueue: getQueue
   };
 });

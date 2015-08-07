@@ -9,7 +9,8 @@ angular.module('turntify', [
   'turntify.login',
   'turntify.player',
   'turntify.modifyPlaylist',
-  'ui.router'
+  'ui.router',
+  'ngCookies'
 ])
 
 /**
