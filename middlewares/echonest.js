@@ -10,13 +10,13 @@ var config = require('../config');
 /*
  * getting Echo Nest track data
 **/
-var getTrackData = function (spotyfyId) {
+var getTrackData = function (spotyfyURIs) {
   var query = queryString.stringify({
     api_key: config.ECHONEST_API_KEY,
     format: "json",
     results: 1,
     bucket: 'audio_summary',
-    track_id: spotyfyId
+    track_id: spotyfyURIs
   });
 
   return new Promise(function (resolve, reject) {
@@ -25,13 +25,11 @@ var getTrackData = function (spotyfyId) {
       url: 'http://developer.echonest.com/api/v4/song/profile?' + query, //URL to hit
     }, function (error, responce, body) {
       if (error) {
-        reject(error)
+        reject(error);
         return;
       }
-      var songData = JSON.parse(body).response.songs[0];
-      resolve(songData);
-      // var danceability = songData.audio_summary.danceability;
-      // console.log('danceability', danceability);
+      var songs = JSON.parse(body).response.songs;
+      resolve(songs);
     });
   });
 };
