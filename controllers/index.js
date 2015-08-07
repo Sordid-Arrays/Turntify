@@ -85,7 +85,7 @@ router.get('/callback', function(req, res) {
         })
         .then(function(playListArr) {
           res.cookie('OAuth', access_token);
-          res.json({playlist: playListArr});
+          res.json(playListArr);
         });
 
         // we can also pass the token to the browser to make requests from there
@@ -133,10 +133,26 @@ router.get('/refresh_token', function(req, res) {
 */
 router.get('/user/:id/playlist', function(req,res) {
   var access_token = req.cookies[tokenKey];
-  var target_id = parseInt(req.params.id);
+  var target_id = req.params.id;
 
+  spotify.getUserPlaylist(target_id, access_token)
+  .then(function(playListArr) {
+    res.json(playListArr);
+  });
+});
 
+/**
+* route for getting songs/tracks from playlist
+*/
+router.get('/user/:id/playlist/:playlistId', function(req, res) {
+  var access_token = req.cookies[tokenKey];
+  var target_userId = req.params.id;
+  var target_playlistId = req.params.playlistId;
 
+  spotify.getPlaylistTracks(target_userId, target_playlistId, access_token)
+  .then(function(playlist) {
+    res.json(playlist);
+  });
 });
 
 module.exports = router;
