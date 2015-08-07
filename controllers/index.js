@@ -22,13 +22,14 @@ var generateRandomString = function(length) {
 };
 
 var stateKey = 'spotify_auth_state';
+var tokenKey = 'OAuth';
 
 router.get('/login', function(req, res) {
 
   var state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  // your application requests authorization
+  // application requests authorization
   var scope = 'user-read-private user-read-email';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
@@ -40,14 +41,9 @@ router.get('/login', function(req, res) {
     }));
 });
 
-router.get('/test', function(req, res) {
-  console.log('INSIDE TEST');
-  res.json({success: true});
-});
-
 router.get('/callback', function(req, res) {
 
-  // your application requests refresh and access tokens
+  // application requests refresh and access tokens
   // after checking the state parameter
 
   var code = req.query.code || null;
@@ -74,23 +70,38 @@ router.get('/callback', function(req, res) {
       json: true
     };
 
+    //request to get the actual token
     request.post(authOptions, function(error, response, body) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
             refresh_token = body.refresh_token;
 
-        // var options = {
-        //   url: 'https://api.spotify.com/v1/me',
-        //   headers: { 'Authorization': 'Bearer ' + access_token },
-        //   json: true
-        // };
+        var options = {
+          url: 'https://api.spotify.com/v1/me',
+          headers: { 'Authorization': 'Bearer ' + access_token },
+          json: true
+        };
 
-        // use the access token to access the Spotify Web API
-        // request.get(options, function(error, response, body) {
-        //   console.log(response);
-        // });
-        res.json({token: access_token});
+        // use the access token to access the Spotify API
+        request.get(options, function(error, response, body) {
+          var userId = body.id;
+          options.url = 'https://api.spotify.com/v1/users/' + userId + '/playlists';
+
+          //request to get playlist on logged in user
+          request.get(options, function(error, response, body) {
+            var albumArr = [];
+            for (var i = 0; i < body.items.length; i++) {
+              albumArr.push({name: body.items[i].name, playlistId: body.items[i].id});
+            }
+
+            console.log(access_token);
+            res.cookie('OAuth', 'access_token');
+            res.json({playlist: albumArr});
+          });
+        });
+
+        //res.json({token: access_token});
 
         // we can also pass the token to the browser to make requests from there
         // res.redirect('/#' +
@@ -106,6 +117,39 @@ router.get('/callback', function(req, res) {
       }
     });
   }
+});
+
+router.get('/refresh_token', function(req, res) {
+
+  // requesting access token from refresh token
+  var refresh_token = req.query.refresh_token;
+  var authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
+    form: {
+      grant_type: 'refresh_token',
+      refresh_token: refresh_token
+    },
+    json: true
+  };
+
+  request.post(authOptions, function(error, response, body) {
+    if (!error && response.statusCode === 200) {
+      var access_token = body.access_token;
+      res.send({
+        'access_token': access_token
+      });
+    }
+  });
+});
+
+/**
+* route for getting playlist based on user id
+*/
+router.get('/user/:id/playlist', function(req,res) {
+  var access_token = req.cookies[tokenKey];
+
+
 });
 
 module.exports = router;
