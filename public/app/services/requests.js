@@ -36,5 +36,6 @@ angular.module('turntify.services', [])
 
   return {
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
+    getListOfPlaylists: getListOfPlaylists
   };
 });
