@@ -5,26 +5,18 @@
 * any logic/data filters longer than a couple lines should be required in another factory file
 */
 angular.module('turntify.services', [])
-.factory('RequestService', function($http, $state, $rootScope, $cookies /*logic files injected here*/) {
+.factory('RequestService', function($http, $state, $rootScope, $cookies, UserService /*logic files injected here*/) {
   //posts, gets, puts, etc.
 
   var getListOfPlaylists = function(){
-    var userId = $cookies.get('userId');
-    var userOAuth = $cookies.get('OAuth');
-    if(!userId){
-      console.log('No user id cookie found');
-    }
-    if(!userOAuth){
-      console.log('No user OAuth cookie found');
-    }
-
+    var userCookies = UserService.getUserCookies();
     $http({
       method: 'GET',
       url: 'user/playlists',
       headers: {
         Accept: 'application/json',
-        userId: userId,
-        userOAuth: userOAuth
+        userId: userCookies.userId,
+        userOAuth: userCookies.userOAuth
       }
     }).then(function(res){
       console.log(res);
@@ -33,6 +25,26 @@ angular.module('turntify.services', [])
       throw Error(error);
     });
   };
+
+  var getQueue = function(playlistId){
+    var userCookies = UserService.getUserCookies();
+    $http({
+      method: 'GET',
+      url: 'user/playlist/' + playlistId,
+      headers: {
+        Accept: 'application/json',
+        userId: userCookies.userId,
+        userOAuth: userCookies.userOAuth
+      }
+    }).then(function(res){
+      console.log(res);
+      return res;
+    },function(error) {
+      throw Error(error);
+    });
+  };
+
+
 
   return {
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
