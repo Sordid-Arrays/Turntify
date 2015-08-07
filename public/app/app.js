@@ -6,10 +6,11 @@
 
 angular.module('turntify', [
   'turntify.services',
-  'turntify.signin',
-  'turntify.play',
-  'turntify.playlistControl',
-  'ui.router'
+  'turntify.login',
+  'turntify.player',
+  'turntify.modifyPlaylist',
+  'ui.router',
+  'ngCookies'
 ])
 
 /**
@@ -20,12 +21,12 @@ angular.module('turntify', [
   //the $urlRouterProvider is the "otherwise" state
   //TODO: make proper variable urls to fit our get requests
   //TODO: add states and substates down the line
-  $urlRouterProvider.otherwise('/signin');
+  $urlRouterProvider.otherwise('/login');
   $stateProvider
-  .state('signin', {
-    url: '/signin',
-    templateUrl: './app/signin/signin.html',
-    controller: 'SigninController as signin'
+  .state('login', {
+    url: '/login',
+    templateUrl: './app/login/login.html',
+    controller: 'LoginController as login'
   })
   //this state contains the queue and player logic, so a persistent sidebar of music
   //will be present as the user navigates between subviews like settings, party managers,
@@ -37,10 +38,10 @@ angular.module('turntify', [
   })
   // This view is nested within the player view, and contains the turntometer
   // and the playlist selector
-  .state('player.playlistControl', {
-    url: '/playlistControl',
-    templateUrl: './app/playlistControl/playlistControl.html',
-    controller: 'PlayerControlController as playerControl'
+  .state('player.modifyPlaylist', {
+    url: '/modifyPlaylist',
+    templateUrl: './app/modifyPlaylist/modifyPlaylist.html',
+    controller: 'ModifyPlaylistController as modifyPlaylist'
   });
 
 })
