@@ -1,15 +1,21 @@
-//app.js
-//This is where the main app module will be instantiated. It will require all the other
-// modules (act as a namespace), handle routing with ui-router, and handle cookies (possibly). If the app gets too
-// bloated, the router could be moved to its own file
+/**
+* This is where the main app module will be instantiated. It will require all the other
+* modules (act as a namespace), handle routing with ui-router, and handle cookies (possibly). If the app gets too
+* bloated, the router could be moved to its own file
+*/
+
 angular.module('turntify', [
   'turntify.services',
   'turntify.signin',
   'turntify.play',
-  'turntify.main',
+  'turntify.playlistControl',
   'ui.router'
 ])
-//The config block gets executed first, and manages state
+
+/**
+* The config block gets executed first, and manages state
+*/
+
 .config(function($stateProvider, $urlRouterProvider) {
   //the $urlRouterProvider is the "otherwise" state
   //TODO: make proper variable urls to fit our get requests
@@ -31,14 +37,15 @@ angular.module('turntify', [
   })
   // This view is nested within the player view, and contains the turntometer
   // and the playlist selector
-  .state('player.main', {
-    url: '/main',
-    templateUrl: './app/main/main.html',
-    controller: 'MainController as Main'
+  .state('player.playlistControl', {
+    url: '/playlistControl',
+    templateUrl: './app/playlistControl/playlistControl.html',
+    controller: 'PlayerControlController as playerControl'
   });
 
 })
-// ... and the run block gets executed after, which contains any code that is needed to "kick start" the application
-// (which is usually stored in a separate module, like services, because it is hard to unit-test)
+/** ...and the run block gets executed after, which contains any code that is needed to "kick start" the application
+*(which is usually stored in a separate module, like services, because it is hard to unit-test)
+*/
 .run(function()/*<-- we'll inject instances as needed here */ {
 });
