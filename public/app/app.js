@@ -6,7 +6,7 @@
 
 angular.module('turntify', [
   'turntify.services',
-  'turntify.signin',
+  'turntify.login',
   'turntify.player',
   'turntify.modifyPlaylist',
   'ui.router'
@@ -20,12 +20,12 @@ angular.module('turntify', [
   //the $urlRouterProvider is the "otherwise" state
   //TODO: make proper variable urls to fit our get requests
   //TODO: add states and substates down the line
-  $urlRouterProvider.otherwise('/signin');
+  $urlRouterProvider.otherwise('/login');
   $stateProvider
-  .state('signin', {
-    url: '/signin',
-    templateUrl: './app/signin/signin.html',
-    controller: 'SigninController as signin'
+  .state('login', {
+    url: '/login',
+    templateUrl: './app/login/login.html',
+    controller: 'LoginController as login'
   })
   //this state contains the queue and player logic, so a persistent sidebar of music
   //will be present as the user navigates between subviews like settings, party managers,
