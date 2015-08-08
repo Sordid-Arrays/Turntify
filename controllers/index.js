@@ -1,27 +1,17 @@
 var express = require('express');
-var router = express.Router();
-
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
+var _ = require('underscore');
 
 var config = require('../config.js');
+var spotify = require('../middlewares/spotify.js');
+var echonest = require('../middlewares/echonest.js');
+var util = require('../helpers/util');
+var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
 var redirect_uri = 'http://localhost:8888/player/modifyPlaylist'; // Your redirect uri
-var spotify = require('../middlewares/spotify.js');
-var echonest = require('../middlewares/echonest.js');
-var _ = require('underscore');
-
-var generateRandomString = function(length) {
-  var text = '';
-  var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-
-  for (var i = 0; i < length; i++) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-};
 
 var stateKey = 'spotify_auth_state';
 var tokenKey = 'OAuth';
@@ -30,7 +20,7 @@ var userId = 'userId';
 
 router.get('/login', function(req, res) {
 
-  var state = generateRandomString(16);
+  var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
 
   // application requests authorization
