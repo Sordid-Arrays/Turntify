@@ -1,0 +1,33 @@
+<!-- This is our overall index view -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Turntify</title>
+    <!--link rel="stylesheet" type="text/css" href="./assets/libs/TODO:CHOOSE BASE CSS" /-->
+    <link rel="stylesheet" type="text/css" href="./assets/css/app.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="./assets/css/min/app.min.css" /> -->
+    <!--link rel="icon" type="image/jpg" href="./assets/favicon.jpg" (or .ico)-->
+  </head>
+  <body ng-app='turntify'>
+    <!-- this is where we put the navbar. now, it's just buttons. -->
+    <div class="bodyContainer">
+      <div class="viewContainer">
+          <div ui-view></div>
+      </div>
+    </div>
+    <script src="./assets/libs/angular/angular.js"></script>
+    <script src="./assets/libs/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="./assets/libs/angular-cookies/angular-cookies.min.js"></script>
+    <!-- other libs scripts loaded first -->
+    <script src="./app/services/requests.js"></script>
+    <script src="./app/services/sharedServices.js"></script>
+    <script src="./app/player/player.js"></script>
+    <script src="./app/player/playerServices.js"></script>
+    <script src="./app/modifyPlaylist/modifyPlaylist.js"></script>
+    <script src="./app/modifyPlaylist/modifyPlaylistServices.js"></script>
+    <script src="./app/login/login.js"></script>
+    <script src="./app/login/loginServices.js"></script>
+    <script src="./app/app.js"></script>
+  </body>
+</html>

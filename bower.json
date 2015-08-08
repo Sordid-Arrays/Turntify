@@ -1,0 +1,22 @@
+{
+  "name": "Turntify",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Sordid-Arrays/Turntify",
+  "authors": [
+    "mjsgreen01 <mjsgreen01@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./public/assets/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "angular-ui-router": "~0.2.15",
+    "angular-cookies": "~1.4.3"
+  }
+}

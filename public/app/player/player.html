@@ -1,0 +1,16 @@
+<!-- This is where we put the "player" partial. the "ui-view" section of index.html will house this view, and the "ui-view" of this partial holds any sub-views that need the player and queue to be persistent -->
+<div class="playerContainer">
+  <!--div id="iFrameHolder">
+  </div-->
+  <div class="queueContainer">
+    <h3>Queue</h3>
+    <ul class="songList">
+      <li ng-repeat="song in player.queue">{{song.name}}</li>
+    </ul>
+  </div>
+  <div class="spotifyPlayerContainer">
+    <h3>Player</h3>
+  </div>
+  <button ng-click="player.logout()">Logout</button>
+  <ui-view></ui-view>
+</div>
