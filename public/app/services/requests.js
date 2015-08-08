@@ -10,8 +10,6 @@ angular.module('turntify.services', [])
 
   var getListOfPlaylists = function(){
     return $q(function(resolve, reject){
-      var userCookies = UserService.getUserCookies();
-      console.log('before getlistofplaylists, user cookies:', userCookies);
       $http({
         method: 'GET',
         url: 'user/playlists',
@@ -19,7 +17,6 @@ angular.module('turntify.services', [])
         console.log(res);
         resolve( res.data);
       },function(error) {
-        // throw Error(error);
         console.log(error);
         reject(error);
       });
@@ -29,7 +26,6 @@ angular.module('turntify.services', [])
 
   var getQueue = function(playlistId, turntness){
     return $q(function(resolve, reject){
-      var userCookies = UserService.getUserCookies();
       $http({
         method: 'GET',
         url: 'user/playlist/' + playlistId + '/' + turntness,
