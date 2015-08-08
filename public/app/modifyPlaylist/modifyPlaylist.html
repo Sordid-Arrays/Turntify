@@ -6,6 +6,7 @@
       <option value="">Choose playlist </option>
     </select>
     <h4>Selected Playlist: {{ modifyPlaylist.selectedPlaylist }}</h4>
+    playlists: {{modifyPlaylist.playlists}}
   </div>
   <div class="turntometerWrapper">
     <select class="turntSelector" ng-model="modifyPlaylist.selectedTurntness" ng-options="turntness for turntness in modifyPlaylist.turntLevels" ng-change="modifyPlaylist.updateQueue()">

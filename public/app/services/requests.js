@@ -5,26 +5,30 @@
 * any logic/data filters longer than a couple lines should be required in another factory file
 */
 angular.module('turntify.services', [])
-.factory('RequestService', function($http, $state, $rootScope, UserService /*logic files injected here*/) {
+.factory('RequestService', function($http, $state, $rootScope, $q, UserService /*logic files injected here*/) {
   //posts, gets, puts, etc.
 
   var getListOfPlaylists = function(){
-    var userCookies = UserService.getUserCookies();
-    console.log('before getlistofplaylists, user cookies:', userCookies);
-    $http({
-      method: 'GET',
-      url: 'user/playlists',
-      headers: {
-        Accept: 'application/json',
-        userId: userCookies.userId,
-        userOAuth: userCookies.userOAuth
-      }
-    }).then(function(res){
-      console.log(res);
-      return res;
-    },function(error) {
-      // throw Error(error);
-      console.log(error);
+    return $q(function(resolve, reject){
+      var userCookies = UserService.getUserCookies();
+      console.log('before getlistofplaylists, user cookies:', userCookies);
+      $http({
+        method: 'GET',
+        url: 'user/playlists',
+        headers: {
+          Accept: 'application/json',
+          userId: userCookies.userId,
+          userOAuth: userCookies.userOAuth
+        }
+      }).then(function(res){
+        console.log(res);
+        resolve( res.data);
+      },function(error) {
+        // throw Error(error);
+        console.log(error);
+        reject(error);
+      });
+
     });
   };
 
