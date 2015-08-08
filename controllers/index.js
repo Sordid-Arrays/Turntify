@@ -82,15 +82,19 @@ router.get('/player/modifyPlaylist', function(req, res) {
         var access_token = body.access_token,
             refresh_token = body.refresh_token,
             expires_in = body.expires_in;
-        spotify.getUser(access_token)
-        .then(function(user){
+
+            spotify.getUser(access_token)
+            .then(function(user){
           res.cookie(userId,user.id);
-          return spotify.getUserPlaylist(user.id, access_token);
-        })
-        .then(function(playListArr) {
           res.cookie(tokenKey, access_token);
           res.cookie(refreshToken, refresh_token);
-          res.json(playListArr);
+        // spotify.getUser(access_token)
+        // .then(function(user){
+        //   return spotify.getUserPlaylist(user.id, access_token);
+        // })
+        // .then(function(playListArr) {
+          res.redirect('/#/player/modifyPlaylist');
+          // res.json(playListArr);
         });
 
         // we can also pass the token to the browser to make requests from there
@@ -133,9 +137,9 @@ router.get('/refresh_token', function(req, res) {
 /**
 * route for getting playlist based on user id
 */
-router.get('/user/:id/playlist', function(req,res) {
+router.get('/user/playlists', function(req,res) {
   var access_token = req.cookies[tokenKey];
-  var target_id = req.params.id;
+  var target_id = req.cookies[userId];
 
   spotify.getUserPlaylist(target_id, access_token)
   .then(function(playListArr) {
