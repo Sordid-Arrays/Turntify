@@ -8,16 +8,23 @@ var config = require('../config.js');
 var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
 var util = require('../helpers/util');
+
 var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
 var redirect_uri = 'http://localhost:8888/player/modifyPlaylist'; // Your redirect uri
 
+/**
+* keys for cookies
+*/
 var stateKey = 'spotify_auth_state';
 var tokenKey = 'OAuth';
 var refreshToken = 'refreshToken';
 var userId = 'userId';
 
+/**
+* route for login
+*/
 router.get('/login', function(req, res) {
 
   var state = util.generateRandomString(16);
@@ -36,6 +43,19 @@ router.get('/login', function(req, res) {
   );
 });
 
+/**
+* save new token cookie
+*/
+function updateCookieToken (res, newAccessToken, newRefreshToken) {
+  res.cookie(tokenKey, newAccessToken);
+  if (newRefreshToken) {
+    res.cookie(refreshToken, newRefreshToken);
+  }
+}
+
+/**
+* redirect route after authorized by spotify login
+*/
 router.get('/player/modifyPlaylist', function(req, res) {
 
   // application requests refresh and access tokens
@@ -51,32 +71,29 @@ router.get('/player/modifyPlaylist', function(req, res) {
         error: 'state_mismatch'
       }));
   }
+
   res.clearCookie(stateKey);
   spotify.getToken(code, redirect_uri)
   .then(function (body) {
-    var access_token = body.access_token,
-        refresh_token = body.refresh_token,
-        expires_in = body.expires_in;
-    res.cookie(tokenKey, access_token);
-    res.cookie(refreshToken, refresh_token);
-    return spotify.getUser(access_token);
+    var access_token = body.access_token;
+    var refresh_token = body.refresh_token;
+    updateCookieToken(res, access_token, refresh_token);
+    return spotify.getUser(access_token)
+  })
+  .catch(spotify.OldTokenError, function (err) {
+    // statusCode 401:  Unauthorized
+    return spotify.refreshToken(refresh_token)
+    .then(function (body) {
+      updateCookieToken(res, body.access_token, body.refresh_token);
+      return spotify.getUser(body.access_token);
+    });
   })
   .then(function(user){
     res.cookie(userId,user.id);
     res.redirect('/#/player/modifyPlaylist');
-  });
-});
-
-router.get('/refresh_token', function(req, res) {
-
-  // requesting access token from refresh token
-  var refresh_token = req.cookies[refreshToken];
-  spotify.refreshToken(refresh_token)
-  .then(function (body) {
-    var access_token = body.access_token;
-    res.send({
-      'access_token': access_token
-    });
+  })
+  .catch(function (e) {
+    console.error('Got error: ',e);
   });
 });
 
@@ -88,8 +105,19 @@ router.get('/user/playlists', function(req,res) {
   var target_id = req.cookies[userId];
 
   spotify.getUserPlaylist(target_id, access_token)
+  .catch(spotify.OldTokenError, function (err) {
+    // statusCode 401:  Unauthorized
+    return spotify.refreshToken(req.cookies[refreshToken])
+    .then(function (body) {
+      updateCookieToken(res, body.access_token, body.refresh_token);
+      return spotify.getUserPlaylist(target_id, body.access_token);
+    });
+  })
   .then(function(playListArr) {
     res.json(playListArr);
+  })
+  .catch(function (e) {
+    console.error('Got error: ',e);
   });
 });
 
@@ -99,20 +127,30 @@ router.get('/user/playlists', function(req,res) {
 router.get('/user/playlist/:playlistId', function(req, res) {
   var access_token = req.cookies[tokenKey];
   var target_userId = req.cookies[userId];
-  //target_userId = 'rickyhendrawan';
   var target_playlistId = req.params.playlistId;
 
   spotify.getPlaylistTracks(target_userId, target_playlistId, access_token)
+  .catch(spotify.OldTokenError, function () {
+    // statusCode 401:  Unauthorized
+    return spotify.refreshToken(req.cookies[refreshToken])
+    .then(function (body) {
+      updateCookieToken(res, body.access_token, body.refresh_token);
+      return spotify.getPlaylistTracks(target_userId, target_playlistId, body.access_token);
+    });
+  })
   .then(function(playlist) {
     var songUris = playlist.items.map(function(item) {
       return item.track.uri;
     });
-    echonest.getTrackData(songUris)
-    .then(function(songs) {
-      res.json(_.sortBy(songs, function(song) {
-        return song.audio_summary.danceability;
-      }));
-    });
+    return echonest.getTrackData(songUris);
+  })
+  .then(function(songs) {
+    res.json(_.sortBy(songs, function(song) {
+      return song.audio_summary.danceability;
+    }));
+  })
+  .catch(function (e) {
+    console.error('Got error: ',e);
   });
 });
 
