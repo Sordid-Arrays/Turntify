@@ -25,6 +25,7 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 var tokenKey = 'OAuth';
+var refreshToken = 'refreshToken';
 var userId = 'userId';
 
 router.get('/login', function(req, res) {
@@ -79,8 +80,8 @@ router.get('/player/modifyPlaylist', function(req, res) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
-            refresh_token = body.refresh_token;
-
+            refresh_token = body.refresh_token,
+            expires_in = body.expires_in;
         spotify.getUser(access_token)
         .then(function(user){
           res.cookie(userId,user.id);
@@ -88,6 +89,7 @@ router.get('/player/modifyPlaylist', function(req, res) {
         })
         .then(function(playListArr) {
           res.cookie(tokenKey, access_token);
+          res.cookie(refreshToken, refresh_token);
           res.json(playListArr);
         });
 
@@ -98,10 +100,7 @@ router.get('/player/modifyPlaylist', function(req, res) {
         //     refresh_token: refresh_token
         //   }));
       } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
+        res.redirect('/refresh_token');
       }
     });
   }
@@ -110,7 +109,7 @@ router.get('/player/modifyPlaylist', function(req, res) {
 router.get('/refresh_token', function(req, res) {
 
   // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
+  var refresh_token = req.cookies[refreshToken];
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
