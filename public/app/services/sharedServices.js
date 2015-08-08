@@ -3,7 +3,7 @@
 * this information
 */
 angular.module('turntify.services')
-.factory('UserService', function($http, $state, $rootScope, $cookies ) /*might require "RequestService" at some point*/{
+.factory('UserService', function($http, $state, $rootScope, $cookies) /*might require "RequestService" at some point*/{
   //"persistent data" could include:
   //    -user data (to start: could also be in a "session")
   //    -full song information for queue(i.e spotify track ids, and any other un-displayed information)
@@ -13,7 +13,9 @@ angular.module('turntify.services')
   // names, etc.
   
   //Logouts could be handled here if they aren't handled in a session   
+  var logoutUser = function(){
 
+  }
 
   var getUserCookies = function(){
     var userId = $cookies.get('userId');
@@ -36,6 +38,7 @@ angular.module('turntify.services')
     //return functions to access persistent data. 
     //Probably don't want to return persistent data itself, just functions
     //also returns any view-agnostic and user-session-y functions
-    getUserCookies: getUserCookies
+    getUserCookies: getUserCookies,
+    logoutUser: logoutUser
   };
 });

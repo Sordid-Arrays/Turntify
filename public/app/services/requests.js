@@ -7,7 +7,25 @@
 angular.module('turntify.services', [])
 .factory('RequestService', function($http, $state, $rootScope, $q, UserService /*logic files injected here*/) {
   //posts, gets, puts, etc.
-
+  // CORS PROBLEMS. MIGHT WORK LATER.
+  // var loginUser = function(){
+  //   console.log('logging in user...');
+  //   $http({
+  //     method: 'GET',
+  //     url: 'login',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       "Access-Control-Allow-Origin": '*'
+  //     }
+  //   }).then(function(res){
+  //     console.log("logged in!", res);
+  //     return res;
+  //   },function(error) {
+  //     // throw Error(error);
+  //     console.log(error);
+  //   });
+  // };
+  
   var getListOfPlaylists = function(){
     return $q(function(resolve, reject){
       $http({
@@ -44,6 +62,7 @@ angular.module('turntify.services', [])
   return {
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
     getListOfPlaylists: getListOfPlaylists,
-    getQueue: getQueue
+    getQueue: getQueue,
+    // loginUser: loginUser
   };
 });

@@ -4,7 +4,12 @@
 */
 
 angular.module('turntify.player', [])
-.controller('PlayerController', function (PlayerService) {
+.controller('PlayerController', function (PlayerService, UserService) {
+  //This might be a problem from a "separation of concerns" perspective, since it has to do with
+  //logout funcionality
+  this.logout = function() {
+    console.log("logout called!");
+  }
   //This will handle the song/queue display logic. Not sure where we will put the numerous hacks
   // needed to manhandle the spotify widgets, possibly a custom directive
 });
