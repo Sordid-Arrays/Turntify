@@ -60,77 +60,33 @@ router.get('/player/modifyPlaylist', function(req, res) {
       querystring.stringify({
         error: 'state_mismatch'
       }));
-  } else {
-    res.clearCookie(stateKey);
-    var authOptions = {
-      url: 'https://accounts.spotify.com/api/token',
-      form: {
-        code: code,
-        redirect_uri: redirect_uri,
-        grant_type: 'authorization_code'
-      },
-      headers: {
-        'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-      },
-      json: true
-    };
-
-    //request to get the actual token
-    request.post(authOptions, function(error, response, body) {
-      if (!error && response.statusCode === 200) {
-
-        var access_token = body.access_token,
-            refresh_token = body.refresh_token,
-            expires_in = body.expires_in;
-
-            spotify.getUser(access_token)
-            .then(function(user){
-          res.cookie(userId,user.id);
-          res.cookie(tokenKey, access_token);
-          res.cookie(refreshToken, refresh_token);
-        // spotify.getUser(access_token)
-        // .then(function(user){
-        //   return spotify.getUserPlaylist(user.id, access_token);
-        // })
-        // .then(function(playListArr) {
-          res.redirect('/#/player/modifyPlaylist');
-          // res.json(playListArr);
-        });
-
-        // we can also pass the token to the browser to make requests from there
-        // res.redirect('/#' +
-        //   querystring.stringify({
-        //     access_token: access_token,
-        //     refresh_token: refresh_token
-        //   }));
-      } else {
-        res.redirect('/refresh_token');
-      }
-    });
   }
+  res.clearCookie(stateKey);
+  spotify.getToken(code, redirect_uri)
+  .then(function (body) {
+    var access_token = body.access_token,
+        refresh_token = body.refresh_token,
+        expires_in = body.expires_in;
+    res.cookie(tokenKey, access_token);
+    res.cookie(refreshToken, refresh_token);
+    return spotify.getUser(access_token);
+  })
+  .then(function(user){
+    res.cookie(userId,user.id);
+    res.redirect('/#/player/modifyPlaylist');
+  });
 });
 
 router.get('/refresh_token', function(req, res) {
 
   // requesting access token from refresh token
   var refresh_token = req.cookies[refreshToken];
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
-    form: {
-      grant_type: 'refresh_token',
-      refresh_token: refresh_token
-    },
-    json: true
-  };
-
-  request.post(authOptions, function(error, response, body) {
-    if (!error && response.statusCode === 200) {
-      var access_token = body.access_token;
-      res.send({
-        'access_token': access_token
-      });
-    }
+  spotify.refreshToken(refresh_token)
+  .then(function (body) {
+    var access_token = body.access_token;
+    res.send({
+      'access_token': access_token
+    });
   });
 });
 
