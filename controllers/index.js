@@ -12,7 +12,7 @@ var util = require('../helpers/util');
 var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
-var redirect_uri = 'http://localhost:8888/player/modifyPlaylist'; // Your redirect uri
+var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
 /**
 * keys for cookies
@@ -56,7 +56,7 @@ function updateCookieToken (res, newAccessToken, newRefreshToken) {
 /**
 * redirect route after authorized by spotify login
 */
-router.get('/player/modifyPlaylist', function(req, res) {
+router.get('/callback', function(req, res) {
 
   // application requests refresh and access tokens
   // after checking the state parameter
@@ -78,7 +78,7 @@ router.get('/player/modifyPlaylist', function(req, res) {
     var access_token = body.access_token;
     var refresh_token = body.refresh_token;
     updateCookieToken(res, access_token, refresh_token);
-    return spotify.getUser(access_token)
+    return spotify.getUser(access_token);
   })
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
@@ -90,7 +90,7 @@ router.get('/player/modifyPlaylist', function(req, res) {
   })
   .then(function(user){
     res.cookie(userId,user.id);
-    res.redirect('/#/player/modifyPlaylist');
+    res.redirect('/#/player');
   })
   .catch(function (e) {
     console.error('Got error: ',e);

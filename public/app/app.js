@@ -8,7 +8,6 @@ angular.module('turntify', [
   'turntify.services',
   'turntify.login',
   'turntify.player',
-  'turntify.modifyPlaylist',
   'ui.router',
   'ngCookies'
 ])
@@ -23,7 +22,7 @@ angular.module('turntify', [
   //TODO: add states and substates down the line
   
   //normalizes urls to be lowercase
-  $urlRouterProvider.otherwise('/player/modifyPlaylist');
+  $urlRouterProvider.otherwise('/player');
   $stateProvider
   .state('login', {
     url: '/login',
@@ -39,14 +38,6 @@ angular.module('turntify', [
     templateUrl: './app/player/player.html',
     controller: "PlayerController as player",
     data: {isRestricted: true}
-  })
-  // This view is nested within the player view, and contains the turntometer
-  // and the playlist selector
-  .state('player.modifyPlaylist', {
-    url: '/modifyPlaylist',
-    templateUrl: './app/modifyPlaylist/modifyPlaylist.html',
-    controller: 'ModifyPlaylistController as modifyPlaylist',
-    data: {isRestricted: true}
   });
 
 })
@@ -60,7 +51,7 @@ angular.module('turntify', [
     if(toState.name === 'login'){
       return;
     }
-    if(toState.data.isRestricted){;
+    if(toState.data.isRestricted){
       var cookies = UserService.getUserCookies();
       //TODO: check other, less reliable cookies. might have different exp.
       if(cookies.userId === undefined){
@@ -70,4 +61,4 @@ angular.module('turntify', [
       }
     }
   });
-})
+});
