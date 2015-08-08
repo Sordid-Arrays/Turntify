@@ -97,7 +97,6 @@ router.get('/player/modifyPlaylist', function(req, res) {
           // res.json(playListArr);
         });
 
-
         // we can also pass the token to the browser to make requests from there
         // res.redirect('/#' +
         //   querystring.stringify({

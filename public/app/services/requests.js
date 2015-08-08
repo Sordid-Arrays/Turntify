@@ -10,6 +10,7 @@ angular.module('turntify.services', [])
 
   var getListOfPlaylists = function(){
     var userCookies = UserService.getUserCookies();
+    console.log('before getlistofplaylists, user cookies:', userCookies);
     $http({
       method: 'GET',
       url: 'user/playlists',
@@ -22,7 +23,8 @@ angular.module('turntify.services', [])
       console.log(res);
       return res;
     },function(error) {
-      throw Error(error);
+      // throw Error(error);
+      console.log(error);
     });
   };
 
@@ -31,11 +33,11 @@ angular.module('turntify.services', [])
     $http({
       method: 'GET',
       url: 'user/playlist/' + playlistId,
-      headers: {
-        Accept: 'application/json',
-        userId: userCookies.userId,
-        userOAuth: userCookies.userOAuth
-      }
+      // headers: {
+      //   Accept: 'application/json',
+      //   userId: userCookies.userId,
+      //   userOAuth: userCookies.userOAuth
+      // }
     }).then(function(res){
       console.log(res);
       return res;
