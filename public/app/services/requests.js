@@ -10,21 +10,13 @@ angular.module('turntify.services', [])
 
   var getListOfPlaylists = function(){
     return $q(function(resolve, reject){
-      var userCookies = UserService.getUserCookies();
-      console.log('before getlistofplaylists, user cookies:', userCookies);
       $http({
         method: 'GET',
         url: 'user/playlists',
-        headers: {
-          Accept: 'application/json',
-          userId: userCookies.userId,
-          userOAuth: userCookies.userOAuth
-        }
       }).then(function(res){
         console.log(res);
         resolve( res.data);
       },function(error) {
-        // throw Error(error);
         console.log(error);
         reject(error);
       });
@@ -32,21 +24,18 @@ angular.module('turntify.services', [])
     });
   };
 
-  var getQueue = function(playlistId){
-    var userCookies = UserService.getUserCookies();
-    $http({
-      method: 'GET',
-      url: 'user/playlist/' + playlistId,
-      // headers: {
-      //   Accept: 'application/json',
-      //   userId: userCookies.userId,
-      //   userOAuth: userCookies.userOAuth
-      // }
-    }).then(function(res){
-      console.log(res);
-      return res;
-    },function(error) {
-      throw Error(error);
+  var getQueue = function(playlistId, turntness){
+    return $q(function(resolve, reject){
+      $http({
+        method: 'GET',
+        url: 'user/playlist/' + playlistId + '/' + turntness,
+      }).then(function(res){
+        console.log(res);
+        resolve(res.data);
+      },function(error) {
+        console.log(error);
+        reject(error);
+      });
     });
   };
 
