@@ -12,7 +12,10 @@ angular.module('turntify.modifyPlaylist', [])
     var turntness = this.selectedTurntness;
 
     console.log(playlistId);
-    ModifyPlaylistService.getQueue(playlistId);
+    ModifyPlaylistService.getQueue(playlistId, turntness).then(function(data){
+      // assign returned queue to a var in order to display it
+      return;
+    });
   };
 
   var context = this;

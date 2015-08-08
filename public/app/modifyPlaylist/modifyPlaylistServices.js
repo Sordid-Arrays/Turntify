@@ -11,8 +11,10 @@ angular.module('turntify.modifyPlaylist')
     });
   };
 
-  var getQueue = function(playlistId){
-    return RequestService.getQueue(playlistId);
+  var getQueue = function(playlistId, turntness){
+    return RequestService.getQueue(playlistId, turntness).then(function(data){
+      return data;
+    });
   };
 
   return {
