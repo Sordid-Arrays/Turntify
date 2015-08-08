@@ -48,5 +48,20 @@ angular.module('turntify', [
 /** ...and the run block gets executed after, which contains any code that is needed to "kick start" the application
 *(which is usually stored in a separate module, like services, because it is hard to unit-test)
 */
-.run(function()/*<-- we'll inject instances as needed here */ {
-});
+.run(function($state, $rootScope, $timeout, UserService) {
+  $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
+    console.log('change state to ', toState.name);
+    // shouldn't be able to access other pages if not signed in
+    if(toState.name !== 'login' && ) {
+      $timeout(function() {
+        $state.go('signin');
+      });
+    }
+
+    if ($rootScope.loggedIn && (toState.name === 'signin' || toState.name === 'signup')) {
+      $timeout(function() {
+        $state.go('profile');
+      });
+    }
+  });
+})
