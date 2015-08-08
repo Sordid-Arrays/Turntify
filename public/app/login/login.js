@@ -4,6 +4,5 @@
 */
 
 angular.module('turntify.login', [])
-.controller('LoginController', function ()/*probably requires 'UserService' from services*/ {
-  //display logic for login button (for now)
+.controller('LoginController', function (UserService)/*probably requires 'UserService' from services*/ {
 });
