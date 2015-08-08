@@ -27,6 +27,7 @@ angular.module('turntify.services', [])
   // };
   
   var getListOfPlaylists = function(){
+    console.log('calling get list');
     return $q(function(resolve, reject){
       $http({
         method: 'GET',

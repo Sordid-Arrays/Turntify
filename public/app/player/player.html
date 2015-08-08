@@ -12,5 +12,22 @@
     <h3>Player</h3>
   </div>
   <button ng-click="player.logout()">Logout</button>
-  <ui-view></ui-view>
+  
+  <!-- Playlist and Turntness selectors -->
+  <div class="playlistControlContainer">
+    <div class="playlistWrapper">
+      <h3>Select A Playlist</h3>
+      <select class="playlistSelector" ng-model="player.selectedPlaylist" ng-options="playlist.name for playlist in player.playlists" ng-change="player.updateQueue()">
+        <option value="">Choose playlist </option>
+      </select>
+      <h4>Selected Playlist: {{ player.selectedPlaylist }}</h4>
+    </div>
+    <div class="turntometerWrapper">
+      <select class="turntSelector" ng-model="player.selectedTurntness" ng-options="turntness for turntness in player.turntLevels" ng-change="player.updateQueue()">
+        <option value="">Choose turntness</option>
+      </select>
+      <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
+    </div>
+  </div>
+
 </div>
