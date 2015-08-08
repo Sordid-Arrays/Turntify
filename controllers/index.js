@@ -8,9 +8,10 @@ var cookieParser = require('cookie-parser');
 var config = require('../config.js');
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+var redirect_uri = 'http://localhost:8888/player/modifyPlaylist'; // Your redirect uri
 var spotify = require('../middlewares/spotify.js');
-
+var echonest = require('../middlewares/echonest.js');
+var _ = require('underscore');
 
 var generateRandomString = function(length) {
   var text = '';
@@ -24,6 +25,8 @@ var generateRandomString = function(length) {
 
 var stateKey = 'spotify_auth_state';
 var tokenKey = 'OAuth';
+var refreshToken = 'refreshToken';
+var userId = 'userId';
 
 router.get('/login', function(req, res) {
 
@@ -43,7 +46,7 @@ router.get('/login', function(req, res) {
   );
 });
 
-router.get('/callback', function(req, res) {
+router.get('/player/modifyPlaylist', function(req, res) {
 
   // application requests refresh and access tokens
   // after checking the state parameter
@@ -77,14 +80,16 @@ router.get('/callback', function(req, res) {
       if (!error && response.statusCode === 200) {
 
         var access_token = body.access_token,
-            refresh_token = body.refresh_token;
-
+            refresh_token = body.refresh_token,
+            expires_in = body.expires_in;
         spotify.getUser(access_token)
         .then(function(user){
+          res.cookie(userId,user.id);
           return spotify.getUserPlaylist(user.id, access_token);
         })
         .then(function(playListArr) {
-          res.cookie('OAuth', access_token);
+          res.cookie(tokenKey, access_token);
+          res.cookie(refreshToken, refresh_token);
           res.json(playListArr);
         });
 
@@ -95,10 +100,7 @@ router.get('/callback', function(req, res) {
         //     refresh_token: refresh_token
         //   }));
       } else {
-        res.redirect('/#' +
-          querystring.stringify({
-            error: 'invalid_token'
-          }));
+        res.redirect('/refresh_token');
       }
     });
   }
@@ -107,7 +109,7 @@ router.get('/callback', function(req, res) {
 router.get('/refresh_token', function(req, res) {
 
   // requesting access token from refresh token
-  var refresh_token = req.query.refresh_token;
+  var refresh_token = req.cookies[refreshToken];
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
@@ -144,14 +146,23 @@ router.get('/user/:id/playlist', function(req,res) {
 /**
 * route for getting songs/tracks from playlist
 */
-router.get('/user/:id/playlist/:playlistId', function(req, res) {
+router.get('/user/playlist/:playlistId', function(req, res) {
   var access_token = req.cookies[tokenKey];
-  var target_userId = req.params.id;
+  var target_userId = req.cookies[userId];
+  //target_userId = 'rickyhendrawan';
   var target_playlistId = req.params.playlistId;
 
   spotify.getPlaylistTracks(target_userId, target_playlistId, access_token)
   .then(function(playlist) {
-    res.json(playlist);
+    var songUris = playlist.items.map(function(item) {
+      return item.track.uri;
+    });
+    echonest.getTrackData(songUris)
+    .then(function(songs) {
+      res.json(_.sortBy(songs, function(song) {
+        return song.audio_summary.danceability;
+      }));
+    });
   });
 });
 
