@@ -70,7 +70,7 @@ var getUserPlaylist = function(userId, token) {
       }
       var playListArr = [];
       for (var i = 0; i < body.items.length; i++) {
-        playListArr.push({name: body.items[i].name, playlistId: body.items[i].id});
+        playListArr.push({name: body.items[i].name, playlistId: body.items[i].id, ownerId: body.items[i].owner.id});
       }
       resolve(playListArr);
     });
