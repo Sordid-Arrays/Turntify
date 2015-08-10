@@ -43,11 +43,11 @@ angular.module('turntify.services', [])
     });
   };
 
-  var getQueue = function(playlistId, turntness){
+  var getQueue = function(ownerId, playlistId, turntness){
     return $q(function(resolve, reject){
       $http({
         method: 'GET',
-        url: 'user/playlist/' + playlistId + '/' + turntness,
+        url: 'user/playlist/'+ ownerId +'/' + playlistId + '/' + turntness,
       }).then(function(res){
         console.log(res);
         resolve(res.data);
