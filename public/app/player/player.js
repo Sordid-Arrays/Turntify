@@ -8,11 +8,12 @@ angular.module('turntify.player', [])
   // this should contain display logic for the turntometer, and the
   //ng-repeatable object for the playlist selector
   this.updateQueue = function(){
+    var ownerId = this.selectedPlaylist.ownerId;
     var playlistId = this.selectedPlaylist.playlistId;
     var turntness = this.selectedTurntness;
 
     console.log(playlistId);
-    PlayerService.getQueue(playlistId, turntness).then(function(data){
+    PlayerService.getQueue(ownerId, playlistId, turntness).then(function(data){
       // assign returned queue to a var in order to display it
       return;
     });

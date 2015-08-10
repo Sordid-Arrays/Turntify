@@ -16,8 +16,8 @@ angular.module('turntify.player')
     });
   };
 
-  var getQueue = function(playlistId, turntness){
-    return RequestService.getQueue(playlistId, turntness).then(function(data){
+  var getQueue = function(ownerId, playlistId, turntness){
+    return RequestService.getQueue(ownerId, playlistId, turntness).then(function(data){
       return data;
     });
   };
