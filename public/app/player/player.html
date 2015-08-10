@@ -5,7 +5,7 @@
   <div class="queueContainer">
     <h3>Queue</h3>
     <ul class="songList">
-      <li ng-repeat="song in player.queue">{{song.name}}</li>
+      <li ng-repeat="song in player.queue">{{song.title}}</li>
     </ul>
   </div>
   <div class="spotifyPlayerContainer">
@@ -28,6 +28,10 @@
       </select>
       <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
     </div>
+  </div>
+  <div class="widgetContainer" ng-if="player.hasQueue">
+    <h3>Showing Widget!</h3>
+    <div class="widgetWrapper">{{player.template}}</div>
   </div>
 
 </div>

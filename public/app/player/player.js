@@ -7,6 +7,10 @@ angular.module('turntify.player', [])
 .controller('PlayerController', function (PlayerService, UserService) {
   // this should contain display logic for the turntometer, and the
   //ng-repeatable object for the playlist selector
+  
+  var context = this;
+  this.hasQueue = false;
+  this.queue = []
   this.updateQueue = function(){
     var ownerId = this.selectedPlaylist.ownerId;
     var playlistId = this.selectedPlaylist.playlistId;
@@ -15,6 +19,9 @@ angular.module('turntify.player', [])
     console.log(playlistId);
     PlayerService.getQueue(ownerId, playlistId, turntness).then(function(data){
       // assign returned queue to a var in order to display it
+      console.log("called!");
+      console.log("data in promise: ",data);
+      context.queue = data;
       return;
     });
   };
@@ -27,6 +34,9 @@ angular.module('turntify.player', [])
   PlayerService.getListOfPlaylists().then(function(data){
     console.log('from controller', data);
     context.playlists = data;
+    if(context.playlists.length > 0){
+
+    }
     return;
   }); 
 
