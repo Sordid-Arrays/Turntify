@@ -10,8 +10,7 @@ angular.module('turntify.player', [])
   
   var context = this;
   this.hasQueue = false;
-  this.queue = []
-  this.brah = "supBrah";
+  this.queue = [];
   this.updateQueue = function(){
     var ownerId = this.selectedPlaylist.ownerId;
     var playlistId = this.selectedPlaylist.playlistId;
@@ -42,9 +41,6 @@ angular.module('turntify.player', [])
   PlayerService.getListOfPlaylists().then(function(data){
     console.log('from controller', data);
     context.playlists = data;
-    if(context.playlists.length > 0){
-
-    }
     return;
   }); 
 
