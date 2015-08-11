@@ -15,12 +15,20 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      //TODO: add files
+      'libs/angular/angular.js',
+      'libs/angular-ui-router/release/angular-ui-router.js',
+      'libs/angular-mocks/angular-mocks.js',
+      'libs/angular-mocks/angular-cookies.js',
+
+      // our app code
+      'app/*.js',
+      'app/**/*.js'
     ],
 
 
     // list of files to exclude
     exclude: [
+        'karma.conf.js'
     ],
 
 
@@ -33,7 +41,7 @@ module.exports = function(config) {
     // test results reporter to use
     // possible values: 'dots', 'progress'
     // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-    reporters: ['progress'],
+    reporters: ['nyan','unicorn'],
 
 
     // web server port
@@ -55,11 +63,11 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true
-  })
-}
+  });
+};
