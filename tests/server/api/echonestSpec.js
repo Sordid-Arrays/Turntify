@@ -25,12 +25,11 @@ describe('getTrackData', function () {
     .then(function (songs) {
       expect(songs).to.be.an('array');
       expect(songs.length).to.be.equal(3);
-      console.log(songs[0]);
       for (var i = 0; i < songs.length; i++) {
         expect(songs[i].audio_summary.danceability).to.be.a('number');
         expect(songs[i].audio_summary.duration).to.be.a('number');
-        expect(songs[0].tracks[0].catalog).to.be.equal('spotify');
-        expect(songs[0].tracks[0].foreign_id).to.be.equal(spotifyURI);
+        expect(songs[i].tracks[0].catalog).to.be.equal('spotify');
+        expect(songs[i].tracks[0].foreign_id).to.be.a('string');
         expect(songs[i].title).to.be.a('string');
       }
       done();
