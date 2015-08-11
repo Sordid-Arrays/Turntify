@@ -58,7 +58,6 @@ var getUserPlaylist = function(userId, token) {
   return new Promise(function(resolve, reject) {
     return request.get(options, function(error, response, body) {
       if (response.statusCode === 401) {
-        console.log('401 in getPlaylist');
         reject(new OldTokenError());
         return;
       }
@@ -91,7 +90,6 @@ var getPlaylistTracks = function(userId, playlistId, token) {
   return new Promise(function(resolve, reject) {
     return request.get(options, function(error, response, body) {
       if (response.statusCode === 401) {
-        console.log('401 in getPlaylistTracks');
         reject(new OldTokenError());
         return;
       }
@@ -110,7 +108,6 @@ var getPlaylistTracks = function(userId, playlistId, token) {
 * get new token
 */
 var getToken = function (code, redirect_uri) {
-  console.log(code);
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     form: {

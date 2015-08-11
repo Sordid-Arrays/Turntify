@@ -11,9 +11,10 @@ iisnode.yml
 .Trashes
 node_modules/
 bower_components/
-db/
+data/db/
 client/lib
 config.js
+
 
 # node
 node_modules
