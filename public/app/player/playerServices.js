@@ -30,7 +30,7 @@ angular.module('turntify.player')
       trackIds.push(queue[i]['tracks'][0]['foreign_id'].slice(14));
     };
     var queueName = argsObj.selectedPlaylist.name + ", turnt to " + argsObj.selectedTurntness;
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+queueName+':'+trackString+'" frameborder="0" allowtransparency="true"></iframe>');
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+queueName+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
   }
 
   return {
