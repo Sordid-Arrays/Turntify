@@ -3,25 +3,24 @@ var request = require('request'); // "Request" library
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
-//var MongoStore = require('connect-mongo')(session);
-//var mongoose = require('./models/dbConnection.js');
+var MongoStore = require('connect-mongo')(session);
+var mongoose = require('./models/dbConnection.js');
 
 var routes = require('./controllers/index');
-
 
 var app = express();
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(express.static(__dirname + '/public'))
    .use(cookieParser());
-app.use('/', routes);
-
 app.use(session({
   secret: 'foo',
-  //store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
   resave: false,
   saveUninitialized: false
 }));
+app.use('/', routes);
+
 
 
 // catch 404 and forward to error handler

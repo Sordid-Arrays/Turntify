@@ -16,14 +16,8 @@ var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
 var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
 
-/**
-* keys for cookies
-*/
 var stateKey = 'spotify_auth_state';
-var tokenKey = 'OAuth';
-var refreshToken = 'refreshToken';
-var userId = 'userId';
-var returnKey = 'returnKey';
+
 
 /**
 * route for login
@@ -49,11 +43,10 @@ router.get('/login', function(req, res) {
 /**
 * save new token cookie
 */
-function updateCookieToken (res, newAccessToken, newRefreshToken) {
-  res.cookie(tokenKey, newAccessToken);
-  console.log(newAccessToken);
+function updateSessionToken (req, newAccessToken, newRefreshToken) {
+  req.session.user.access_token = newAccessToken;
   if (newRefreshToken) {
-    res.cookie(refreshToken, newRefreshToken);
+    req.session.user.refresh_token = newRefreshToken;
   }
 }
 
@@ -82,36 +75,28 @@ router.get('/callback', function(req, res) {
   .then(function (body) {
     access_token = body.access_token;
     refresh_token = body.refresh_token;
-    updateCookieToken(res, access_token, refresh_token);
     return spotify.getUser(access_token);
   })
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(refresh_token)
     .then(function (body) {
-      updateCookieToken(res, body.access_token, body.refresh_token);
+      updateSessionToken(req, body.access_token, body.refresh_token);
       return spotify.getUser(body.access_token);
     });
   })
   .then(function(user){
-    //search if db exist in db and update
-    var randomKey = util.generateRandomString(20);
-    var query = {'spotifyId' : user.id};
+    var query = {spotifyId : user.id};
     var newData = {
-      'spotifyId' : user.id,
-      'access_token' : access_token,
-      'refresh_token' : refresh_token,
-      'returnKey' : randomKey
+      spotifyId : user.id,
+      access_token : access_token,
+      refresh_token : refresh_token
     };
-    //res.cookie(returnKey, randomKey);
 
-    console.log('USER: ' + user.id);
     return User.findOneAndUpdate(query, newData, {upsert: true});
   }).then(function(user) {
-    //req.session.user = newData;
-    console.log('REQ: ',req);
-    console.log('REQ SESSION: ',req.session);
-    console.log('USER INSIDE: ' + user);
+    req.session.user = user;
+    req.session.save();
     res.redirect('/#/player');
   })
   .catch(function (e) {
@@ -123,20 +108,19 @@ router.get('/callback', function(req, res) {
 * route for getting playlist based on user id
 */
 router.get('/user/playlists', function(req,res) {
-  var access_token = req.cookies[tokenKey];
-  var target_id = req.cookies[userId];
+  var access_token = req.session.user.access_token;
+  var target_id = req.session.user.spotifyId;
 
   spotify.getUserPlaylist(target_id, access_token)
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
-    return spotify.refreshToken(req.cookies[refreshToken])
+    return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
-      updateCookieToken(res, body.access_token, body.refresh_token);
+      updateSessionToken(req, body.access_token, body.refresh_token);
       return spotify.getUserPlaylist(target_id, body.access_token);
     });
   })
   .then(function(playListArr) {
-    console.log()
     res.json(playListArr);
   })
   .catch(function (e) {
@@ -148,30 +132,28 @@ router.get('/user/playlists', function(req,res) {
 * route for getting songs/tracks from playlist
 */
 router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) {
-  var access_token = req.cookies[tokenKey];
-  var target_userId = req.cookies[userId];
+  var access_token = req.session.user.access_token;
+  var target_userId = req.session.user.spotifyId;
   var target_ownerId = req.params.ownerId;
   var target_playlistId = req.params.playlistId;
   var target_turntness = req.params.turntness;
 
-  spotify.getPlaylistTracks(target_ownerId, target_playlistId, access_token)
+  spotify.getPlaylistTracks(target_userId, target_playlistId, access_token)
   .catch(spotify.OldTokenError, function () {
     // statusCode 401:  Unauthorized
-    return spotify.refreshToken(req.cookies[refreshToken])
+    return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
-      updateCookieToken(res, body.access_token, body.refresh_token);
+      updateSessionToken(req, body.access_token, body.refresh_token);
       return spotify.getPlaylistTracks(target_userId, target_playlistId, body.access_token);
     });
   })
   .then(function(playlist) {
-    console.log('HERE IS PLAYLIST: ' + playlist);
     var songUris = playlist.items.map(function(item) {
       return item.track.uri;
     });
     return echonest.getTrackData(songUris);
   })
   .then(function(songs) {
-    console.log('HERE IS SONG: ' + songs);
     var tempSongs = _.sortBy(songs, function(song) {
         return song.audio_summary.danceability;
       });
