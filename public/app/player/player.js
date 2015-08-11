@@ -28,6 +28,7 @@ angular.module('turntify.player', [])
         context.generateWidget();
         return;
       }
+
       console.log('no tracks in playlist "'+context.selectedPlaylist.name+'" at turntness '+context.selectedTurntness);
       return;
     });
@@ -54,19 +55,11 @@ angular.module('turntify.player', [])
 
   this.turntLevels = [0,1,2,3,4,5,6,7,8,9,10,11];
   this.generateWidget = function(){
-    var el = angular.element(document.querySelector('.widgetWrapper'));
-    var trackIds = [];
-    var queue= this.queue;
-    for(var i=0; i<queue.length; i++){
-      trackIds.push(queue[i]['tracks'][0]['foreign_id'].slice(14));
+    var args = {queue: this.queue,
+                selectedPlaylist: this.selectedPlaylist,
+                selectedTurntness: this.selectedTurntness
     };
-    var trackString = trackIds.join(",");
-    console.log('trackIds: ', trackString);
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:BRAHHHH:'+trackString+'" frameborder="0" allowtransparency="true"></iframe>');
-    //el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:BRAHHHH:'+ '5Z7ygHQo02SUrFmcgpwsKW,1x6ACsKV4UdWS2FMuPFUiT,4bi73jCM02fMpkI11Lqmfe' + '"'+ ' frameborder="0" allowtransparency="true"></iframe>');
+    PlayerService.generateWidget(args);
+    
   };
-
-
-  //This will handle the song/queue display logic. Not sure where we will put the numerous hacks
-  // needed to manhandle the spotify widgets, possibly a custom directive
 });
