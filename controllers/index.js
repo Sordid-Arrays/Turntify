@@ -3,11 +3,13 @@ var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 var _ = require('underscore');
+var session = require('express-session');
 
 var config = require('../config.js');
 var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
 var util = require('../helpers/util');
+var User = require('../models/users.js');
 
 var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
@@ -21,6 +23,7 @@ var stateKey = 'spotify_auth_state';
 var tokenKey = 'OAuth';
 var refreshToken = 'refreshToken';
 var userId = 'userId';
+var returnKey = 'returnKey';
 
 /**
 * route for login
@@ -48,6 +51,7 @@ router.get('/login', function(req, res) {
 */
 function updateCookieToken (res, newAccessToken, newRefreshToken) {
   res.cookie(tokenKey, newAccessToken);
+  console.log(newAccessToken);
   if (newRefreshToken) {
     res.cookie(refreshToken, newRefreshToken);
   }
@@ -72,11 +76,12 @@ router.get('/callback', function(req, res) {
       }));
   }
 
+  var access_token, refresh_token;
   res.clearCookie(stateKey);
   spotify.getToken(code, redirect_uri)
   .then(function (body) {
-    var access_token = body.access_token;
-    var refresh_token = body.refresh_token;
+    access_token = body.access_token;
+    refresh_token = body.refresh_token;
     updateCookieToken(res, access_token, refresh_token);
     return spotify.getUser(access_token);
   })
@@ -89,7 +94,24 @@ router.get('/callback', function(req, res) {
     });
   })
   .then(function(user){
-    res.cookie(userId,user.id);
+    //search if db exist in db and update
+    var randomKey = util.generateRandomString(20);
+    var query = {'spotifyId' : user.id};
+    var newData = {
+      'spotifyId' : user.id,
+      'access_token' : access_token,
+      'refresh_token' : refresh_token,
+      'returnKey' : randomKey
+    };
+    //res.cookie(returnKey, randomKey);
+
+    console.log('USER: ' + user.id);
+    return User.findOneAndUpdate(query, newData, {upsert: true});
+  }).then(function(user) {
+    //req.session.user = newData;
+    console.log('REQ: ',req);
+    console.log('REQ SESSION: ',req.session);
+    console.log('USER INSIDE: ' + user);
     res.redirect('/#/player');
   })
   .catch(function (e) {
@@ -114,6 +136,7 @@ router.get('/user/playlists', function(req,res) {
     });
   })
   .then(function(playListArr) {
+    console.log()
     res.json(playListArr);
   })
   .catch(function (e) {
@@ -141,12 +164,14 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
     });
   })
   .then(function(playlist) {
+    console.log('HERE IS PLAYLIST: ' + playlist);
     var songUris = playlist.items.map(function(item) {
       return item.track.uri;
     });
     return echonest.getTrackData(songUris);
   })
   .then(function(songs) {
+    console.log('HERE IS SONG: ' + songs);
     var tempSongs = _.sortBy(songs, function(song) {
         return song.audio_summary.danceability;
       });
