@@ -21,9 +21,21 @@ angular.module('turntify.player')
       return data;
     });
   };
+  var generateWidget = function(argsObj){
+    var el = angular.element(document.querySelector('.widgetWrapper'));
+    el.empty();
+    var trackIds = [];
+    var queue= argsObj.queue;
+    for(var i=0; i<queue.length; i++){
+      trackIds.push(queue[i]['tracks'][0]['foreign_id'].slice(14));
+    };
+    var queueName = argsObj.selectedPlaylist.name + ", turnt to " + argsObj.selectedTurntness;
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+queueName+':'+trackString+'" frameborder="0" allowtransparency="true"></iframe>');
+  }
 
   return {
     getListOfPlaylists: getListOfPlaylists,
-    getQueue: getQueue
+    getQueue: getQueue,
+    generateWidget: generateWidget
   };
 });
