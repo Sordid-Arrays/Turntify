@@ -14,6 +14,7 @@
     "express": "~4.13.1",
     "express-session": "^1.11.3",
     "mocha": "^2.2.5",
+    "mongodb-uri": "^0.9.7",
     "mongoose": "^4.1.1",
     "query-string": "^2.4.0",
     "request": "^2.60.0",
