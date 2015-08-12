@@ -1,5 +1,4 @@
 var express = require('express');
-var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
@@ -83,6 +82,8 @@ router.get('/callback', function(req, res) {
 
   .catch(function (e) {
     console.error('Got error: ',e);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
