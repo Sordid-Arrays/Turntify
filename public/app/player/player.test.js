@@ -1,23 +1,54 @@
 //player.test.js
 
+beforeEach(module('turntify'));
+beforeEach(module('turntify.player'));
+
+beforeEach(inject(function(_$rootScope_, _$controller_){
+  // The injector unwraps the underscores (_) from around the parameter names when matching
+  $scope = _$rootScope_.$new();
+  $controller = _$controller_;
+  PlayerController = $controller('PlayerController', { $scope: $scope });
+}));
+
+
+
 describe('PlayerController', function(){
 
-  beforeEach(module('turntify.player'));
-
-  beforeEach(inject(function(_$controller_){
-    // The injector unwraps the underscores (_) from around the parameter names when matching
-    $controller = _$controller_;
-  }));
-
-  var PlayerController = $controller('PlayerController', { $scope: $scope });
-
   describe('updatesQueue', function(){
+   
+    it('should be a function', function(){
+      expect(PlayerController.updateQueue).to.be.a('function');
+    });
+
+  });
+
+  describe('generateWidget', function(){
 
     it('should be a function', function(){
+      expect(PlayerController.generateWidget).to.be.a('function');
+    });
 
-      expect($scope.updatesQueue).to.be.a('function');
+  });
+
+  describe('turntLevels', function(){
+
+    it('should be an array', function(){
+      expect(PlayerController.turntLevels).to.be.an('array');
+    });
+
+  });
+
+  describe('queue', function(){
+
+    it('should be an array', function(){
+      expect(PlayerController.queue).to.be.an('array');
     });
 
   });
 
 });
+
+describe('PlayerService', function(){
+
+});
+
