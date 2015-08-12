@@ -1,11 +1,9 @@
 var express = require('express');
 var request = require('request'); // "Request" library
 var _ = require('underscore');
-// var session = require('express-session');
 
 var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
-// var User = require('../models/users.js');
 var util = require('../helpers/util');
 
 var router = express.Router();

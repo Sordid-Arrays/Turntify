@@ -1,6 +1,4 @@
 var expect = require('chai').expect;
-var request = require('request');
-var http = require('http');
 var Promise = require('bluebird');
 var assert = require('assert');
 var nock = require('nock');

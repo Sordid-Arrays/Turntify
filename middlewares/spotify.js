@@ -9,7 +9,7 @@ var tokenKey = 'OAuth';
 var refreshToken = 'refreshToken';
 
 /**
-* Custom Error to throw when token is exipiered
+* Custom Error to throw when token is expired
 */
 var OldTokenError = function () {
   this.name = "OldTokenError";
