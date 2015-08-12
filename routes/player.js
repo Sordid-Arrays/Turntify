@@ -44,7 +44,7 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
   var target_playlistId = req.params.playlistId;
   var target_turntness = req.params.turntness;
 
-  spotify.getPlaylistTracks(target_userId, target_playlistId, access_token)
+  spotify.getPlaylistTracks(target_ownerId, target_playlistId, access_token)
   .catch(spotify.OldTokenError, function () {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
