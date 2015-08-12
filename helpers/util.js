@@ -1,3 +1,6 @@
+/**
+* util func return random string
+*/
 var generateRandomString = function(length) {
   var text = '';
   var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -9,16 +12,17 @@ var generateRandomString = function(length) {
 };
 
 /**
-* save new token cookie
+* save new token in session
 */
-function updateSessionToken (req, newAccessToken, newRefreshToken) {
+var saveToken = function (req, newAccessToken, newRefreshToken) {
   req.session.user.access_token = newAccessToken;
   if (newRefreshToken) {
     req.session.user.refresh_token = newRefreshToken;
   }
+  req.session.save();
 }
 
 module.exports = {
   generateRandomString: generateRandomString,
-  updateSessionToken: updateSessionToken
+  saveToken: saveToken
 };

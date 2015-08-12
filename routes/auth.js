@@ -68,7 +68,7 @@ router.get('/callback', function(req, res) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(refresh_token)
     .then(function (body) {
-      util.updateSessionToken(req, body.access_token, body.refresh_token);
+      util.saveToken(req, body.access_token, body.refresh_token);
       return spotify.getUser(body.access_token);
     });
   })
