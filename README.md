@@ -40,6 +40,8 @@ From within the root directory:
 sudo npm install -g bower
 npm install
 bower install
+mkdir data/db
+mongod --dbpath data/db
 ```
 
 ### Roadmap

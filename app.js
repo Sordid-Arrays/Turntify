@@ -6,7 +6,9 @@ var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var mongoose = require('./models/dbConnection.js');
 
-var routes = require('./controllers/index');
+//var routes = require('./controllers/index');
+var routes = require('./routes/auth.js');
+var player = require('./routes/player.js');
 
 var app = express();
 app.use(bodyParser.json({limit: '5mb'}));
@@ -20,6 +22,7 @@ app.use(session({
   saveUninitialized: false
 }));
 app.use('/', routes);
+app.use('/', player);
 
 
 
