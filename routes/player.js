@@ -22,7 +22,7 @@ router.get('/user/playlists', function(req,res) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
-      util.updateSessionToken(req, body.access_token, body.refresh_token);
+      util.saveToken(req, body.access_token, body.refresh_token);
       return spotify.getUserPlaylist(target_id, body.access_token);
     });
   })
@@ -49,7 +49,7 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
-      util.updateSessionToken(req, body.access_token, body.refresh_token);
+      util.saveToken(req, body.access_token, body.refresh_token);
       return spotify.getPlaylistTracks(target_userId, target_playlistId, body.access_token);
     });
   })
@@ -64,15 +64,15 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
         return song.audio_summary.danceability;
       });
 
-      var turntness = {
-        1: {lowLimit: 0, highLimit: 0.365},
-        2: {lowLimit: 0.365, highLimit: 0.5},
-        3: {lowLimit: 0.5, highLimit: 0.635},
-        4: {lowLimit: 0.635, highLimit: 1}
-      };
-      res.json(_.filter(tempSongs, function(song) {
-        return song.audio_summary.danceability >= turntness[target_turntness].lowLimit && song.audio_summary.danceability <= turntness[target_turntness].highLimit;
-      }));
+    var turntness = {
+      1: {lowLimit: 0, highLimit: 0.365},
+      2: {lowLimit: 0.365, highLimit: 0.5},
+      3: {lowLimit: 0.5, highLimit: 0.635},
+      4: {lowLimit: 0.635, highLimit: 1}
+    };
+    res.json(_.filter(tempSongs, function(song) {
+      return song.audio_summary.danceability >= turntness[target_turntness].lowLimit && song.audio_summary.danceability <= turntness[target_turntness].highLimit;
+    }));
   })
   .catch(function (e) {
     console.error('Got error: ',e);
