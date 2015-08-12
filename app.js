@@ -19,7 +19,9 @@ app.use(session({
   secret: 'foo',
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  // httpOnly is for dev-environment only
+  cookie: { httpOnly: false }
 }));
 app.use('/', routes);
 app.use('/', player);

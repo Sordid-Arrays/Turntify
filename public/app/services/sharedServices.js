@@ -15,20 +15,17 @@ angular.module('turntify.services')
   //Logouts could be handled here if they aren't handled in a session   
   var logoutUser = function(){
 
-  }
+  };
 
   var getUserCookies = function(){
-    var userId = $cookies.get('userId');
-    var userOAuth = $cookies.get('OAuth');
-    if(!userId){
-      console.log('No user id cookie found');
+    var sessionId = $cookies.get('connect.sid');
+    console.log('cookies are:',JSON.stringify($cookies.getAll()));
+    if(sessionId === undefined){
+      console.log('No session ID found');
     }
-    if(!userOAuth){
-      console.log('No user OAuth cookie found');
-    }
+
     return {
-      userId: userId,
-      userOAuth: userOAuth
+      sessionId: sessionId
     };
   };
   
