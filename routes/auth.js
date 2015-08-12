@@ -2,7 +2,6 @@ var express = require('express');
 var request = require('request'); // "Request" library
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
-//var session = require('express-session');
 
 var config = require('../config.js');
 var spotify = require('../middlewares/spotify.js');
@@ -58,34 +57,30 @@ router.get('/callback', function(req, res) {
 
   var access_token, refresh_token;
   res.clearCookie(stateKey);
+
+  // get spotify access token
   spotify.getToken(code, redirect_uri)
   .then(function (body) {
     access_token = body.access_token;
     refresh_token = body.refresh_token;
     return spotify.getUser(access_token);
   })
-  .catch(spotify.OldTokenError, function (err) {
-    // statusCode 401:  Unauthorized
-    return spotify.refreshToken(refresh_token)
-    .then(function (body) {
-      util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.getUser(body.access_token);
-    });
-  })
+
   .then(function(user){
+    // save the user data in db
     var query = {spotifyId : user.id};
     var newData = {
       spotifyId : user.id,
       access_token : access_token,
       refresh_token : refresh_token
     };
-
     return User.findOneAndUpdate(query, newData, {upsert: true});
   }).then(function(user) {
     req.session.user = user;
     req.session.save();
     res.redirect('/#/player');
   })
+
   .catch(function (e) {
     console.error('Got error: ',e);
   });
