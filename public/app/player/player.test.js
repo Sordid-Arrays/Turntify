@@ -8,27 +8,33 @@ beforeEach(inject(function(_$rootScope_, _$controller_){
   $scope = _$rootScope_.$new();
   $controller = _$controller_;
   PlayerController = $controller('PlayerController', { $scope: $scope });
+
+  PlayerController = [];
 }));
 
 
 
 describe('PlayerController', function(){
 
-  describe('updatesQueue', function(){
+  describe('updateQueue', function(){
    
     it('should be a function', function(){
       expect(PlayerController.updateQueue).to.be.a('function');
     });
 
-  });
-
-  describe('generateWidget', function(){
-
-    it('should be a function', function(){
-      expect(PlayerController.generateWidget).to.be.a('function');
+    it('should update the queue', function(){
+      expect(PlayerController.updateQueue).to.be.a('function');
     });
 
   });
+
+  // describe('generateWidget', function(){
+
+  //   it('should be a function', function(){
+  //     expect(PlayerController.generateWidget).to.be.a('function');
+  //   });
+
+  // });
 
   describe('turntLevels', function(){
 
@@ -38,13 +44,13 @@ describe('PlayerController', function(){
 
   });
 
-  describe('queue', function(){
+  // describe('queue', function(){
 
-    it('should be an array', function(){
-      expect(PlayerController.queue).to.be.an('array');
-    });
+  //   it('should be an array', function(){
+  //     expect(PlayerController.queue).to.be.an('array');
+  //   });
 
-  });
+  // });
 
 });
 

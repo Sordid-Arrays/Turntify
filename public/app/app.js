@@ -54,7 +54,8 @@ angular.module('turntify', [
     if(toState.data.isRestricted){
       var cookies = UserService.getUserCookies();
       //TODO: check other, less reliable cookies. might have different exp.
-      if(cookies.userId === undefined){
+      if(cookies.sessionId === undefined){
+        console.log('cookies: ',cookies);
         $state.go('login');
         e.preventDefault();
         return;
