@@ -49,7 +49,7 @@ angular.module('turntify.services', [])
         method: 'GET',
         url: 'user/playlist/'+ ownerId +'/' + playlistId + '/' + turntness,
       }).then(function(res){
-        console.log(JSON.stringify(res.data));
+        // console.log(JSON.stringify(res.data));
         resolve(res.data);
       },function(error) {
         console.log(error);

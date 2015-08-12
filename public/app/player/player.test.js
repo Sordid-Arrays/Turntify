@@ -47,7 +47,11 @@ describe('PlayerController', function(){
         return $q(function(resolve, reject){
           resolve(PlayerController.updateQueue());
         });
-      })().should.eventually.equal(PlayerService.queue);
+      })().then(function(data){
+        console.log('player controller',PlayerController);
+        console.log('player controller queue:',PlayerController.queue);
+        return PlayerController.queue;
+      }).should.eventually.equal(PlayerService.queue);
     });
 
     // Maybe test inputs are passed to PlayerService.updateQueue
@@ -63,6 +67,16 @@ describe('PlayerController', function(){
       expect(PlayerService.getListOfPlaylists.calledOnce).to.equal(true);
       // expect(PlayerController.updateQueue).to.be.a('function');
     });
+
+    // it('should update the list of playlists', function(){
+    //   // promisify PlayerController.updateQueue instead of using setTimeout
+    //   (function(){
+    //     return $q(function(resolve, reject){
+    //       resolve(PlayerController.init());
+    //     });
+    //   })().should.eventually.equal(PlayerService.getListOfPlaylists);
+    // });
+
   });
 
   describe('turntLevels', function(){
