@@ -32,7 +32,6 @@ var getTrackData = function (spotyfyURIs) {
         reject(error);
         return;
       }
-      console.log(JSON.parse(body).response);
       var songs = JSON.parse(body).response.songs;
       _.each(songs, function (song) {
         song.tracks = _.filter(song.tracks, function (track) {

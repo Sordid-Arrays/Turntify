@@ -1,5 +1,4 @@
 var express = require('express');
-var request = require('request'); // "Request" library
 var _ = require('underscore');
 
 var spotify = require('../middlewares/spotify.js');
@@ -29,6 +28,8 @@ router.get('/user/playlists', function(req,res) {
   })
   .catch(function (e) {
     console.error('Got error: ',e);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
@@ -74,6 +75,8 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
   })
   .catch(function (e) {
     console.error('Got error: ',e);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
