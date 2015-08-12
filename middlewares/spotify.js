@@ -166,35 +166,6 @@ var refreshToken = function (refreshToken) {
   });
 };
 
-/**
-* !! FOR TESTING !!
-* get new token
-*/
-var getTestingToken = function () {
-  var authOptions = {
-    url: 'https://accounts.spotify.com/api/token',
-    form: {
-      grant_type: 'client_credentials'
-    },
-    headers: {
-      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-    },
-    json: true
-  };
-
-  //request to get the actual token
-  return new Promise(function (resolve, reject) {
-    request.post(authOptions, function(error, response, body) {
-      if (error || response.statusCode !== 200) {
-        console.error('get token ', error);
-        console.log(response.statusCode);
-        reject(error);
-        return;
-      }
-      resolve(body);
-    });
-  });
-};
 
 module.exports = {
   getUser: getUser,
@@ -202,6 +173,5 @@ module.exports = {
   getPlaylistTracks: getPlaylistTracks,
   getToken: getToken,
   refreshToken: refreshToken,
-  OldTokenError: OldTokenError,
-  getTestingToken: getTestingToken
+  OldTokenError: OldTokenError
 };

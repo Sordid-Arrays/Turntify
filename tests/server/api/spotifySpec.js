@@ -1,16 +1,50 @@
 var expect = require('chai').expect;
 var request = require('request');
 var http = require('http');
+var Promise = require('bluebird');
 var assert = require('assert');
 
 var spotify = require('../../../middlewares/spotify.js');
-var accessToken = '';
+var config = require('../../../config.js');
+
+var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
+var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
+
+var accessToken;
 var userId = '22cw4tmccteifpehid5awbaki';
 var playlistId = '0SzuoS1rVNdMR0Yj7RNPc0';
 var oldToken = 'old token';
 
+/**
+* !! FOR TESTING !!
+* get new token
+*/
+var getTestingToken = function () {
+  var authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    form: {
+      grant_type: 'client_credentials'
+    },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
+    },
+    json: true
+  };
+
+  //request to get the actual token
+  return new Promise(function (resolve, reject) {
+    request.post(authOptions, function(error, response, body) {
+      if (error || response.statusCode !== 200) {
+        reject(error);
+        return;
+      }
+      resolve(body);
+    });
+  });
+};
+
 beforeEach(function (done) {
-  spotify.getTestingToken()
+  getTestingToken()
   .then(function (body) {
     console.log('GOT TOKEN', accessToken);
     accessToken = body.access_token;
