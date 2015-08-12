@@ -155,12 +155,10 @@ var refreshToken = function (refreshToken) {
       if (error || response.statusCode !== 200) {
         console.error(error);
         console.log(authOptions);
-        console.log('refreshToken failed? ',response.statusCode);
+        console.log('refreshToken failed: ',response.statusCode);
         reject(error);
         return;
       }
-      console.log('EXPIRES IN ', body.expires_in);
-      console.log('refresh token????  ', body.refresh_token);
       resolve(body);
     });
   });
