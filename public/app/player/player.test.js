@@ -9,7 +9,7 @@ beforeEach(inject(function(_$rootScope_, _$controller_, _$q_){
   /**
   * Mock the player service
   */ 
-  PlayerService = {
+  PlayerServiceMock = {
     getQueue: function(){
       return $q(function(resolve, reject){
         resolve();
@@ -27,7 +27,7 @@ beforeEach(inject(function(_$rootScope_, _$controller_, _$q_){
   // The injector unwraps the underscores (_) from around the parameter names when matching
   $scope = _$rootScope_.$new();
   $controller = _$controller_;
-  PlayerController = $controller('PlayerController', { $scope: $scope, PlayerService: PlayerService });
+  PlayerController = $controller('PlayerController', { $scope: $scope, PlayerService: PlayerServiceMock });
 
 }));
 
@@ -47,11 +47,14 @@ describe('PlayerController', function(){
         return $q(function(resolve, reject){
           resolve(PlayerController.updateQueue());
         });
-      })().then(function(data){
-        console.log('player controller',PlayerController);
+      })().then(function(){
         console.log('player controller queue:',PlayerController.queue);
         return PlayerController.queue;
-      }).should.eventually.equal(PlayerService.queue);
+      }).should.eventually.equal(PlayerServiceMock.queue);
+      // Whenever creating Promises in a test, 
+      // you must trigger a digest cycle in order for that promise to be resolved
+      $scope.$digest();
+
     });
 
     // Maybe test inputs are passed to PlayerService.updateQueue
@@ -64,7 +67,7 @@ describe('PlayerController', function(){
     it('should call PlayerService.getListOfPlaylists', function(){
       // var spy = sinon.spy(PlayerService, 'getListOfPlaylists');
       
-      expect(PlayerService.getListOfPlaylists.calledOnce).to.equal(true);
+      expect(PlayerServiceMock.getListOfPlaylists.calledOnce).to.equal(true);
       // expect(PlayerController.updateQueue).to.be.a('function');
     });
 
