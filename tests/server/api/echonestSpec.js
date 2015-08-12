@@ -10,11 +10,9 @@ var config = require('../../../config');
 var api;
 
 function mockAPI(spotifyURIs) {
-  console.log(spotifyURIs);
   if (typeof spotifyURIs === 'string'){
     spotifyURIs = [spotifyURIs];
   }
-  console.log(spotifyURIs);
   var query = queryString.stringify({
     api_key: config.ECHONEST_API_KEY,
     format: "json",
@@ -22,9 +20,8 @@ function mockAPI(spotifyURIs) {
     bucket: ['audio_summary', 'id:spotify', 'tracks'],
     track_id: spotifyURIs
   });
-  console.log(query);
+
   return nock('http://developer.echonest.com')
-  .persist()
   .get('/api/v4/song/profile?' + query)
   .reply(200, {
     response: {
@@ -48,7 +45,6 @@ describe('getTrackData', function () {
     api = mockAPI(spotifyURI);
     echonest.getTrackData(spotifyURI)
     .then(function (songs) {
-      console.log(songs);
       expect(songs).to.be.an('array');
       expect(songs.length).to.be.equal(1);
       // expect(songs[0].audio_summary.danceability).to.be.a('number');
