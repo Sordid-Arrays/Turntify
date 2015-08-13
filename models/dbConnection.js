@@ -18,7 +18,11 @@ var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000
                 pass: config.MONGOLAB_PASSWORD };
 
 //var mongodbUri = 'mongodb://ds031213.mongolab.com:31213/turntify -u ' + config.MONGOLAB_USER_ID + ' -p ' + config.MONGOLAB_PASSWORD;
-var mongodbUri = 'mongodb://ds031213.mongolab.com:31213/turntify';
+if(process.env.MONGOLAB_URI){
+  var mongodbUri = process.env.MONGOLAB_URI;
+}else{
+  var mongodbUri = 'mongodb://ds031213.mongolab.com:31213/turntify';
+}
 //var mongooseUri = uriUtil.formatMongoose(mongodbUri);
 
 mongoose.connect(mongodbUri, options);
