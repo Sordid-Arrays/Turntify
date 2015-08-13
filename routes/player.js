@@ -38,7 +38,6 @@ router.get('/user/playlists', function(req,res) {
 */
 router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) {
   var access_token = req.session.user.access_token;
-  var target_userId = req.session.user.spotifyId;
   var target_ownerId = req.params.ownerId;
   var target_playlistId = req.params.playlistId;
   var target_turntness = req.params.turntness;
@@ -49,30 +48,22 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
       util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.getPlaylistTracks(target_userId, target_playlistId, body.access_token);
+      return spotify.getPlaylistTracks(target_ownerId, target_playlistId, body.access_token);
     });
   })
+
   .then(function(playlist) {
+    // get track data from echonest
     var songUris = playlist.items.map(function(item) {
       return item.track.uri;
     });
     return echonest.getTrackData(songUris);
   })
-  .then(function(songs) {
-    var tempSongs = _.sortBy(songs, function(song) {
-        return song.audio_summary.danceability;
-      });
 
-    var turntness = {
-      1: {lowLimit: 0, highLimit: 0.365},
-      2: {lowLimit: 0.365, highLimit: 0.5},
-      3: {lowLimit: 0.5, highLimit: 0.635},
-      4: {lowLimit: 0.635, highLimit: 1}
-    };
-    res.json(_.filter(tempSongs, function(song) {
-      return song.audio_summary.danceability >= turntness[target_turntness].lowLimit && song.audio_summary.danceability <= turntness[target_turntness].highLimit;
-    }));
+  .then(function(songs) {
+    res.json(util.danceableFiltering(songs, target_turntness));
   })
+
   .catch(function (e) {
     console.error('Got error: ',e);
     res.status(e.status || 500);

@@ -32,12 +32,13 @@ var getTrackData = function (spotyfyURIs) {
         reject(error);
         return;
       }
+
       var songs = JSON.parse(body).response.songs;
       _.each(songs, function (song) {
+        // each song might have multiple tracks (in single, in album, in best hits, etc.)
+        // we only need the track whose spotify URI maches given spotify URIs
         song.tracks = _.filter(song.tracks, function (track) {
-          if(_.contains(spotyfyURIs, track.foreign_id)){
-            return track;
-          }
+          return _.contains(spotyfyURIs, track.foreign_id);
         });
       });
       resolve(songs);
