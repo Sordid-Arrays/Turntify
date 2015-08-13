@@ -38,6 +38,14 @@ function mockAPI(spotifyURIs) {
 }
 
 describe('getTrackData', function () {
+  it('should return Promise', function (done) {
+    var spotifyURI = 'spotify:track:0jBE7Fn78EAvmIs3dCd6GO';
+    api = mockAPI(spotifyURI);
+    echonest.getTrackData(spotifyURI)
+    .then(function () {
+      done();
+    });
+  });
 
   it('should get data of a song', function (done) {
     var spotifyURI = 'spotify:track:0jBE7Fn78EAvmIs3dCd6GO';
