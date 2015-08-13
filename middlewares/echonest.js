@@ -2,8 +2,7 @@
  * for accessing Echonest API
 **/
 var queryString = require('query-string');
-var request = require('request');
-var Promise = require("bluebird");
+var request = require('request-promise');
 var _ = require('underscore');
 
 var config = require('../config');
@@ -23,26 +22,19 @@ var getTrackData = function (spotyfyURIs) {
     track_id: spotyfyURIs
   });
 
-  return new Promise(function (resolve, reject) {
-    request({
-      method: 'GET',
+  return request.get({
       url: 'http://developer.echonest.com/api/v4/song/profile?' + query, //URL to hit
-    }, function (error, response, body) {
-      if (error) {
-        reject(error);
-        return;
-      }
-
-      var songs = JSON.parse(body).response.songs;
-      _.each(songs, function (song) {
-        // each song might have multiple tracks (in single, in album, in best hits, etc.)
-        // we only need the track whose spotify URI maches given spotify URIs
-        song.tracks = _.filter(song.tracks, function (track) {
-          return _.contains(spotyfyURIs, track.foreign_id);
-        });
+  })
+  .then(function (body) {
+    var songs = JSON.parse(body).response.songs;
+    // each song might have multiple tracks (in single, in album, in best hits, etc.)
+    // we only need the track whose spotify URI is in given spotify URIs
+    _.each(songs, function (song) {
+      song.tracks = _.filter(song.tracks, function (track) {
+        return _.contains(spotyfyURIs, track.foreign_id);
       });
-      resolve(songs);
     });
+    return songs;
   });
 };
 
