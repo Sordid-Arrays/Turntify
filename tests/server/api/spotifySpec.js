@@ -139,7 +139,6 @@ describe('getUser', function () {
     api = mockOldToken('/v1/me');
     spotify.getUser(oldToken)
     .catch(function (err) {
-      console.log('GOT ',err);
       expect(err).to.be.instanceof(spotify.OldTokenError);
       done();
     });

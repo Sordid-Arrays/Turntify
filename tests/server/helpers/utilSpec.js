@@ -23,19 +23,23 @@ describe('generateRandomString', function () {
 describe('danceableFiltering', function () {
   var songs = [
     { audio_summary: {
-        danceability: 0.5
+        danceability: 0.5,
+        energy: 0.5
       }
     },
     { audio_summary: {
-        danceability: 0.3
+        danceability: 0.3,
+        energy: 0.3
       }
     },
     { audio_summary: {
-        danceability: 0.2
+        danceability: 0.2,
+        energy: 0.2
       }
     },
     { audio_summary: {
-        danceability: 0.7
+        danceability: 0.7,
+        energy: 0.7
       }
     }
   ];
