@@ -1,7 +1,14 @@
 var request = require('request-promise');
 var Promise = require('bluebird');
 
-var config = require('../config.js');
+if(process.env.SPOTIFY_CLIENT_ID){
+  var config = {
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTFIY_CLIENT_SECRET: process.env.SPOTFIY_CLIENT_SECRET
+  };
+}else{
+  var config = require('../config.js');
+}
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
 

@@ -4,8 +4,13 @@ var nock = require('nock');
 var queryString = require('query-string');
 
 var echonest = require('../../../middlewares/echonest');
-var config = require('../../../config');
-
+if(process.env.SPOTIFY_CLIENT_ID){
+  var config = {
+    ECHONEST_API_KEY: process.env.ECHONEST_API_KEY,
+  };
+}else{
+  var config = require('../../../config');
+}
 
 var api;
 

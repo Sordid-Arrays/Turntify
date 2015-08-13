@@ -2,7 +2,14 @@ var express = require('express');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-var config = require('../config.js');
+if(process.env.SPOTIFY_CLIENT_ID){
+  var config = {
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTFIY_CLIENT_SECRET: process.env.SPOTFIY_CLIENT_SECRET
+  };
+}else{
+  var config = require('../config.js');
+}
 var spotify = require('../middlewares/spotify.js');
 var util = require('../helpers/util');
 var User = require('../models/users.js');
