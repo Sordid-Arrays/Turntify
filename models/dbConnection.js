@@ -1,14 +1,14 @@
 var Promise = require('bluebird');
 var mongoose = Promise.promisifyAll(require('mongoose'));
 var uriUtil = require('mongodb-uri');
-if(process.env.PORT){
+// if(process.env.PORT){
   var config = {
     MONGOLAB_USER_ID: process.env.MONGOLAB_USER_ID,
     MONGOLAB_PASSWORD: process.env.MONGOLAB_PASSWORD
   };
-}else{
-  var config = require('../config.js');
-}
+// }else{
+//   var config = require('../config.js');
+// }
 //mongoose.connect('mongodb://localhost/turntify');
 
 var options = { server: { socketOptions: { keepAlive: 1, connectTimeoutMS: 30000 } },
