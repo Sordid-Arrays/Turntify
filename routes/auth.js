@@ -2,7 +2,14 @@ var express = require('express');
 var querystring = require('querystring');
 var cookieParser = require('cookie-parser');
 
-var config = require('../config.js');
+if(process.env.SPOTIFY_CLIENT_ID){
+  var config = {
+    SPOTIFY_CLIENT_ID: process.env.SPOTIFY_CLIENT_ID,
+    SPOTFIY_CLIENT_SECRET: process.env.SPOTFIY_CLIENT_SECRET
+  };
+}else{
+  var config = require('../config.js');
+}
 var spotify = require('../middlewares/spotify.js');
 var util = require('../helpers/util');
 var User = require('../models/users.js');
@@ -10,7 +17,11 @@ var User = require('../models/users.js');
 var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+if(process.env.PORT){
+  var redirect_uri = process.env.SPOTIFY_REDIRECT_URI; // Your redirect uri
+}else{
+  var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+}
 
 var stateKey = 'spotify_auth_state';
 

@@ -5,7 +5,13 @@ var queryString = require('query-string');
 var request = require('request-promise');
 var _ = require('underscore');
 
-var config = require('../config');
+if(process.env.SPOTIFY_CLIENT_ID){
+  var config = {
+    ECHONEST_API_KEY: process.env.ECHONEST_API_KEY,
+  };
+}else{
+  var config = require('../config.js');
+}
 
 /*
  * getting Echo Nest track data
