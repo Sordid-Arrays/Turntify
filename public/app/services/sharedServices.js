@@ -12,9 +12,13 @@ angular.module('turntify.services')
   //parts of the app: the player view might need app id, but the queue might just list track
   // names, etc.
   
-  //Logouts could be handled here if they aren't handled in a session   
+  /** 
+  * This simply removes the cookies and redirects the user to login. TODO: add "hide" in view so that
+  * it doesn't show in the 'login' view
+  */
   var logoutUser = function(){
-
+    $cookies.remove('connect.sid');
+    $state.go('login');
   };
 
   var getUserCookies = function(){

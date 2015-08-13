@@ -8,6 +8,7 @@ angular.module('turntify', [
   'turntify.services',
   'turntify.login',
   'turntify.player',
+  'turntify.main',
   'ui.router',
   'ngCookies'
 ])
@@ -45,9 +46,10 @@ angular.module('turntify', [
 *(which is usually stored in a separate module, like services, because it is hard to unit-test)
 */
 .run(function($state, $rootScope, $timeout, UserService) {
-  
+  //TODO: use this to check scope from view
+  // $rootScope.$state = $state;
+
   $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
-    console.log("changing to state:", toState.name);
     if(toState.name === 'login'){
       return;
     }
@@ -55,9 +57,9 @@ angular.module('turntify', [
       var cookies = UserService.getUserCookies();
       //TODO: check other, less reliable cookies. might have different exp.
       if(cookies.sessionId === undefined){
-        console.log('cookies: ',cookies);
-        $state.go('login');
         e.preventDefault();
+        $state.go('login');
+
         return;
       }
     }

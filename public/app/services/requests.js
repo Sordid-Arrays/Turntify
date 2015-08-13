@@ -5,7 +5,7 @@
 * any logic/data filters longer than a couple lines should be required in another factory file
 */
 angular.module('turntify.services', [])
-.factory('RequestService', function($http, $state, $rootScope, $q, UserService /*logic files injected here*/) {
+.factory('RequestService', function($http, $q) {
   //posts, gets, puts, etc.
   // CORS PROBLEMS. MIGHT WORK LATER.
   // var loginUser = function(){
