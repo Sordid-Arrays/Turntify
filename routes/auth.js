@@ -17,7 +17,11 @@ var User = require('../models/users.js');
 var router = express.Router();
 var client_id = config.SPOTIFY_CLIENT_ID; // Your client id
 var client_secret = config.SPOTFIY_CLIENT_SECRET; // Your client secret
-var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+if(process.env.PORT){
+  var redirect_uri = process.env.SPOTIFY_REDIRECT_URI; // Your redirect uri
+}else{
+  var redirect_uri = 'http://localhost:8888/callback'; // Your redirect uri
+}
 
 var stateKey = 'spotify_auth_state';
 
