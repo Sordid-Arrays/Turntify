@@ -2,6 +2,11 @@
   "name": "turntify",
   "version": "1.0.0",
   "private": true,
+  "main": "app.js",
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.x"
+  },
   "scripts": {
     "start": "node app.js"
   },
