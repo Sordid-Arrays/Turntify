@@ -10,6 +10,9 @@
     <!--link rel="icon" type="image/jpg" href="./assets/favicon.jpg" (or .ico)-->
   </head>
   <body ng-app='turntify'>
+    <div class="navContainer" ng-controller="MainController as main"><!-- add in "ng-if" to not show in login -->
+      <button ng-click="main.logout()" ng-controller="MainController as main">Logout</button>
+    </div>
     <!-- this is where we put the navbar. now, it's just buttons. -->
     <div class="bodyContainer">
       <div class="viewContainer">
@@ -26,6 +29,8 @@
     <script src="./app/player/playerServices.js"></script>
     <script src="./app/login/login.js"></script>
     <script src="./app/login/loginServices.js"></script>
+    <script src="./app/main/main.js"></script>
+    <script src="./app/main/mainServices.js"></script>
     <script src="./app/app.js"></script>
   </body>
 </html>
