@@ -1,7 +1,7 @@
 var Promise = require('bluebird');
 var mongoose = Promise.promisifyAll(require('mongoose'));
 var uriUtil = require('mongodb-uri');
-if(process.env.SPOTIFY_CLIENT_ID){
+if(process.env.NODE_ENV){
   var config = {
     MONGOLAB_USER_ID: process.env.MONGOLAB_USER_ID,
     MONGOLAB_PASSWORD: process.env.MONGOLAB_PASSWORD
