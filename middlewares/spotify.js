@@ -1,4 +1,4 @@
-var request = require('request');
+var request = require('request-promise');
 var Promise = require('bluebird');
 
 var config = require('../config.js');
@@ -27,21 +27,13 @@ var getUser = function(token) {
     headers: { 'Authorization': 'Bearer ' + token },
     json: true
   };
+  return request.get(options)
 
-  return new Promise(function(resolve, reject) {
-    return request.get(options, function(error, response, body) {
-      if (response.statusCode === 401) {
-        reject(new OldTokenError());
-        return;
-      }
-      if (error || response.statusCode !== 200) {
-        console.error('get user ', error);
-        console.log(response.statusCode);
-        reject(error);
-        return;
-      }
-      resolve(body);
-    });
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
   });
 };
 
@@ -55,25 +47,21 @@ var getUserPlaylist = function(userId, token) {
     json: true
   };
 
-  return new Promise(function(resolve, reject) {
-    return request.get(options, function(error, response, body) {
-      if (response.statusCode === 401) {
-        reject(new OldTokenError());
-        return;
-      }
-      if (error || response.statusCode !== 200) {
-        console.error('error in getUserPlaylist ', error);
-        console.log(response.statusCode);
-        reject(error);
-        return;
-      }
-      var playListArr = [];
-      for (var i = 0; i < body.items.length; i++) {
-        playListArr.push({name: body.items[i].name, playlistId: body.items[i].id, ownerId: body.items[i].owner.id});
-      }
-      resolve(playListArr);
+  return request.get(options)
+  .then(function (data) {
+    return  data.items.map(function (item) {
+      return {
+        name:       item.name,
+        playlistId: item.id,
+        ownerId:    item.owner.id};
     });
+  })
 
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
   });
 };
 
@@ -87,20 +75,13 @@ var getPlaylistTracks = function(userId, playlistId, token) {
     json: true
   };
 
-  return new Promise(function(resolve, reject) {
-    return request.get(options, function(error, response, body) {
-      if (response.statusCode === 401) {
-        reject(new OldTokenError());
-        return;
-      }
-      if (error || response.statusCode !== 200) {
-        console.error('error in getPlaylistTracks',error);
-        console.log(response.statusCode);
-        reject(error);
-        return;
-      }
-      resolve(body);
-    });
+  return request.get(options)
+
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
   });
 };
 
@@ -122,16 +103,13 @@ var getToken = function (code, redirect_uri) {
   };
 
   //request to get the actual token
-  return new Promise(function (resolve, reject) {
-    request.post(authOptions, function(error, response, body) {
-      if (error || response.statusCode !== 200) {
-        console.error('get token ', error);
-        console.log(response.statusCode);
-        reject(error);
-        return;
-      }
-      resolve(body);
-    });
+  return request.post(authOptions)
+
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
   });
 };
 
@@ -139,7 +117,6 @@ var getToken = function (code, redirect_uri) {
 * refresh token
 */
 var refreshToken = function (refreshToken) {
-  console.log('REFRESH TOKEN!');
   var authOptions = {
     url: 'https://accounts.spotify.com/api/token',
     headers: { 'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')) },
@@ -150,17 +127,13 @@ var refreshToken = function (refreshToken) {
     json: true
   };
 
-  return new Promise(function (resolve, reject) {
-    request.post(authOptions, function (error, response, body) {
-      if (error || response.statusCode !== 200) {
-        console.error(error);
-        console.log(authOptions);
-        console.log('refreshToken failed: ',response.statusCode);
-        reject(error);
-        return;
-      }
-      resolve(body);
-    });
+  return request.post(authOptions)
+
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
   });
 };
 

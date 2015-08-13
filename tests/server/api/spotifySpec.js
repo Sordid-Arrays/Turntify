@@ -1,5 +1,4 @@
 var expect = require('chai').expect;
-var Promise = require('bluebird');
 var assert = require('assert');
 var nock = require('nock');
 
@@ -121,9 +120,12 @@ function mockOldToken(route) {
 // });
 
 describe('getUser', function () {
-  it('should return Promise', function () {
+  it('should return Promise', function (done) {
     api = mockGetUser();
-    expect(spotify.getUser(accessToken)).to.be.instanceof(Promise);
+    spotify.getUser(accessToken)
+    .then(function () {
+      done();
+    });
   });
   it('should get user information', function (done) {
     api = mockGetUser();
@@ -137,6 +139,7 @@ describe('getUser', function () {
     api = mockOldToken('/v1/me');
     spotify.getUser(oldToken)
     .catch(function (err) {
+      console.log('GOT ',err);
       expect(err).to.be.instanceof(spotify.OldTokenError);
       done();
     });
@@ -144,9 +147,12 @@ describe('getUser', function () {
 });
 
 describe('getUserPlaylist', function () {
-  it('should return Promise', function () {
+  it('should return Promise', function (done) {
     api = mockGetUserPlaylists(userId);
-    expect(spotify.getUserPlaylist(userId, accessToken)).to.be.instanceof(Promise);
+    spotify.getUserPlaylist(userId, accessToken)
+    .then(function () {
+      done();
+    });
   });
   it('should get Playlist array', function (done) {
     api = mockGetUserPlaylists(userId);
@@ -167,9 +173,12 @@ describe('getUserPlaylist', function () {
 });
 
 describe('getPlaylistTracks', function () {
-  it('should return Promise', function () {
+  it('should return Promise', function (done) {
     api = mockGetTracks(userId, playlistId);
-    expect(spotify.getPlaylistTracks(userId, playlistId, accessToken)).to.be.instanceof(Promise);
+    spotify.getPlaylistTracks(userId, playlistId, accessToken)
+    .then(function () {
+      done();
+    });
   });
   it('should get tracks information', function (done) {
     api = mockGetTracks(userId, playlistId);
@@ -191,9 +200,12 @@ describe('getPlaylistTracks', function () {
 });
 
 describe('getToken', function () {
-  it('should return Promise', function () {
+  it('should return Promise', function (done) {
     api = mockGetToken();
-    expect(spotify.getToken('some code', redirect_uri)).to.be.instanceof(Promise);
+    spotify.getToken('some code', redirect_uri)
+    .then(function () {
+      done();
+    });
   });
   it('should get access_token and refresh_token', function (done) {
     api = mockGetToken();
@@ -207,9 +219,12 @@ describe('getToken', function () {
 });
 
 describe('refresh token', function () {
-  it('should return Promise', function () {
+  it('should return Promise', function (done) {
     api = mockRefreshToken();
-    expect(spotify.refreshToken(refreshToken)).to.be.instanceof(Promise);
+    spotify.refreshToken(refreshToken)
+    .then(function () {
+      done();
+    });
   });
   it('should get new access token', function (done) {
     api = mockRefreshToken();
