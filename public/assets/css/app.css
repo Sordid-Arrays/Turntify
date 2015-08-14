@@ -1,3 +1,19 @@
 /* This contains our App-Specific CSS. it will be loaded AFTER 
 the base CSS template file, so it takes priority over the generic 
 template (NOT BOOTSTRAP) without modifying the template file*/
+
+.playerContainer{
+  max-width: 1250px;
+  margin: 0 auto;
+}
+.widgetContainer{
+  text-align: center;
+}
+.navContainer{
+  background-color: #303F9F;
+  color: #fff;
+}
+.navInnerContainer{
+  width: 1250px;
+  margin: 0 auto;
+}

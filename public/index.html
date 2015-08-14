@@ -4,14 +4,19 @@
   <head>
     <meta charset="UTF-8">
     <title>Turntify</title>
+    <!-- Load angular-material framework and dependencies from CDN -->
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/v0.10.1-master-333984f/angular-material.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
     <!--link rel="stylesheet" type="text/css" href="./assets/libs/TODO:CHOOSE BASE CSS" /-->
     <link rel="stylesheet" type="text/css" href="./assets/css/app.css" />
     <!-- <link rel="stylesheet" type="text/css" href="./assets/css/min/app.min.css" /> -->
     <!--link rel="icon" type="image/jpg" href="./assets/favicon.jpg" (or .ico)-->
   </head>
   <body ng-app='turntify'>
-    <div class="navContainer" ng-controller="MainController as main"><!-- add in "ng-if" to not show in login -->
-      <button ng-click="main.logout()" ng-controller="MainController as main">Logout</button>
+    <div class="navContainer md-primary" ng-controller="MainController as main" layout="row"><!-- add in "ng-if" to not show in login -->
+      <div class="navInnerContainer">
+        <md-button ng-click="main.logout()" ng-controller="MainController as main">Logout</md-button>
+      </div>
     </div>
     <!-- this is where we put the navbar. now, it's just buttons. -->
     <div class="bodyContainer">
@@ -20,7 +25,11 @@
       </div>
     </div>
     <script src="./assets/libs/angular/angular.js"></script>
+    <script src="./assets/libs/angular-animate/angular-animate.js"></script>
     <script src="./assets/libs/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="./assets/libs/angular-aria/angular-aria.js"></script>
+    <script src="./assets/libs/angular-messages/angular-messages.js"></script>
+    <script src="./assets/libs/angular-material/angular-material.js"></script>
     <script src="./assets/libs/angular-cookies/angular-cookies.min.js"></script>
     <!-- other libs scripts loaded first -->
     <script src="./app/services/requests.js"></script>
