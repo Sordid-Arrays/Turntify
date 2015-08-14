@@ -10,14 +10,15 @@ angular.module('turntify', [
   'turntify.player',
   'turntify.main',
   'ui.router',
-  'ngCookies'
+  'ngCookies',
+  'ngMaterial'
 ])
 
 /**
 * The config block gets executed first, and manages state
 */
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider) {
   //the $urlRouterProvider is the "otherwise" state
   //TODO: make proper variable urls to fit our get requests
   //TODO: add states and substates down the line
@@ -40,6 +41,9 @@ angular.module('turntify', [
     controller: "PlayerController as player",
     data: {isRestricted: true}
   });
+
+  // $mdThemingProvider.theme('default')
+  //   .dark();
 
 })
 /** ...and the run block gets executed after, which contains any code that is needed to "kick start" the application

@@ -2,34 +2,44 @@
 <div class="playerContainer">
   <!--div id="iFrameHolder">
   </div-->
-  <div class="queueContainer">
-    <h3>Queue</h3>
-    <ul class="songList">
-      <li ng-repeat="song in player.queue">{{song.title}}</li>
-    </ul>
-  </div>
-  <div class="spotifyPlayerContainer">
-    <h3>Player</h3>
-  </div>
-  <!-- Playlist and Turntness selectors -->
-  <div class="playlistControlContainer">
-    <div class="playlistWrapper">
-      <h3>Select A Playlist</h3>
-      <select class="playlistSelector" ng-model="player.selectedPlaylist" ng-options="playlist.name for playlist in player.playlists" ng-change="player.updateQueue()">
-        <option value="">Choose playlist </option>
-      </select>
-      <h4>Selected Playlist: {{ player.selectedPlaylist }}</h4>
+  <div layout="row">
+    <!-- Playlist and Turntness selectors -->
+    <div class="playlistControlContainer" flex>
+      <div class="playlistWrapper">
+        <div layout="row">
+          <md-input-container>
+            <label>Select A Playlist</label>
+            <md-select class="playlistSelector" ng-model="player.selectedPlaylist" ng-change="player.updateQueue()">
+              <md-option ng-repeat="playlist in player.playlists" value="{{playlist}}">{{playlist.name}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <!-- <h4>Selected Playlist: {{ player.selectedPlaylist.name }}</h4> -->
+      </div>
+      <div class="turntometerWrapper">
+        <div layout="row">
+          <md-input-container>
+            <label>Select A Turntness</label>
+            <md-select class="turntSelector" ng-model="player.selectedTurntness" ng-change="player.updateQueue()">
+              <md-option ng-repeat="turntness in player.turntLevels" value="{{turntness}}">{{turntness}}</md-option>
+            </md-select>
+          </md-input-container>
+        </div>
+        <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
+      </div>
     </div>
-    <div class="turntometerWrapper">
-      <select class="turntSelector" ng-model="player.selectedTurntness" ng-options="turntness for turntness in player.turntLevels" ng-change="player.updateQueue()">
-        <option value="">Choose turntness</option>
-      </select>
-      <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
+  
+    <div class="widgetContainer" flex="55">
+      <h3>Showing Widget!</h3>
+      <div class="widgetWrapper"></div>
     </div>
-  </div>
-  <div class="widgetContainer">
-    <h3>Showing Widget!</h3>
-    <div class="widgetWrapper"></div>
-  </div>
+  
+    <div class="queueContainer" flex>
+      <h3>Queue</h3>
+      <ul class="songList">
+        <li ng-repeat="song in player.queue">{{song.title}}</li>
+      </ul>
+    </div>
+  </div>  
 
 </div>

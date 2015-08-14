@@ -3,7 +3,7 @@
 * these views will persist across many states of the app, so those states will be subviews of the player
 */
 
-angular.module('turntify.player', [])
+angular.module('turntify.player', ['ngMaterial'])
 .controller('PlayerController', function (PlayerService) {
   
   /**
@@ -27,7 +27,7 @@ angular.module('turntify.player', [])
   */
   this.updateQueue = function(){
     var turntness = vm.selectedTurntness;
-    var playlist = vm.selectedPlaylist;
+    var playlist = JSON.parse(vm.selectedPlaylist);
     PlayerService.getQueue(playlist, turntness).then(function(){
       vm.queue = PlayerService.queue;
     });
