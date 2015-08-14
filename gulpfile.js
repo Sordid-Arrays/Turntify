@@ -28,5 +28,8 @@ gulp.task('styles', function(){
     .pipe(gulp.dest('./public/assets/css/min/'));
 });
 
+gulp.task('test-server', function(){
+  
+});
 
 gulp.task('default', ['deleteMin', 'styles', 'lint']);
