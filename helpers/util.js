@@ -28,32 +28,30 @@ var saveToken = function (req, newAccessToken, newRefreshToken) {
 * sort and filter the songs according to danceability
 */
 var danceableFiltering = function (songs, turntness) {
-  // var danceabilityRange = {
-  //   1: {lowLimit: 0, highLimit: 0.365},
-  //   2: {lowLimit: 0.365, highLimit: 0.5},
-  //   3: {lowLimit: 0.5, highLimit: 0.635},
-  //   4: {lowLimit: 0.635, highLimit: 1}
-  // };
   turntness = Number(turntness);
+  if (turntness < 1) {
+    turntness = 1;
+  }
+  var numBuckets = 4;
   var breakPoints = [
-    0,
-    0.206,
-    0.286,
-    0.342,
-    0.387,
-    0.427,
-    0.464,
-    0.5,
-    0.536,
-    0.573,
-    0.613,
-    0.658,
-    0.713,
-    0.793,
-    1
+    0,      // 0
+    0.206,  // 1
+    0.286,  // 2
+    0.342,  // 3
+    0.387,  // 4
+    0.427,  // 5
+    0.464,  // 6
+    0.5,    // 7
+    0.536,  // 8
+    0.573,  // 9
+    0.613,  //10
+    0.658,  //11
+    0.713,  //12
+    0.793,  //13
+    1       //14
   ];
   var lowLimit = breakPoints[turntness -1];
-  var highLimit = breakPoints[turntness +2];
+  var highLimit = breakPoints[turntness + numBuckets -1];
 
   return _.chain(songs)
   .filter(function (song) {

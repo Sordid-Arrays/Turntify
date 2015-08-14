@@ -1,5 +1,4 @@
 var request = require('request-promise');
-var Promise = require('bluebird');
 
 if(process.env.SPOTIFY_CLIENT_ID){
   var config = {
@@ -75,15 +74,14 @@ var getUserPlaylist = function(userId, token) {
 /**
 * get spotify songs from playlist
 */
-var getPlaylistTracks = function(userId, playlistId, token) {
+var getPlaylistTracks = function(userId, playlistId, token, index) {
   var options = {
-    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?offset=' + index,
     headers: { 'Authorization': 'Bearer ' + token },
     json: true
   };
 
   return request.get(options)
-
   .catch(function (err) {
     if (err.statusCode === 401) {
       throw new OldTokenError();
