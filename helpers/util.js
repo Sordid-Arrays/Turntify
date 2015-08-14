@@ -34,6 +34,7 @@ var danceableFiltering = function (songs, turntness) {
   //   3: {lowLimit: 0.5, highLimit: 0.635},
   //   4: {lowLimit: 0.635, highLimit: 1}
   // };
+  turntness = Number(turntness);
   var breakPoints = [
     0,
     0.206,
