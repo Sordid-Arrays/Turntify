@@ -43,6 +43,7 @@ describe('PlayerController', function(){
     });
 
     it('should update the queue', function(){
+      PlayerController.selectedPlaylist = '{"name":"Sample","playlistId":"5zA1FfniCXXT2e7gLu8igS"}';
       // promisify PlayerController.updateQueue instead of using setTimeout
       (function(){
         return $q(function(resolve, reject){

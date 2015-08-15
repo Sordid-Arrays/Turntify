@@ -16,7 +16,11 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       'public/assets/libs/angular/angular.js',
+      'public/assets/libs/angular-animate/angular-animate.js',
       'public/assets/libs/angular-ui-router/release/angular-ui-router.js',
+      'public/assets/libs/angular-aria/angular-aria.js',
+      'public/assets/libs/angular-messages/angular-messages.js',
+      'public/assets/libs/angular-material/angular-material.js',
       'public/assets/libs/angular-mocks/angular-mocks.js',
       'public/assets/libs/angular-cookies/angular-cookies.js',
 
