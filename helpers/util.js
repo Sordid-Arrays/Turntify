@@ -2,6 +2,23 @@
 * util func return random string
 */
 var _ = require('underscore');
+var breakPoints = [
+  0,      // 0
+  0.206,  // 1
+  0.286,  // 2
+  0.342,  // 3
+  0.387,  // 4
+  0.427,  // 5
+  0.464,  // 6
+  0.5,    // 7
+  0.536,  // 8
+  0.573,  // 9
+  0.613,  //10
+  0.658,  //11
+  0.713,  //12
+  0.793,  //13
+  1       //14
+];
 
 var generateRandomString = function(length) {
   var text = '';
@@ -33,23 +50,6 @@ var danceableFiltering = function (songs, turntness) {
     turntness = 1;
   }
   var numBuckets = 4;
-  var breakPoints = [
-    0,      // 0
-    0.206,  // 1
-    0.286,  // 2
-    0.342,  // 3
-    0.387,  // 4
-    0.427,  // 5
-    0.464,  // 6
-    0.5,    // 7
-    0.536,  // 8
-    0.573,  // 9
-    0.613,  //10
-    0.658,  //11
-    0.713,  //12
-    0.793,  //13
-    1       //14
-  ];
   var lowLimit = breakPoints[turntness -1];
   var highLimit = breakPoints[turntness + numBuckets -1];
 
@@ -65,8 +65,18 @@ var danceableFiltering = function (songs, turntness) {
   .value();
 };
 
+var getTurntness = function (song) {
+  for ( var i = 0; i < breakPoints.length - 1; i++) {
+    var danceability = (song.audio_summary.danceability + song.audio_summary.energy) / 2;
+    if (breakPoints[i] <= danceability && breakPoints[i + 1] >= danceability) {
+      return i;
+    }
+  }
+};
+
 module.exports = {
   generateRandomString: generateRandomString,
   saveToken: saveToken,
-  danceableFiltering: danceableFiltering
+  danceableFiltering: danceableFiltering,
+  getTurntness: getTurntness
 };
