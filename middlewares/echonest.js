@@ -40,6 +40,10 @@ var getTrackData = function (spotyfyURIs) {
         return _.contains(spotyfyURIs, track.foreign_id);
       });
     });
+
+    if (songs === undefined) {
+      return [];
+    }
     return songs;
   });
 };
