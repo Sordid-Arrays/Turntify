@@ -1,5 +1,5 @@
 /**
-* the playerService will hold any business logic relating to the player. 
+* the playerService will hold any business logic relating to the player.
 * Directives will be in a seperate directive folder
 */
 angular.module('turntify.player')
@@ -11,8 +11,8 @@ angular.module('turntify.player')
   /**
   * getListOfPlaylists is called on initialization, sends a get request from the request factory,
   * and sets the playlists property equal to the result.
-  */ 
-  
+  */
+
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
@@ -20,15 +20,16 @@ angular.module('turntify.player')
       console.log("playlists: ", context.playlists);
     });
   };
-  
+
   /**
   * getQueue takes a playlist and turntness level, sends it to the RequestService, and updates the
   * current queue to reflect that change.
   */
-  
+
   PlayerService.getQueue = function(playlist, turntness){
     var context = this;
     return RequestService.getQueue(playlist.ownerId, playlist.playlistId, turntness).then(function(data){
+      console.log('FRONTEND:', data);
       context.queue = data;
       //checks to see if queue has songs, and a widget should be made
       if(context.queue.length>0){
@@ -43,11 +44,11 @@ angular.module('turntify.player')
       return;
     });
   };
-  
+
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-  
+
   PlayerService.generateWidget = function(argsObj){
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();

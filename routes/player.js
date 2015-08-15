@@ -48,19 +48,10 @@ router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) 
 
   helper.getTracks(target_ownerId, target_playlistId, access_token, refresh_token, target_turntness)
   .then(function (tracks) {
-    console.log('HERE TRACK');
-    console.log(tracks);
     var limitedTracks = tracks.map(function(track) {
 
     });
-    User.findOneAndUpdate({ spotifyId: target_userId }, { songQueue: tracks })
-    .then (function(user) {
-      //console.log(user);
-      //res.json(tracks);
-    });
-    // .catch(function(error) {
-    //   console.log('ERROR UPDATE QUEUE ', error);
-    // });
+    User.findOneAndUpdate({ spotifyId: target_userId }, { songQueue: tracks }).exec();
     res.json(tracks);
   })
 
