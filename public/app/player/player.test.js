@@ -1,11 +1,12 @@
 //player.test.js
-
-beforeEach(module('turntify'));
-beforeEach(module('turntify.player'));
-
 describe('PlayerController', function(){
-
-  beforeEach(inject(function(_$rootScope_, _$controller_, _$q_){
+  
+  /**
+  * Any "beforeEach" blocks go in the following function:
+  */ 
+  beforeEach( function() {
+    module('turntify.player');
+    inject(function(_$rootScope_, _$controller_, _$q_){
     $q = _$q_;
 
     /**
@@ -30,8 +31,8 @@ describe('PlayerController', function(){
     $scope = _$rootScope_.$new();
     $controller = _$controller_;
     PlayerController = $controller('PlayerController', { $scope: $scope, PlayerService: PlayerServiceMock });
-
-  }));
+   });
+  });
 
 
 
