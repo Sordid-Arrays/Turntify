@@ -142,6 +142,25 @@ var refreshToken = function (refreshToken) {
   });
 };
 
+var searchSong = function(targetSong, token) {
+  var option = {
+    url: 'https://api.spotify.com/v1/search?q=' + targetSong + '&type=track&limit=10' ,
+    headers: { 'Authorization': 'Bearer ' + token },
+    json: true
+  };
+
+  return request.get(option)
+  .catch(function(e) {
+    console.log('Got error: ', e.stack);
+  })
+
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
+  });
+};
 
 module.exports = {
   getUser: getUser,
@@ -149,5 +168,6 @@ module.exports = {
   getPlaylistTracks: getPlaylistTracks,
   getToken: getToken,
   refreshToken: refreshToken,
-  OldTokenError: OldTokenError
+  OldTokenError: OldTokenError,
+  searchSong: searchSong
 };
