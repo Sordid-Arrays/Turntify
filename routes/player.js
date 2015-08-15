@@ -5,6 +5,7 @@ var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
 var helper = require('../helpers/playlistHelper');
 var util = require('../helpers/util');
+var User = require('../models/users.js');
 
 var router = express.Router();
 
@@ -40,17 +41,31 @@ router.get('/user/playlists', function(req,res) {
 router.get('/user/playlist/:ownerId/:playlistId/:turntness', function(req, res) {
   var access_token = req.session.user.access_token;
   var refresh_token = req.session.user.refresh_token;
+  var target_userId = req.session.user.spotifyId;
   var target_ownerId = req.params.ownerId;
   var target_playlistId = req.params.playlistId;
   var target_turntness = req.params.turntness;
 
   helper.getTracks(target_ownerId, target_playlistId, access_token, refresh_token, target_turntness)
   .then(function (tracks) {
+    console.log('HERE TRACK');
+    console.log(tracks);
+    var limitedTracks = tracks.map(function(track) {
+
+    });
+    User.findOneAndUpdate({ spotifyId: target_userId }, { songQueue: tracks })
+    .then (function(user) {
+      //console.log(user);
+      //res.json(tracks);
+    });
+    // .catch(function(error) {
+    //   console.log('ERROR UPDATE QUEUE ', error);
+    // });
     res.json(tracks);
   })
 
   .catch(function (e) {
-    console.error('Got error: ',e);
+    console.error('Got error: ',e.stack);
     res.status(e.status || 500);
     res.json('Internal server error');
   });

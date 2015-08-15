@@ -81,12 +81,15 @@ router.get('/callback', function(req, res) {
     var query = {spotifyId : user.id};
     var newData = {
       spotifyId : user.id,
-      access_token : access_token,
-      refresh_token : refresh_token
+      name: user.display_name || user.id
     };
     return User.findOneAndUpdate(query, newData, {upsert: true});
   }).then(function(user) {
-    req.session.user = user;
+    req.session.user = {
+      spotifyId: user.spotifyId,
+      access_token: access_token,
+      refresh_token: refresh_token
+    };
     req.session.save();
     res.redirect('/#/player');
   })

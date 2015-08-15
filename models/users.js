@@ -7,7 +7,7 @@ var Schema = mongoose.Schema;
 var userSchema = new Schema({
   spotifyId: { type: String, required: true},
   name: { type: String, required: true},
-  songQueu: { type: Array, required: false}
+  songQueue: { type: Array, required: false}
   }
 );
 
