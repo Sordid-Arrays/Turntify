@@ -11,7 +11,8 @@ var ghettoNestSchema = new Schema({
   danceability: { type: Number, required: false},
   energy: { type: Number, required: false},
   duration: { type: Number, required: false},
-  album_name: { type: String, required: false}
+  album_name: { type: String, required: false},
+  turntness: {type: Number, required: false}
   }
 );
 
