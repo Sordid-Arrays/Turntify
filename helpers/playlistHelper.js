@@ -73,11 +73,11 @@ function getTracks(userId, playlistId, accessToken, refreshToken, tracks, index)
           energy: echonestSong.audio_summary.energy,
           duration: echonestSong.audio_summary.duration,
           album_name: echonestSong.tracks[0].album_name,
-          turntness: util.getTurntness(echonestSong)
+          turnt_bucket: util.getTurntness(echonestSong)
         };
       });
       // // here will insert to our db[]
-      console.log('NEW DATA TURNTNESS: ',newGhettoNest[0].turntness);
+      console.log('NEW DATA TURNTNESS: ',newGhettoNest[0].turnt_bucket);
       GhettoNest.create(newGhettoNest);
       tracks = tracks.concat(newGhettoNest);
     }

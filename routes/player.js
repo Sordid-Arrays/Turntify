@@ -106,11 +106,12 @@ router.get('/song', function(req, res) {
 * route for adding song to specific playlist
 */
 //this should be a post when connect to front end
-//router.get('/add/:ownerId/:playlistId/song', function(req, res) {
-router.post('/add/:ownerId/:playlistId/song', function(req, res) {
+//router.get('/addsong/:playlistId', function(req, res) {
+//router.post('/add/:ownerId/:playlistId/song', function(req, res) {
+router.post('/addsong/:playlistId', function(req, res) {
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
-  var targetOwnerId = req.params.ownerId;
+  var targetUserId = req.session.user.spotifyId;
   var targetPlaylistId = req.params.playlistId;
   var targetSongId = req.body.songId;
   //this is for teting, uncomment 3 lines on top when working with front end
@@ -119,13 +120,13 @@ router.post('/add/:ownerId/:playlistId/song', function(req, res) {
   // var targetPlaylistId = '7obYR1XGAi1XqnyOpRiorR';
   // var targetOwnerId = 'rickyhendrawan';
 
-  spotify.insertSong(accessToken, targetOwnerId, targetPlaylistId, targetSongId)
+  spotify.insertSong(accessToken, targetUserId, targetPlaylistId, targetSongId)
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
       util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.insertSong(body.access_token, targetOwnerId, targetPlaylistId, targetSongId);
+      return spotify.insertSong(body.access_token, targetUserId, targetPlaylistId, targetSongId);
     });
   })
   .then(function(done) {
