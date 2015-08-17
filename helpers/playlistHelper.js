@@ -5,7 +5,7 @@ var _ = require('underscore');
 var Songs = require('../models/songs.js');
 var GhettoNest = require('../models/ghettoNest.js');
 
-function getTracks(userId, playlistId, accessToken, refreshToken, turntness, tracks, index) {
+function getTracks(userId, playlistId, accessToken, refreshToken, tracks, index) {
   tracks = tracks || [];
   index = index || 0;
   var totalTracks = 0;
@@ -86,7 +86,7 @@ function getTracks(userId, playlistId, accessToken, refreshToken, turntness, tra
     // if number of tracks is less than 10 and total tracks is greater than 100,
     // recurse getTracks
     if (totalTracks > index + 100) {
-      return getTracks(userId, playlistId, accessToken, refreshToken, turntness, tracks, index+100);
+      return getTracks(userId, playlistId, accessToken, refreshToken, tracks, index+100);
     }
     return tracks;
   });

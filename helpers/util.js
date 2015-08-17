@@ -65,6 +65,9 @@ var danceableFiltering = function (songs, turntness) {
   .value();
 };
 
+/**
+* get Turntness for each song that will be returned to frot end and save to db
+*/
 var getTurntness = function (song) {
   for ( var i = 0; i < breakPoints.length - 1; i++) {
     var danceability = (song.audio_summary.danceability + song.audio_summary.energy) / 2;

@@ -34,7 +34,7 @@ router.get('/login', function(req, res) {
   res.cookie(stateKey, state);
 
   // application requests authorization
-  var scope = 'user-read-private user-read-email';
+  var scope = 'user-read-private playlist-modify-public playlist-modify-private';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
