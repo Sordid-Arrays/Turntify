@@ -12,7 +12,7 @@ var ghettoNestSchema = new Schema({
   energy: { type: Number, required: false},
   duration: { type: Number, required: false},
   album_name: { type: String, required: false},
-  turntness: {type: Number, required: false}
+  turnt_bucket: {type: Number, required: false}
   }
 );
 

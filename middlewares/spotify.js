@@ -169,7 +169,7 @@ var searchSong = function(targetSong, token) {
 /**
 * insert song to particular user playlist
 */
-var insertSong = function(token, ownerId, playlistId, songId) {
+var insertSong = function(token, userId, playlistId, songId) {
   // console.log('SONGID: ', songId);
   // console.log('OWNERID: ', ownerId);
   // console.log('PLAYLISTID: ', playlistId);
@@ -182,7 +182,7 @@ var insertSong = function(token, ownerId, playlistId, songId) {
   var option = {
     //https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks
     //url: 'https://api.spotify.com/v1/users/' + ownerId + '/playlists/' + playlistId + '/tracks?position=0&uris=' + songId ,
-    url: 'https://api.spotify.com/v1/users/' + ownerId + '/playlists/' + playlistId + '/tracks?' + query ,
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?' + query ,
     headers: { 'Authorization': 'Bearer ' + token },
     json: true
   };
