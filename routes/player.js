@@ -42,14 +42,14 @@ router.get('/user/playlists', function(req,res) {
 router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
-  var targetUserId = req.session.user.spotifyId;
+  var userId = req.session.user.spotifyId;
   var targetOwnerId = req.params.ownerId;
   var targetPlaylistId = req.params.playlistId;
 
   console.log('BEGIN ', new Date());
   helper.getTracks(targetOwnerId, targetPlaylistId, accessToken, refreshToken, req)
   .then(function (tracks) {
-    User.findOneAndUpdate({ spotifyId: target_userId }, { songQueue: tracks }).exec();
+    User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
 
     res.json(tracks);
   })
