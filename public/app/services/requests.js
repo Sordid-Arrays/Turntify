@@ -29,7 +29,6 @@ angular.module('turntify.services', [])
   
   var getListOfPlaylists = function(){
     // console.log('calling get list');
-    console.log('calling get list');
     return $http({
       method: 'GET',
       url: 'user/playlists',
@@ -56,6 +55,32 @@ angular.module('turntify.services', [])
     });
   };
 
+  var getPlaylist = function(ownerId, playlistId){
+    return $http({
+      method: 'GET',
+      url: 'user/playlist/'+ ownerId +'/' + playlistId,
+    }).then(function(res){
+      // console.log(JSON.stringify(res.data));
+      return res.data;
+    },function(error) {
+      console.log(error);
+      return;
+    });
+  };
+
+  // var savePlaylist = function(ownerId, playlistId){
+  //   return $http({
+  //     method: 'GET',
+  //     url: 'user/playlist/'+ ownerId +'/' + playlistId,
+  //   }).then(function(res){
+  //     // console.log(JSON.stringify(res.data));
+  //     return res.data;
+  //   },function(error) {
+  //     console.log(error);
+  //     return;
+  //   });
+  // };
+
 
 /**
 * Dummy request to practice to testing the mock backend.
@@ -76,7 +101,9 @@ angular.module('turntify.services', [])
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
     getListOfPlaylists: getListOfPlaylists,
     getQueue: getQueue,
+    getPlaylist: getPlaylist,
     // loginUser: loginUser
     dummyTest: dummyTest
+    //savePlaylist: savePlaylist
   };
 });
