@@ -25,16 +25,14 @@ function mapUris(playlist) {
 /*
 *  call spotify API to get tracks in the playlist
 */
-function getSpotifyUris(userId, playlistId, accessToken, refreshToken, index, req) {
-  return spotify.getPlaylistTracks(userId, playlistId, accessToken, index)
+function getSpotifyUris(userId, playlistId, index, req) {
+  return spotify.getPlaylistTracks(userId, playlistId, req.session.user.access_token, index)
   .catch(spotify.OldTokenError, function () {
     // statusCode 401:  Unauthorized
-    return spotify.refreshToken(refreshToken)
+    return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
-      accessToken = body.access_token;
-      refreshToken = body.refresh_token;
       util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.getPlaylistTracks(userId, playlistId, body.access_token);
+      return spotify.getPlaylistTracks(userId, playlistId, body.access_token, index);
     });
   });
 }
@@ -102,7 +100,7 @@ function getEchonestData (spotifyUris) {
 *  call spotify API multiple times because spotify API cannot return
 *  more than 100 songs at a time.
 */
-function getTracks(userId, playlistId, accessToken, refreshToken, req) {
+function getTracks(userId, playlistId, req) {
   console.log(new Date(), 'getTracks START: ');
   var allTracks = [];  // push tracks when DB response or Echonest response come back
   var resCount = 0; // keep track of response count and request count
@@ -118,7 +116,7 @@ function getTracks(userId, playlistId, accessToken, refreshToken, req) {
     */
     function makeRequest(index, first) {
       reqCount ++;
-      getSpotifyUris(userId, playlistId, accessToken, refreshToken, index, req)
+      getSpotifyUris(userId, playlistId, index, req)
       .then(function (playlist) {
         console.log(new Date(), 'got spotify URI ' + index + ' ~ ' + (index + 100));
         var totalTracks = playlist.total;

@@ -47,7 +47,7 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   var targetPlaylistId = req.params.playlistId;
 
   console.log('BEGIN ', new Date());
-  helper.getTracks(targetOwnerId, targetPlaylistId, accessToken, refreshToken, req)
+  helper.getTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
     User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
 
