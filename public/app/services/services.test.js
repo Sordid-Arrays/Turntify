@@ -82,7 +82,7 @@ describe('RequestService', function () {
         expect(result[i].playlistId).to.equal(returnData[i].playlistId);
         expect(result[i]).to.have.property("ownerId");
         expect(result[i].ownerId).to.equal(returnData[i].ownerId);
-      };
+      }
     });  
 
   });

@@ -37,33 +37,33 @@ describe('PlayerController', function(){
 
 
 
-  describe('updateQueue', function(){
+  // describe('getPlaylist', function(){
    
-    it('should be a function', function(){
-      expect(PlayerController.updateQueue).to.be.a('function');
-    });
+  //   it('should be a function', function(){
+  //     expect(PlayerController.getPlaylist).to.be.a('function');
+  //   });
 
-    it('should update the queue', function(){
-      PlayerController.selectedPlaylist = '{"name":"Sample","playlistId":"5zA1FfniCXXT2e7gLu8igS"}';
-      // promisify PlayerController.updateQueue instead of using setTimeout
-      (function(){
-        return $q(function(resolve, reject){
-          resolve(PlayerController.updateQueue());
-        });
-      })().then(function(){
-        // console.log('player controller queue:',PlayerController.queue);
-        return PlayerController.queue;
-      }).should.eventually.equal(PlayerServiceMock.queue);
-      // Whenever creating Promises in a test, 
-      // you must trigger a digest cycle in order for that promise to be resolved
-      $scope.$digest();
+  //   it('should update the queue', function(){
+  //     PlayerController.selectedPlaylist = '{"name":"Sample","playlistId":"5zA1FfniCXXT2e7gLu8igS"}';
+  //     // promisify PlayerController.updateQueue instead of using setTimeout
+  //     (function(){
+  //       return $q(function(resolve, reject){
+  //         resolve(PlayerController.updateQueue());
+  //       });
+  //     })().then(function(){
+  //       // console.log('player controller queue:',PlayerController.queue);
+  //       return PlayerController.queue;
+  //     }).should.eventually.equal(PlayerServiceMock.queue);
+  //     // Whenever creating Promises in a test, 
+  //     // you must trigger a digest cycle in order for that promise to be resolved
+  //     $scope.$digest();
 
-    });
+  //   });
 
     // Maybe test inputs are passed to PlayerService.updateQueue
 
 
-  });
+  // });
 
   describe('init', function(){
 
@@ -88,7 +88,6 @@ describe('PlayerController', function(){
     });
 
   });
-
   describe('turntLevels', function(){
 
     it('should be an array', function(){

@@ -25,5 +25,10 @@ GET user/playlist/:ownerId/:playlistId
 ]
 
 
-
+GET user/playlist/:ownerId/:playlistId
+* For getting ALL songs in a playlist
+* Request header includes { userId: <str>, userOAuth: <str> } (I think)
+* OwnerId is the ID of the owner of the playlist - not necessarily the logged-in user
+* Takes three arguments: owner.id, playlist.id
+* Returns song objects in the same format as the above request
 
