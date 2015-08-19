@@ -187,7 +187,6 @@ var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, 
       var songUris = _.map(songs, function(song) {
         return song.spotify_id;
       });
-      //console.log('SongUris: ', songUris);
 
       return spotify.removeTracks(userId, playlistIdToPass, accessToken, songUris).
       then(function(done) {
