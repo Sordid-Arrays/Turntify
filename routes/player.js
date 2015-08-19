@@ -64,19 +64,20 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
 * route for searching song from all spotify
 */
 router.get('/song', function(req, res) {
-  var targetSong = req.query.song;
-  //var targetSong = 'hotel california';
+  var searchWords = req.query.song;
   var accessToken = req.session.user.access_token;
-  console.log(accessToken);
   var refreshToken = req.session.user.refresh_token;
+  if (typeof searchWords === 'string') {
+    searchWords = [searchWords];
+  }
 
-  spotify.searchSong(targetSong, accessToken)
+  spotify.searchSong(searchWords, accessToken)
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
       util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.searchSong(targetSong, body.access_token);
+      return spotify.searchSong(searchWords, body.access_token);
     });
   })
 
@@ -91,11 +92,11 @@ router.get('/song', function(req, res) {
         spotifyUri: song.uri
       };
     });
-    console.log(searchResult);
+    console.log('SEARCH: ', searchResult);
     res.json(searchResult);
   })
   .catch(function(e) {
-    console.log('Got error: ', e.stack);
+    console.error('Got error: ', e);
   });
 });
 

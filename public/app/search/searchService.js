@@ -2,9 +2,9 @@ angular.module('turntify.search')
 .factory('SearchService', function(RequestService) {
   var candidates = {};
 
-  var checkCash = function (input) {
+  var checkCache = function (input) {
     if (candidates[input]) {
-      console.log('CASH');
+      console.log('CACHE');
       return candidates[input];
     }
     return false;
@@ -17,11 +17,8 @@ angular.module('turntify.search')
     qs = qs.slice(0, qs.length - 1);
     return RequestService.searchTracks(qs)
     .then(function (tracks) {
-      var results = tracks.map(function (track) {
-        return track.songName + ' / '+ track.artist + ' ('+ track.album + ')\n';
-      });
-      candidates[input] = results;
-      return results;
+      candidates[input] = tracks;
+      return tracks;
     });
   };
 
@@ -31,7 +28,7 @@ angular.module('turntify.search')
   };
 
   return {
-    checkCash: checkCash,
+    checkCache: checkCache,
     autoComplete: autoComplete,
     searchTracks: searchTracks
   };
