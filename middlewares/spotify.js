@@ -147,9 +147,15 @@ var refreshToken = function (refreshToken) {
 /**
 * get all songs related to the search
 */
-var searchSong = function(targetSong, token) {
+var searchSong = function(targetSongs, token) {
+  var qs = queryString.stringify({
+    q: targetSongs,
+    type: 'track',
+    limit: 10
+  });
+  console.log('qs: ',qs);
   var option = {
-    url: 'https://api.spotify.com/v1/search?q=' + targetSong + '&type=track&limit=10' ,
+    url: 'https://api.spotify.com/v1/search?' + qs,
     headers: { 'Authorization': 'Bearer ' + token },
     json: true
   };

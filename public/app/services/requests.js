@@ -1,7 +1,7 @@
-/** 
-* this module will: 
-* 1) create a module ("services") for services shared between apps 
-* 2) handle RESTful interaction between the client and the server. Other services that store 
+/**
+* this module will:
+* 1) create a module ("services") for services shared between apps
+* 2) handle RESTful interaction between the client and the server. Other services that store
 * information or functions required across the app can be added to the turntify.services namespace in another file.
 * any logic/data filters longer than a couple lines should be required in another factory file
 */
@@ -26,7 +26,7 @@ angular.module('turntify.services', [])
   //     console.log(error);
   //   });
   // };
-  
+
   var getListOfPlaylists = function(){
     // console.log('calling get list');
     return $http({
@@ -81,6 +81,16 @@ angular.module('turntify.services', [])
   //   });
   // };
 
+  var searchTracks = function (qs) {
+    return $http({
+      method: 'GET',
+      url: 'song?' + qs
+    }).then(function (res) {
+      return res.data;
+    }).catch(function (error) {
+      console.log(error);
+    });
+  };
 
 /**
 * Dummy request to practice to testing the mock backend.
@@ -102,6 +112,7 @@ angular.module('turntify.services', [])
     getListOfPlaylists: getListOfPlaylists,
     getQueue: getQueue,
     getPlaylist: getPlaylist,
+    searchTracks: searchTracks,
     // loginUser: loginUser
     dummyTest: dummyTest
     //savePlaylist: savePlaylist
