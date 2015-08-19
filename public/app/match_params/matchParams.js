@@ -5,7 +5,6 @@ angular.module('turntify.player')
   // 2) anything relating to the playlist name
   // 3) remove songs, clear playlist, etc.
   var vm = this;
-
   vm.updateMatches = function(){
     PlayerService.updateMatches(vm.selectedTurntness);
   };
