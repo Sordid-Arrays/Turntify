@@ -3,5 +3,6 @@
 <!--also: buttons for each song to add to the middle playlist-->
 <h3>Matching songs:</h3>
 <ul class="songList">
-  <li ng-repeat="song in player.viewQueue">{{song.title}}</li>
+  <li ng-repeat="song in matches.matches">{{song.title}}</li>
 </ul>
+<button type="button" ng-click="matches.saveMatches(player.matches)">Click Me!</button>

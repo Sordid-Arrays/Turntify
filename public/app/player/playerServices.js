@@ -3,12 +3,13 @@
 * Directives will be in a seperate directive folder
 */
 angular.module('turntify.player')
-.factory('PlayerService', function PlayerService (RequestService) {
+.factory('PlayerService', function PlayerService ($rootScope, RequestService, turntToFilter) {
   var PlayerService = {};
   PlayerService.playlists = [];
   PlayerService.playlist = [];  
-  PlayerService.viewQueue = [];
+  PlayerService.matches = [];
   PlayerService.turntness = 1;
+  PlayerService.customPlaylist = [];
 
   /**
   * getListOfPlaylists is called on initialization, sends a get request from the request factory,
@@ -24,6 +25,7 @@ angular.module('turntify.player')
     });
   };
 
+  //DEPRECATED: only here for demo purposes
   PlayerService.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
     var context = this;
     console.log("viewQueue: ", viewQueue);
@@ -33,6 +35,18 @@ angular.module('turntify.player')
                         selectedPlaylist: selectedPlaylist,
                         selectedTurntness: turntness});
     }
+  };
+
+  //this function updates the "matches", and is run every time any of the filters
+  PlayerService.updateMatches = function(turntness){
+    console.log("turntness: ", turntness);
+    this.matches = turntToFilter(PlayerService.playlist, turntness);
+    $rootScope.$broadcast('matchesUpdated');
+  };
+
+  PlayerService.addMatches = function(matches){
+    this.customPlaylist = this.customPlaylist.concat(matches);
+    $rootScope.$broadcast('customPlaylistChanged');
   };
 
   PlayerService.getPlaylist = function(playlist){

@@ -2,7 +2,8 @@
 * This holds any filters we need in our app: most notably, the 'turntFilter'.
 */
 
-angular.module('turntify.player').filter('turntTo', function() {
+angular.module('turntify.player')
+  .filter('turntTo', function() {
   
   //the "input" will be a song object from the "playlist" array, and the "turntness" will be
   // the current value of turntness

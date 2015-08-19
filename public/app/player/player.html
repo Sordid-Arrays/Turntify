@@ -20,22 +20,7 @@
         </div>
         <!-- <h4>Selected Playlist: {{ player.selectedPlaylist.name }}</h4> -->
       </div>
-      <div class="turntometerWrapper">
-        <div layout="row">
-          <div ui-view="matchParams"></div>
-          <md-input-container>
-            <label>Select A Turntness</label>
-            <!--<md-select class="turntSelector" ng-model="player.selectedTurntness" ng-change="player.updateViewQueue(player.selectedTurntness)">
-              <md-option ng-repeat="turntness in player.turntLevels" value="{{turntness}}">{{turntness}}</md-option>
-            </md-select>-->
-            <div>
-              <md-slider ng-model="player.selectedTurntness" step="1" min="1" max="11" ng-change="player.updateViewQueue(player.selectedTurntness)" ng-mouseup="player.persistViewQueue(player.viewQueue, player.selectedTurntness, player.selectedPlaylist)">
-              </md-slider>
-            </div>
-          </md-input-container>
-        </div>
-        <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
-      </div>
+      <div ui-view="matchParams"></div>
       <div ui-view="search"></div>
     </div>
   

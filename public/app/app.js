@@ -10,8 +10,6 @@ angular.module('turntify', [
   'turntify.player',
   'turntify.main',
   'turntify.search',
-  'turntify.customPlaylist',
-  'turntify.matches',
   'ui.router',
   'ngCookies',
   'ngMaterial'
@@ -57,6 +55,10 @@ angular.module('turntify', [
       "matches@player": {
         templateUrl: './app/matches/matches.html',
         controller: 'MatchesController as matches'
+      },
+      "matchParams@player": {
+        templateUrl: './app/match_params/matchParams.html',
+        controller: 'MatchParamsController as matchParams'
       }
     }
   });
