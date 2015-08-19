@@ -22,6 +22,7 @@
       </div>
       <div class="turntometerWrapper">
         <div layout="row">
+          <div ui-view="matchParams"></div>
           <md-input-container>
             <label>Select A Turntness</label>
             <!--<md-select class="turntSelector" ng-model="player.selectedTurntness" ng-change="player.updateViewQueue(player.selectedTurntness)">
@@ -39,14 +40,11 @@
     </div>
   
     <div class="widgetContainer" flex="55">
+      <div ui-view="customPlaylist"></div>
       <div class="widgetWrapper"></div>
     </div>
-    
     <div class="queueContainer" flex>
-      <h3>Queue</h3>
-      <ul class="songList">
-        <li ng-repeat="song in player.viewQueue">{{song.title}}</li>
-      </ul>
+      <div ui-view="matches"></div>
     </div>
   </div>  
 

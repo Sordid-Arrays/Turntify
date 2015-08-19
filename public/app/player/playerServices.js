@@ -7,7 +7,8 @@ angular.module('turntify.player')
   var PlayerService = {};
   PlayerService.playlists = [];
   PlayerService.playlist = [];  
-  PlayerService.queue = [];
+  PlayerService.viewQueue = [];
+  PlayerService.turntness = 1;
 
   /**
   * getListOfPlaylists is called on initialization, sends a get request from the request factory,
@@ -20,30 +21,6 @@ angular.module('turntify.player')
       context.playlists = data;
       console.log("playlists: ", context.playlists);
       console.log("playlists type: ", typeof context.playlists[0]);
-    });
-  };
-
-  /**
-  * DEPRECATED:
-  * getQueue takes a playlist and turntness level, sends it to the RequestService, and updates the
-  * current queue to reflect that change.
-  */
-  PlayerService.getQueue = function(playlist, turntness){
-    var context = this;
-    return RequestService.getQueue(playlist.ownerId, playlist.playlistId, turntness).then(function(data){
-      console.log('FRONTEND:', data);
-      context.queue = data;
-      //checks to see if queue has songs, and a widget should be made
-      if(context.queue.length>0){
-        console.log('gotta song!');
-        //this will have to be updated when 'generateWidget' is refactored.
-        context.generateWidget({queue: context.queue,
-                                selectedPlaylist: playlist,
-                                selectedTurntness: turntness});
-        return;
-      }
-      console.log('no tracks in playlist "'+playlist.name+'" at turntness '+turntness);
-      return;
     });
   };
 
