@@ -154,6 +154,7 @@ var searchSong = function(targetSong, token) {
     json: true
   };
 
+
   return request.get(option)
   .catch(function(e) {
     console.log('Got error: ', e.stack);
@@ -182,7 +183,6 @@ var insertSong = function(token, userId, playlistId, songId) {
   });
 
   var option = {
-    //https://api.spotify.com/v1/users/{user_id}/playlists/{playlist_id}/tracks
     //url: 'https://api.spotify.com/v1/users/' + ownerId + '/playlists/' + playlistId + '/tracks?position=0&uris=' + songId ,
     url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?' + query ,
     headers: { 'Authorization': 'Bearer ' + token },
@@ -201,6 +201,9 @@ var insertSong = function(token, userId, playlistId, songId) {
   });
 };
 
+/**
+* create playlist in spotify
+*/
 var createPlaylist = function(token, userId, playlistName) {
   var option = {
     url: 'https://api.spotify.com/v1/users/' + userId + '/playlists' ,
@@ -221,6 +224,10 @@ var createPlaylist = function(token, userId, playlistName) {
   });
 };
 
+/**
+* remove tracks from playlist if user try to create same playlist name before inserting new tracks
+* from req.body
+*/
 var removeTracks = function(userId, playlistId, token, tracksTobeRemoved) {
 
   var tracksBody = _.map(tracksTobeRemoved, function(track) {

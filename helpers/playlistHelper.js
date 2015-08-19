@@ -148,6 +148,11 @@ function getTracks(userId, playlistId, req) {
   });
 }
 
+/*
+* this function will check if playlist exist, if it is it will delete all the tracks and save new tracks
+* that was passed in from req.body
+* if it doesn't exist, it will create the playlist and add the tracks from the req.body
+*/
 var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, refreshToken) {
   var isPlaylistExist;
   var playlistIdToPass;
@@ -182,7 +187,6 @@ var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, 
       var songUris = _.map(songs, function(song) {
         return song.spotify_id;
       });
-      //console.log('SongUris: ', songUris);
 
       return spotify.removeTracks(userId, playlistIdToPass, accessToken, songUris).
       then(function(done) {
