@@ -10,6 +10,8 @@ angular.module('turntify', [
   'turntify.player',
   'turntify.main',
   'turntify.search',
+  'turntify.customPlaylist',
+  'turntify.matches',
   'ui.router',
   'ngCookies',
   'ngMaterial'
@@ -42,11 +44,19 @@ angular.module('turntify', [
     views: {
       "player": {
         templateUrl: './app/player/player.html',
-        controller: "PlayerController as player",
+        controller: "PlayerController as player"
       },
       "search@player": {
         templateUrl: './app/search/search.html',
-        controller: 'SearchController as search',
+        controller: 'SearchController as search'
+      },
+      "customPlaylist@player": {
+        templateUrl: './app/custom_playlist/customPlaylist.html',
+        controller: 'CustomPlaylistController as customPlaylist'
+      },
+      "matches@player": {
+        templateUrl: './app/matches/matches.html',
+        controller: 'MatchesController as matches'
       }
     }
   });
