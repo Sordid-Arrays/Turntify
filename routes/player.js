@@ -50,7 +50,6 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   helper.getTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
     User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
-
     res.json(tracks);
   })
 
@@ -68,6 +67,7 @@ router.get('/song', function(req, res) {
   var targetSong = req.query.song;
   //var targetSong = 'hotel california';
   var accessToken = req.session.user.access_token;
+  console.log(accessToken);
   var refreshToken = req.session.user.refresh_token;
 
   spotify.searchSong(targetSong, accessToken)
@@ -125,6 +125,51 @@ router.post('/addsong/:playlistId', function(req, res) {
       util.saveToken(req, body.access_token, body.refresh_token);
       return spotify.insertSong(body.access_token, targetUserId, targetPlaylistId, targetSongId);
     });
+  })
+  .then(function(done) {
+    res.json({success: true});
+  })
+  .catch(function(e) {
+    console.log('Got error: ', e.stack);
+    res.json({success:false});
+  });
+});
+
+
+/**
+* route for adding new playlist
+*/
+//router.get('/saveplaylist/:playlistName/:turntness', function(req, res) {
+  router.post('/saveplaylist/:playlistName/:turntness', function(req, res) {
+  var accessToken = req.session.user.access_token;
+  var refreshToken = req.session.user.refresh_token;
+  var userId = req.session.user.spotifyId;
+  var turntness = req.params.turntness;
+  var playlistName = req.params.playlistName + ' Turntness to ' + turntness;
+  //var mockBody = [{"_id":"55d37de118796d701b4806df","spotify_id":"spotify:track:5bC230viUaRu4uXGQkQDRV","echonest_id":"SOLEIZN135CAD15595","artist_name":"Rainbow","title":"The Temple Of The King","danceability":0.360556,"energy":0.477005,"duration":284.89333,"album_name":"Anthology","turnt_bucket":4,"__v":0},{"_id":"55d386157fc3b93d24bd9b28","spotify_id":"spotify:track:5NDyPVjcjK0hw2sUjjWFIO","echonest_id":"SOJWMQV1377850D0F8","artist_name":"Deep Purple","title":"Soldier Of Fortune","danceability":0.533954,"energy":0.347959,"duration":195.07955,"album_name":"Stormbringer","turnt_bucket":5,"__v":0}];
+  var songs = req.body.songs;
+  // var isPlaylistExist;
+  // var playlistIdToPass;
+  //coba to turntness 2: '0C6JGE0FhPhzjQIzzDazFy'
+
+  spotify.getUserPlaylist(userId, accessToken)
+  .catch(spotify.OldTokenError, function (err) {
+    // statusCode 401:  Unauthorized
+    return spotify.refreshToken(req.session.user.refresh_token)
+    .then(function (body) {
+      util.saveToken(req, body.access_token, body.refresh_token);
+      return spotify.getUserPlaylist(userId, body.access_token);
+    });
+  })
+  .then(function(playListArr) {
+    return helper.getEmptyPlaylist(req.session.user.access_token, userId, playlistName, playListArr, req.session.user.refresh_token);
+  })
+  .then(function(playlistIdToPass) {
+    var songArr = _.map(songs, function(song) {
+      return song.spotify_id;
+    });
+    var songsStr = songArr.toString();
+    return spotify.insertSong(accessToken, userId, playlistIdToPass, songsStr);
   })
   .then(function(done) {
     res.json({success: true});

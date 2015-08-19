@@ -1,5 +1,6 @@
 var request = require('request-promise');
 var queryString = require('query-string');
+var _ = require('underscore');
 
 if(process.env.SPOTIFY_CLIENT_ID){
   var config = {
@@ -175,8 +176,9 @@ var insertSong = function(token, userId, playlistId, songId) {
   // console.log('PLAYLISTID: ', playlistId);
   // console.log('TOKEN: ', token);
   var query = queryString.stringify({
-    position: 0,
+    //position: 0,
     uris: songId
+    //uris: 'spotify:track:40riOy7x9W7GXjyGp4pjAv,spotify:track:5bC230viUaRu4uXGQkQDRV'
   });
 
   var option = {
@@ -199,6 +201,50 @@ var insertSong = function(token, userId, playlistId, songId) {
   });
 };
 
+var createPlaylist = function(token, userId, playlistName) {
+  var option = {
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists' ,
+    headers: { 'Authorization': 'Bearer ' + token },
+    body: {
+      name: playlistName,
+      public: 'true'
+    },
+    json: true
+  };
+
+  return request.post(option)
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
+  });
+};
+
+var removeTracks = function(userId, playlistId, token, tracksTobeRemoved) {
+
+  var tracksBody = _.map(tracksTobeRemoved, function(track) {
+    return {uri:track};
+  });
+
+  var option = {
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks'  ,
+    headers: { 'Authorization': 'Bearer ' + token },
+    body: {
+      tracks: tracksBody
+    },
+    json: true
+  };
+
+  return request.del(option)
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
+  });
+};
+
 module.exports = {
   getUser: getUser,
   getUserPlaylist: getUserPlaylist,
@@ -207,5 +253,7 @@ module.exports = {
   refreshToken: refreshToken,
   OldTokenError: OldTokenError,
   searchSong: searchSong,
-  insertSong: insertSong
+  insertSong: insertSong,
+  createPlaylist: createPlaylist,
+  removeTracks: removeTracks
 };
