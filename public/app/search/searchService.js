@@ -4,11 +4,11 @@ angular.module('turntify.search')
 
   var checkCache = function (input) {
     if (candidates[input]) {
-      console.log('CACHE');
       return candidates[input];
     }
     return false;
   };
+  
   var autoComplete = function (input) {
     var searchWords = input.trim().split(/\s+/);
     var qs = searchWords.reduce(function (memo, word) {

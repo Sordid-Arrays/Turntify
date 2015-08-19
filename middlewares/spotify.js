@@ -152,7 +152,7 @@ var searchSong = function(searchWords, token) {
     type: 'track',
     limit: 10
   });
-  qs += '&q=' + searchWords.join('+');
+  qs += '&q=' + searchWords.join('+') + '*';
   var option = {
     url: 'https://api.spotify.com/v1/search?' + qs,
     headers: { 'Authorization': 'Bearer ' + token },

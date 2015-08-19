@@ -92,7 +92,6 @@ router.get('/song', function(req, res) {
         spotifyUri: song.uri
       };
     });
-    console.log('SEARCH: ', searchResult);
     res.json(searchResult);
   })
   .catch(function(e) {
