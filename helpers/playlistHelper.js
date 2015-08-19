@@ -93,7 +93,6 @@ function getEchonestData (spotifyUris) {
   });
 }
 
-
 /*
 *  MAIN FUNCTION
 *  get spotify URI and get Echonest data
@@ -149,6 +148,53 @@ function getTracks(userId, playlistId, req) {
   });
 }
 
+var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, refreshToken) {
+  var isPlaylistExist;
+  var playlistIdToPass;
+
+  isPlaylistExist = _.some(playListArr, function(playlist) {
+    return playlist.name === playlistName;
+  });
+  if (!isPlaylistExist) {
+    return spotify.createPlaylist(accessToken, userId, playlistName)
+    .then(function(playlist) {
+      playlistIdToPass = playlist.id;
+      return playlistIdToPass;
+    });
+  }
+  //console.log('CREATE PLAYLIST ARR: ',playListArr);
+  playlistIdToPass = _.chain(playListArr)
+  .filter(function(playlist) {
+    return playlist.name === playlistName;
+  })
+  .map(function(item) {
+    return item.playlistId;
+  })
+  .value();
+  playlistIdToPass = playlistIdToPass[0];
+  //console.log('CREATE PLAYLIST ID: ', playlistIdToPass);
+
+  return getTracks(userId, playlistIdToPass, accessToken, refreshToken)
+  .then(function(songs) {
+    if (isPlaylistExist && songs.length > 0) {
+    //if (songs.length > 0) {
+      //delete all songs from playlist
+      var songUris = _.map(songs, function(song) {
+        return song.spotify_id;
+      });
+      //console.log('SongUris: ', songUris);
+
+      return spotify.removeTracks(userId, playlistIdToPass, accessToken, songUris).
+      then(function(done) {
+        return playlistIdToPass;
+      });
+    }
+    return playlistIdToPass;
+  });
+};
+
+
 module.exports = {
-  getTracks: getTracks
+  getTracks: getTracks,
+  getEmptyPlaylist: getEmptyPlaylist
 };

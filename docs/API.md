@@ -24,6 +24,9 @@ GET user/playlist/:ownerId/:playlistId
   }
 ]
 
+to search for song : /song
+song name will be in req.query
+this is a get
 
 GET user/playlist/:ownerId/:playlistId
 * For getting ALL songs in a playlist
@@ -32,3 +35,14 @@ GET user/playlist/:ownerId/:playlistId
 * Takes three arguments: owner.id, playlist.id
 * Returns song objects in the same format as the above request
 
+
+to insert song into playlist
+/addsong/:playlistId
+you will send the spotify song id inside the req.body.songId
+this is a post
+
+
+to create playlist or update playlist with imported songs
+/saveplaylist/:playlistName/:turntness
+you will send the songs in req.body.song
+this is a post
