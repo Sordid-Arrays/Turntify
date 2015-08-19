@@ -25,7 +25,7 @@ angular.module('turntify', [
   //the $urlRouterProvider is the "otherwise" state
   //TODO: make proper variable urls to fit our get requests
   //TODO: add states and substates down the line
-  
+
   //normalizes urls to be lowercase
   $urlRouterProvider.otherwise('/player');
   $stateProvider

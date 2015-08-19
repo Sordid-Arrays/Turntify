@@ -1,1 +1,5 @@
 <!-- this partial will be inserted into the "ui-view" in player.html labeled "search" -->
+<input type="text" name="search" ng-change="search.autoComplete(searh.userInput)" ng-model="searh.userInput">
+<textarea rows="10" cols="50" ng-model="search.candidates">
+</textarea>
+<!--button name="enter" ng-click="search.searchTracks(searh.userInput)"></button-->
