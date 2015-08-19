@@ -59,6 +59,10 @@ angular.module('turntify', [
       "matchParams@player": {
         templateUrl: './app/match_params/matchParams.html',
         controller: 'MatchParamsController as matchParams'
+      },
+      "graph@player": {
+        templateUrl: './app/graph/graph.html',
+        controller: 'GraphController as Graph'
       }
     }
   });

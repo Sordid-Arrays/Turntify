@@ -26,16 +26,16 @@ angular.module('turntify.player')
   };
 
   //DEPRECATED: only here for demo purposes
-  PlayerService.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
-    var context = this;
-    console.log("viewQueue: ", viewQueue);
-    context.queue = viewQueue;
-    if(context.queue.length>0){
-      context.generateWidget({queue: context.queue,
-                        selectedPlaylist: selectedPlaylist,
-                        selectedTurntness: turntness});
-    }
-  };
+  // PlayerService.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
+  //   var context = this;
+  //   console.log("viewQueue: ", viewQueue);
+  //   context.queue = viewQueue;
+  //   if(context.queue.length>0){
+  //     context.generateWidget({queue: context.queue,
+  //                       selectedPlaylist: selectedPlaylist,
+  //                       selectedTurntness: turntness});
+  //   }
+  // };
 
   //this function updates the "matches", and is run every time any of the filters
   PlayerService.updateMatches = function(turntness){
@@ -44,8 +44,9 @@ angular.module('turntify.player')
     $rootScope.$broadcast('matchesUpdated');
   };
 
-  PlayerService.addMatches = function(matches){
-    this.customPlaylist = this.customPlaylist.concat(matches);
+  PlayerService.addMatches = function(){
+    this.customPlaylist = _.uniq(this.customPlaylist.concat(this.matches));
+    console.log("current playlist: ", this.customPlaylist);
     $rootScope.$broadcast('customPlaylistChanged');
   };
 

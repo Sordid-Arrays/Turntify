@@ -6,12 +6,10 @@ angular.module('turntify.player')
   // 3) remove songs, clear playlist, etc.
   var vm = this;
   vm.customPlaylist = PlayerService.customPlaylist;
-  vm.update = function(){
-    vm.customPlaylist = PlayerService.customPlaylist;
-  };
 
   //listener for an event saying the playlist needs to update
-  $scope.$on('updateCustomPlaylist', function(){
+  $scope.$on('customPlaylistChanged', function(){
+    console.log('update playlist from controller ', vm.customPlaylist);
     vm.customPlaylist = PlayerService.customPlaylist;
   });
 });

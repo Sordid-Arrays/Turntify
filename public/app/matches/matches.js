@@ -1,9 +1,8 @@
 angular.module('turntify.player')
   .controller('MatchesController', function(PlayerService, $scope){
   var vm = this;
-  vm.saveAllMatches = function(matches){
-    console.log("PlayerController: ", this.viewQueue);
-    PlayerService.saveMatches(matches);
+  vm.addAllMatches = function(){
+    PlayerService.addMatches();
   };
 
   $scope.$on('matchesUpdated', function(){
