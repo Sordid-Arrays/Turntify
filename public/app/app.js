@@ -9,6 +9,7 @@ angular.module('turntify', [
   'turntify.login',
   'turntify.player',
   'turntify.main',
+  'turntify.search',
   'ui.router',
   'ngCookies',
   'ngMaterial'
@@ -37,9 +38,17 @@ angular.module('turntify', [
   //and anything we extend down the line
   .state('player', {
     url: '/player',
-    templateUrl: './app/player/player.html',
-    controller: "PlayerController as player",
-    data: {isRestricted: true}
+    data: {isRestricted: true},
+    views: {
+      "player": {
+        templateUrl: './app/player/player.html',
+        controller: "PlayerController as player",
+      },
+      "search@player": {
+        templateUrl: './app/search/search.html',
+        controller: 'SearchController as search',
+      }
+    }
   });
 
   // $mdThemingProvider.theme('default')
