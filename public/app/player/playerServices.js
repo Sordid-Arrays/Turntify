@@ -47,9 +47,6 @@ angular.module('turntify.player')
     });
   };
 
-  /**
-  * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
-  */
   PlayerService.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
     var context = this;
     console.log("viewQueue: ", viewQueue);
