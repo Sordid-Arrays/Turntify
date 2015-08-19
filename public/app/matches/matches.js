@@ -1,5 +1,15 @@
-angular.module('turntify.matches', [])
-  .controller('MatchesController', function(PlayerService){
+angular.module('turntify.player')
+  .controller('MatchesController', function(PlayerService, $scope){
+  var vm = this;
+  vm.addAllMatches = function(){
+    PlayerService.addMatches();
+  };
+
+  $scope.$on('matchesUpdated', function(){
+    vm.matches = PlayerService.matches;
+    console.log("matches in MController: ", vm.matches);
+    console.log("heard event in matchesController!");
+  });
 
   //this will contain logic, such as:
   // 1) function to add all songs to playlist

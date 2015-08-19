@@ -43,3 +43,4 @@ angular.module('turntify.services')
     logoutUser: logoutUser
   };
 });
+
