@@ -7,8 +7,7 @@ angular.module('turntify.search', [])
   var vm = this;
 
   vm.autoComplete = function (input) {
-    console.log('change!');
-    var cash = SearchService.checkCash(input);
+    var cash = SearchService.checkCache(input);
     if (cash) {
       vm.candidates =cash;
       return;
