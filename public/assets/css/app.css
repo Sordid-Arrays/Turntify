@@ -2,8 +2,11 @@
 the base CSS template file, so it takes priority over the generic 
 template (NOT BOOTSTRAP) without modifying the template file*/
 
+.bodyContainer, .viewContainer, .playerUIview, .playerContainer{
+  height: 100%;
+}
 .playerContainer{
-  max-width: 1250px;
+  max-width: 100%;
   margin: 0 auto;
 }
 .widgetContainer{
@@ -17,7 +20,6 @@ template (NOT BOOTSTRAP) without modifying the template file*/
   width: 1250px;
   margin: 0 auto;
 }
-
 
 [ng-drag] {
   -moz-user-select: -moz-none;
@@ -42,5 +44,15 @@ template (NOT BOOTSTRAP) without modifying the template file*/
 [ng-drop] div {
   position: relative;
   z-index: 2;
+}
+
+md-sidenav {
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.md-sidenav-left>md-content{
+  padding-left: 20px;
+}
+.matchParamsWrapper md-content md-slider{
+  margin-left: 9px;
 }
 

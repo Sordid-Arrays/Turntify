@@ -34,6 +34,31 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
     }); 
 
   };
+  
+  vm.sideNavIsOpen = true;
+  vm.toggleSideNav = function(){
+    console.log('called toggle side nav');
+    vm.sideNavIsOpen = vm.sideNavIsOpen ? false : true;
+  };
+
+  /**
+  * Update the view queue while the user is sliding the slider/turning the knob/radial-ing the radial.
+  * This is to allow for a flickering visual of the potential queue before the queue is locked in.
+  * This DOES NOT write anything to the service/business logic end, and and shouldn't effect the widget.
+  */
+  this.updateViewQueue = function(turntness){
+    vm.viewQueue = turntToFilter(PlayerService.playlist, turntness);
+  };
+
+
+  /**
+  * Persists the view queue to PlayerService.
+  */
+  this.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
+    var playlist = JSON.parse(selectedPlaylist);
+    PlayerService.persistViewQueue(viewQueue, turntness, playlist);
+    console.log("persisting View Queue!");
+  };
 
   /**
   * Called from view, this takes a stringified version of a selected playlist's description
