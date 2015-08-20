@@ -75,12 +75,10 @@ router.get('/song', function(req, res) {
 
   var resultSongs = [];
 
-  //first look in database
-  var dbTargetSongs = _.map(searchWords, function(searchWord) {
-    return new RegExp(util.escape(searchWord), 'i');
-  });
+  var dbSearchText = '"' + searchWords.join('" "') + '"';
 
-  GhettoNest.find( { $or: [ { title: { $in: dbTargetSongs } }, { artist_name: dbTargetSongs } ] } )
+  GhettoNest.find( { $text: { $search: dbSearchText}})
+  // GhettoNest.find( { $or: [ { title: { $in: dbTargetSongs } }, { artist_name: dbTargetSongs } ] } )
   .then(function(dbSongs) {
 
     resultSongs = _.map(dbSongs, function(dbsong) {

@@ -3,9 +3,9 @@
 <div class="autocomplete">
   <table>
     <tr ng-repeat="candidate in search.candidates">
-      <td>{{candidate.title}}</td>
-      <td>{{candidate.artist_name}}</td>
-      <td>({{candidate.album_name}})</td>
+      <td>{{candidate.songName}}</td>
+      <td>{{candidate.artist}}</td>
+      <td><button ng-click="search.addSong(candidate)">+</button></td>
     </tr>
   </table>
 </div>
