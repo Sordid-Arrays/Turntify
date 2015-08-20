@@ -12,11 +12,10 @@ angular.module('turntify.player')
     vm.customPlaylist = PlayerService.customPlaylist;
   }
   vm.onDropComplete = function (index, song, evt) {
-    var otherSong = vm.customPlaylist[index];
-    var otherIndex = vm.customPlaylist.indexOf(song);
-    vm.customPlaylist[index] = song;
-    vm.customPlaylist[otherIndex] = otherSong;
+    PlayerService.onDropComplete(index, song);
+    vm.customPlaylist = PlayerService.customPlaylist;
   }
+  
   vm.savePlaylist = function(){
     PlayerService.savePlaylist(vm.name);
   }

@@ -27,7 +27,10 @@ angular.module('turntify.player')
 
   //this function updates the "matches", and is run every time any of the filters
   PlayerService.updateMatches = function(turntness){
-    $rootScope.$broadcast('matchesUpdated', turntness);
+    if(arguments.length > 0){
+      this.turntness = turntness;
+    };
+    $rootScope.$broadcast('matchesUpdated', this.turntness);
   };
 
   //TODO: refactor to pass matches through an event instead of keeping them in service
@@ -42,6 +45,7 @@ angular.module('turntify.player')
     return RequestService.getPlaylist(playlist.ownerId, playlist.playlistId).then(function(data){
       context.playlist = data;
       console.log("playerservice playlist: ", context.playlist);
+      context.updateMatches();
     });
   };
 
@@ -58,12 +62,18 @@ angular.module('turntify.player')
     this.customPlaylist.push(song);
     $rootScope.$broadcast('customPlaylistChanged');
   };
+
+  PlayerService.onDropComplete = function(index, song){
+    var otherSong = this.customPlaylist[index];
+    var otherIndex = this.customPlaylist.indexOf(song);
+    this.customPlaylist[index] = song;
+    this.customPlaylist[otherIndex] = otherSong;
+  };
   
 
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-
   PlayerService.generateWidget = function(name){
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();
