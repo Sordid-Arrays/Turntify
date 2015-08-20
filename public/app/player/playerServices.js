@@ -44,6 +44,10 @@ angular.module('turntify.player')
       console.log("playerservice playlist: ", context.playlist);
     });
   };
+
+  PlayerService.removeFromCustomPlaylist = function(songIndex){
+    this.customPlaylist.splice(songIndex, 1);
+  }
   
 
   /**

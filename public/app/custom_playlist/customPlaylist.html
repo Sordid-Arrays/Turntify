@@ -2,5 +2,8 @@
 as well as any buttons needed to persist or manipulate that playlist -->
 <h3>Custom Playlist:</h3>
 <ul class="songList">
-  <li ng-repeat="song in customPlaylist.customPlaylist">{{song.title}}</li>
+  <li ng-repeat="song in customPlaylist.customPlaylist">
+  <div>{{song.title}}<div>
+  <button ng-click="customPlaylist.removeSong($index)">X</button>
+  </li>
 </ul>
