@@ -6,6 +6,7 @@ var echonest = require('../middlewares/echonest.js');
 var helper = require('../helpers/playlistHelper');
 var util = require('../helpers/util');
 var User = require('../models/users.js');
+var GhettoNest = require('../models/ghettoNest.js');
 
 var router = express.Router();
 
@@ -67,22 +68,47 @@ router.get('/song', function(req, res) {
   var searchWords = req.query.song;
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
+
   if (typeof searchWords === 'string') {
     searchWords = [searchWords];
   }
 
-  spotify.searchSong(searchWords, accessToken)
-  .catch(spotify.OldTokenError, function (err) {
-    // statusCode 401:  Unauthorized
-    return spotify.refreshToken(req.session.user.refresh_token)
-    .then(function (body) {
-      util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.searchSong(searchWords, body.access_token);
+  var resultSongs = [];
+
+  //first look in database
+  var dbTargetSongs = _.map(searchWords, function(searchWord) {
+    return new RegExp(searchWord, 'i');
+  });
+
+  GhettoNest.find( { $or: [ { title: { $in: dbTargetSongs } }, { artist_name: dbTargetSongs } ] } )
+  .then(function(dbSongs) {
+
+    resultSongs = _.map(dbSongs, function(dbsong) {
+      return {
+        album: dbsong.album_name,
+        artist: dbsong.artist_name,
+        songName: dbsong.title,
+        duration:dbsong.duration,
+        spotifyUri: dbsong.spotify_id};
     });
+
+    //if result from db is less than 10 then do api request
+    if (dbSongs.length <= 10) {
+
+      return spotify.searchSong(searchWords, accessToken, 10 - dbSongs.length)
+      .catch(spotify.OldTokenError, function (err) {
+        // statusCode 401:  Unauthorized
+        return spotify.refreshToken(req.session.user.refresh_token)
+        .then(function (body) {
+          util.saveToken(req, body.access_token, body.refresh_token);
+          return spotify.searchSong(searchWords, body.access_token, 10 - dbSongs.length);
+        });
+      });
+    }
+    res.json(resultSongs);
   })
 
   .then(function(songs) {
-    //console.log(songs.tracks.items[0]);
     var searchResult = _.map(songs.tracks.items, function(song) {
       return {
         album: song.album.name,
@@ -92,10 +118,8 @@ router.get('/song', function(req, res) {
         spotifyUri: song.uri
       };
     });
-    res.json(searchResult);
-  })
-  .catch(function(e) {
-    console.error('Got error: ', e);
+
+    res.json(resultSongs.concat(searchResult));
   });
 });
 
