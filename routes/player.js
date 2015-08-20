@@ -85,11 +85,11 @@ router.get('/song', function(req, res) {
 
     resultSongs = _.map(dbSongs, function(dbsong) {
       return {
-        album: dbsong.album_name,
-        artist: dbsong.artist_name,
-        songName: dbsong.title,
+        album_name: dbsong.album_name,
+        artist_name: dbsong.artist_name,
+        title: dbsong.title,
         duration:dbsong.duration,
-        spotifyUri: dbsong.spotify_id};
+        spotify_id: dbsong.spotify_id};
     });
 
     if (dbSongs.length >= 10) {
@@ -110,19 +110,17 @@ router.get('/song', function(req, res) {
     .then(function(songs) {
       var searchResult = _.map(songs.tracks.items, function(song) {
         return {
-          album: song.album.name,
-          artist: song.artists[0].name,
-          songName: song.name,
+          album_name: song.album.name,
+          artist_name: song.artists[0].name,
+          title: song.name,
           duration: song.duration_ms,
-          spotifyUri: song.uri
+          spotify_id: song.uri
         };
       });
 
       res.json(resultSongs.concat(searchResult));
     });
   });
-
-
 });
 
 /**
