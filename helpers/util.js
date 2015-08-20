@@ -77,9 +77,17 @@ var getTurntness = function (song) {
   }
 };
 
+/**
+* escape a string for regEx
+*/
+var escape = function(s) {
+    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
 module.exports = {
   generateRandomString: generateRandomString,
   saveToken: saveToken,
   danceableFiltering: danceableFiltering,
-  getTurntness: getTurntness
+  getTurntness: getTurntness,
+  escape: escape
 };
