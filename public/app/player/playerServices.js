@@ -25,27 +25,14 @@ angular.module('turntify.player')
     });
   };
 
-  //DEPRECATED: only here for demo purposes
-  // PlayerService.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
-  //   var context = this;
-  //   console.log("viewQueue: ", viewQueue);
-  //   context.queue = viewQueue;
-  //   if(context.queue.length>0){
-  //     context.generateWidget({queue: context.queue,
-  //                       selectedPlaylist: selectedPlaylist,
-  //                       selectedTurntness: turntness});
-  //   }
-  // };
-
   //this function updates the "matches", and is run every time any of the filters
   PlayerService.updateMatches = function(turntness){
-    console.log("turntness: ", turntness);
-    this.matches = turntToFilter(PlayerService.playlist, turntness);
-    $rootScope.$broadcast('matchesUpdated');
+    $rootScope.$broadcast('matchesUpdated', turntness);
   };
 
-  PlayerService.addMatches = function(){
-    this.customPlaylist = _.uniq(this.customPlaylist.concat(this.matches));
+  //TODO: refactor to pass matches through an event instead of keeping them in service
+  PlayerService.addMatches = function(matches){
+    this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
     console.log("current playlist: ", this.customPlaylist);
     $rootScope.$broadcast('customPlaylistChanged');
   };
@@ -57,21 +44,30 @@ angular.module('turntify.player')
       console.log("playerservice playlist: ", context.playlist);
     });
   };
+
+  PlayerService.removeFromCustomPlaylist = function(songIndex){
+    this.customPlaylist.splice(songIndex, 1);
+  };
+
+  PlayerService.savePlaylist = function(playlistName){
+    RequestService.savePlaylist(playlistName, this.customPlaylist);
+    console.log("savePlaylist args: ", playlistName, this.customPlaylist);
+  };
   
 
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-  PlayerService.generateWidget = function(argsObj){
+
+  PlayerService.generateWidget = function(name){
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();
     var trackIds = [];
-    var queue= argsObj.queue;
-    for(var i=0; i<queue.length; i++){
-      trackIds.push(queue[i]['spotify_id'].slice(14));
+    var playlist = PlayerService.customPlaylist;
+    for(var i=0; i<playlist.length; i++){
+      trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
-    var queueName = argsObj.selectedPlaylist.name + ", turnt to " + argsObj.selectedTurntness;
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+queueName+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
   };
 
   return PlayerService;

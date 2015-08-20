@@ -7,25 +7,6 @@
 */
 angular.module('turntify.services', [])
 .factory('RequestService', function($http, $q) {
-  //posts, gets, puts, etc.
-  // CORS PROBLEMS. MIGHT WORK LATER.
-  // var loginUser = function(){
-  //   console.log('logging in user...');
-  //   $http({
-  //     method: 'GET',
-  //     url: 'login',
-  //     headers: {
-  //       Accept: 'application/json',
-  //       "Access-Control-Allow-Origin": '*'
-  //     }
-  //   }).then(function(res){
-  //     console.log("logged in!", res);
-  //     return res;
-  //   },function(error) {
-  //     // throw Error(error);
-  //     console.log(error);
-  //   });
-  // };
 
   var getListOfPlaylists = function(){
     // console.log('calling get list');
@@ -34,20 +15,6 @@ angular.module('turntify.services', [])
       url: 'user/playlists',
     }).then(function(res){
       // console.log("getListOfPLaylists: ",res.data);
-      return res.data;
-    },function(error) {
-      console.log(error);
-      return;
-    });
-  };
-
-  //TODO: will get removed in next sprint
-  var getQueue = function(ownerId, playlistId, turntness){
-    return $http({
-      method: 'GET',
-      url: 'user/playlist/'+ ownerId +'/' + playlistId + '/' + turntness,
-    }).then(function(res){
-      // console.log(JSON.stringify(res.data));
       return res.data;
     },function(error) {
       console.log(error);
@@ -68,18 +35,18 @@ angular.module('turntify.services', [])
     });
   };
 
-  // var savePlaylist = function(ownerId, playlistId){
-  //   return $http({
-  //     method: 'GET',
-  //     url: 'user/playlist/'+ ownerId +'/' + playlistId,
-  //   }).then(function(res){
-  //     // console.log(JSON.stringify(res.data));
-  //     return res.data;
-  //   },function(error) {
-  //     console.log(error);
-  //     return;
-  //   });
-  // };
+  var savePlaylist = function(playlistName, playlist){
+    return $http({
+      method: 'POST',
+      url: 'savePlaylist/'+ playlistName,
+      data: {songs: playlist},
+    }).then(function(res){
+      console.log("did it??", res.data);
+    },function(error) {
+      console.log("effed up", error);
+      return;
+    });
+  };
 
   var searchTracks = function (qs) {
     return $http({
@@ -110,11 +77,9 @@ angular.module('turntify.services', [])
   return {
     //return get/post functions. shouldn't contain persistent data: that should be sent elsewhere
     getListOfPlaylists: getListOfPlaylists,
-    getQueue: getQueue,
     getPlaylist: getPlaylist,
     searchTracks: searchTracks,
-    // loginUser: loginUser
+    savePlaylist: savePlaylist,
     dummyTest: dummyTest
-    //savePlaylist: savePlaylist
   };
 });

@@ -207,6 +207,7 @@ var insertSong = function(token, userId, playlistId, songId) {
 * create playlist in spotify
 */
 var createPlaylist = function(token, userId, playlistName) {
+  console.log("args in createPlaylist: ", token, userId, playlistName);
   var option = {
     url: 'https://api.spotify.com/v1/users/' + userId + '/playlists' ,
     headers: { 'Authorization': 'Bearer ' + token },
@@ -219,6 +220,7 @@ var createPlaylist = function(token, userId, playlistName) {
 
   return request.post(option)
   .catch(function (err) {
+    console.log("error in createPlaylist!");
     if (err.statusCode === 401) {
       throw new OldTokenError();
     }
