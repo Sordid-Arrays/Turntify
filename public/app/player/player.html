@@ -1,37 +1,66 @@
 <!-- This is where we put the "player" partial. the "ui-view" section of index.html will house this view, and the "ui-view" of this partial holds any sub-views that need the player and queue to be persistent -->
-<div class="playerContainer">
+<md-content class="playerContainer">
   <!--div id="iFrameHolder">
   </div-->
-  <div layout="row">
-    <!-- Playlist and Turntness selectors -->
-    <div class="playlistControlContainer" flex>
-      <div class="playlistWrapper">
-        <div layout="row">
-          <md-input-container>
-            <label>Select A Playlist</label>
-            <md-select class="playlistSelector" ng-model="player.selectedPlaylist" ng-change="player.getPlaylist(player.selectedPlaylist)">
-              <md-option ng-repeat="playlist in player.playlists" value="{{playlist}}">{{playlist.name}}</md-option>
-            </md-select>
-          </md-input-container>
-          <div class="playlistSpinnerWrapper" ng-if="player.playlistLoading">
-            <h4>Grabbing your playlist!</h4>
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+  <div layout="row" class="playerRow">
+    <!-- Column One Playlist and Turntness selectors -->
+    <md-sidenav md-component-id="left" md-is-locked-open="player.sideNavIsOpen" class="md-sidenav-left playlistControlContainer playerColumn">
+      <md-content>
+        <div class="playlistWrapper">
+          <div layout="row">
+            <md-input-container>
+              <label>Select A Playlist</label>
+              <md-select class="playlistSelector" ng-model="player.selectedPlaylist" ng-change="player.getPlaylist(player.selectedPlaylist)">
+                <md-option ng-repeat="playlist in player.playlists" value="{{playlist}}">{{playlist.name}}</md-option>
+              </md-select>
+            </md-input-container>
+            <div class="playlistSpinnerWrapper" ng-if="player.playlistLoading">
+              <h4>Grabbing your playlist!</h4>
+              <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+            </div>
           </div>
+          <!-- <h4>Selected Playlist: {{ player.selectedPlaylist.name }}</h4> -->
         </div>
-        <!-- <h4>Selected Playlist: {{ player.selectedPlaylist.name }}</h4> -->
-      </div>
-      <div ui-view="matchParams"></div>
-      <div ui-view="search"></div>
+        <div ui-view="matchParams"></div>
+      </md-content>
+    </md-sidenav>
+    <div class="leftToolBar playerColumn" ng-click="player.toggleSideNav()" layout="column" layout-align="start center">
+      <md-icon>
+        <md-tooltip md-direction="right">
+          Change Playlist
+        </md-tooltip> 
+        playlist_add 
+      </md-icon>
+      <md-icon>
+        <md-tooltip md-direction="right">
+          Filter Playlist
+        </md-tooltip> 
+       filter_list 
+      </md-icon>
     </div>
-    <div class="customPlaylistContainer" flex="55">
-      <div ui-view="customPlaylist"></div>
-      <div class="widgetWrapper"></div>
-    </div>
-    <div class="queueContainer" flex>
+
+
+    <!-- Column Two -->
+    <div class="matchesContainer playerColumn" flex>
       <div ui-view="matches"></div>
-      <div ui-view="graph"></div>
     </div>
-    <div class=""></div>
+
+    <!-- Column Three -->
+    <div class="customPlaylistContainer playerColumn" flex>
+      <div ui-view="customPlaylist"></div>
+    </div>
+
+    <!-- Column Four -->
+    <div class="leftToolBar playerColumn" ng-click="player.toggleSideNav()" layout="column" layout-align="start center">
+      <md-icon> playlist_add </md-icon>
+      <md-icon> filter_list </md-icon>
+    </div>
+    <md-sidenav md-component-id="right" md-is-locked-open="!(player.sideNavIsOpen)" class="md-sidenav-right queueContainer"><div class="queueContainer playerColumn" flex>
+      <md-content><div ui-view="search"></div>
+            <div ui-view="graph"></div>
+            <div class="widgetWrapper"></div></md-content>
+    </md-sidenav>
+
   </div>  
 
-</div>
+</md-content>

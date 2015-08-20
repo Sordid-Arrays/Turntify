@@ -67,8 +67,8 @@ angular.module('turntify', [
     }
   });
 
-  // $mdThemingProvider.theme('default')
-  //   .dark();
+  $mdThemingProvider.theme('default')
+    .dark();
 
 })
 /** ...and the run block gets executed after, which contains any code that is needed to "kick start" the application

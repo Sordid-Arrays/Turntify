@@ -1,15 +1,14 @@
-<div class="turntometerWrapper">
+<div class="matchParamsWrapper">
   <div layout="row">
-    <md-input-container>
+    <md-content>
       <label>Select A Turntness</label>
       <!--<md-select class="turntSelector" ng-model="player.selectedTurntness" ng-change="player.updateViewQueue(player.selectedTurntness)">
         <md-option ng-repeat="turntness in player.turntLevels" value="{{turntness}}">{{turntness}}</md-option>
       </md-select>-->
       <div>
-        <md-slider ng-model="matchParams.selectedTurntness" step="1" min="1" max="11" ng-change="matchParams.updateMatches()">
+        <md-slider ng-model="matchParams.selectedTurntness" min="1" max="11" ng-change="matchParams.updateMatches()" aria-label="Select Turntness" class="md-accent">
         </md-slider>
       </div>
-    </md-input-container>
+    </md-content>
   </div>
-  <h4>Selected turntness: {{ player.selectedTurntness }}</h4>
 </div>

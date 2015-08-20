@@ -2,9 +2,37 @@
 the base CSS template file, so it takes priority over the generic 
 template (NOT BOOTSTRAP) without modifying the template file*/
 
+.bodyContainer, .viewContainer, .playerUIview, .playerContainer{
+  height: 100%;
+}
 .playerContainer{
-  max-width: 1250px;
+  max-width: 100%;
   margin: 0 auto;
+}
+.playerContainer>.playerRow{
+  height: 100%;
+}
+.playerColumn{
+  padding: 8px;
+}
+.leftToolBar, rightToolBar, md-sideNav, md-sideNav md-content{
+      background-color: rgb(49, 49, 49);
+}
+md-sidenav {
+  height: 100%;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.md-sidenav-left>md-content{
+  padding-left: 20px;
+}
+.matchParamsWrapper md-content md-slider{
+  margin-left: 9px;
+}
+.material-icons{
+  font-size: 36px;
+  height: 36px;
+  width: 36px;
+  margin: 40px 0;
 }
 .widgetContainer{
   text-align: center;
@@ -17,7 +45,6 @@ template (NOT BOOTSTRAP) without modifying the template file*/
   width: 1250px;
   margin: 0 auto;
 }
-
 
 [ng-drag] {
   -moz-user-select: -moz-none;
@@ -43,4 +70,6 @@ template (NOT BOOTSTRAP) without modifying the template file*/
   position: relative;
   z-index: 2;
 }
+
+
 

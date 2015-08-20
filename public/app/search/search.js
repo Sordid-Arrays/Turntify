@@ -1,6 +1,7 @@
 // //your controller code here
-angular.module('turntify.search', [])
+angular.module('turntify.search', ['ngMaterial'])
 .controller('SearchController', function(SearchService, PlayerService){
+
   /**
   * 'vm' is short for 'view-model': it is used to designate context within the controller.
   */
