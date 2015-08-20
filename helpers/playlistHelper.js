@@ -153,9 +153,10 @@ function getTracks(userId, playlistId, req) {
 * that was passed in from req.body
 * if it doesn't exist, it will create the playlist and add the tracks from the req.body
 */
-var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, refreshToken) {
+var getEmptyPlaylist = function(req, userId, playlistName, playListArr) {
   var isPlaylistExist;
   var playlistIdToPass;
+  var accessToken = req.session.user.access_token;
 
   isPlaylistExist = _.some(playListArr, function(playlist) {
     return playlist.name === playlistName;
