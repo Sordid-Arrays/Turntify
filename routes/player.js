@@ -162,7 +162,7 @@ router.post('/addsong/:playlistId', function(req, res) {
 * route for adding new playlist
 */
 //router.get('/saveplaylist/:playlistName/:turntness', function(req, res) {
-  router.post('/saveplaylist/:playlistName', function(req, res) {
+router.post('/saveplaylist/:playlistName', function(req, res) {
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
   var userId = req.session.user.spotifyId;
@@ -187,7 +187,7 @@ router.post('/addsong/:playlistId', function(req, res) {
   })
   .then(function(playListArr) {
     console.log("getting playlistArr...", playListArr);
-    return helper.getEmptyPlaylist(req.session.user.access_token, userId, playlistName, playListArr, req.session.user.refresh_token);
+    return helper.getEmptyPlaylist(req, userId, playlistName, playListArr);
   })
   .then(function(playlistIdToPass) {
     console.log("id to pass:", playlistIdToPass);
