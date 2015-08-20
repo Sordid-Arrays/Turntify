@@ -53,6 +53,11 @@ angular.module('turntify.player')
     RequestService.savePlaylist(playlistName, this.customPlaylist);
     console.log("savePlaylist args: ", playlistName, this.customPlaylist);
   };
+
+  PlayerService.addFromSearch = function(song){
+    this.customPlaylist.push(song);
+    $rootScope.$broadcast('customPlaylistChanged');
+  };
   
 
   /**
