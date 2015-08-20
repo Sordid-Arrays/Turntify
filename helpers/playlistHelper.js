@@ -182,7 +182,7 @@ var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, 
   playlistIdToPass = playlistIdToPass[0];
   //console.log('CREATE PLAYLIST ID: ', playlistIdToPass);
 
-  return getTracks(userId, playlistIdToPass, accessToken, refreshToken)
+  return getTracks(userId, playlistIdToPass, req)
   .then(function(songs) {
     if (isPlaylistExist && songs.length > 0) {
     //if (songs.length > 0) {
