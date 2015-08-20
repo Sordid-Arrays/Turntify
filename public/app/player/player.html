@@ -25,8 +25,18 @@
       </md-content>
     </md-sidenav>
     <div class="leftToolBar playerColumn" ng-click="player.toggleSideNav()" layout="column" layout-align="start center">
-      <md-icon> playlist_add </md-icon>
-      <md-icon> filter_list </md-icon>
+      <md-icon>
+        <md-tooltip md-direction="right">
+          Change Playlist
+        </md-tooltip> 
+        playlist_add 
+      </md-icon>
+      <md-icon>
+        <md-tooltip md-direction="right">
+          Filter Playlist
+        </md-tooltip> 
+       filter_list 
+      </md-icon>
     </div>
 
 
