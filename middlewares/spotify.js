@@ -147,10 +147,10 @@ var refreshToken = function (refreshToken) {
 /**
 * get 10 songs related to the search
 */
-var searchSong = function(searchWords, token) {
+var searchSong = function(searchWords, token, numSongToGet) {
   var qs = queryString.stringify({
     type: 'track',
-    limit: 10
+    limit: numSongToGet
   });
   qs += '&q=' + searchWords.join('+') + '*';
   var option = {
@@ -160,10 +160,12 @@ var searchSong = function(searchWords, token) {
   };
 
   return request.get(option)
+
   .catch(function (err) {
     if (err.statusCode === 401) {
       throw new OldTokenError();
     }
+    console.error(err);
     throw err;
   });
 };
