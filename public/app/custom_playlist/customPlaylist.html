@@ -1,6 +1,20 @@
 <!-- This will hold the logic for the custom playlist that the user generates,
 as well as any buttons needed to persist or manipulate that playlist -->
-<h3>Custom Playlist:</h3>
+<md-content layout-padding>
+  <form name="playlistName">
+    <md-input-container>
+      <label>Playlist Name</label>
+      <input name="name" ng-model="customPlaylist.name">
+    </md-input-container>
+  </form>
+</md-content>
 <ul class="songList">
-  <li ng-repeat="song in customPlaylist.customPlaylist">{{song.title}}</li>
+  <li ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
+    <div ng-drag="true" ng-drag-data="song">
+      <div>{{song.title}}</div>
+      <button ng-click="customPlaylist.removeSong($index)">X</button>
+    </div>
+  </li>
 </ul>
+<button ng-click="customPlaylist.savePlaylist()">Save Playlist to Spotify</button>
+<button ng-click="customPlaylist.generateWidget()">Generate Preview</button>

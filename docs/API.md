@@ -43,6 +43,6 @@ this is a post
 
 
 to create playlist or update playlist with imported songs
-/saveplaylist/:playlistName/:turntness
+/saveplaylist/:playlistName
 you will send the songs in req.body.song
 this is a post

@@ -23,7 +23,8 @@
     "bower": "*",
     "install": "~1.0.4",
     "console.loge": "https://github.com/toddmotto/console.loge.git#~1.0.0",
-    "underscore": "~1.8.3"
+    "underscore": "~1.8.3",
+    "ngDraggable": "~0.1.8"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.3"

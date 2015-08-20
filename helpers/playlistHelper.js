@@ -161,8 +161,11 @@ var getEmptyPlaylist = function(accessToken, userId, playlistName, playListArr, 
     return playlist.name === playlistName;
   });
   if (!isPlaylistExist) {
+    console.log("playlist doesn't exist yet");
+    console.log("playlistName: ",playlistName);
     return spotify.createPlaylist(accessToken, userId, playlistName)
     .then(function(playlist) {
+      console.log("playlist created! with id: ", playlist.id);
       playlistIdToPass = playlist.id;
       return playlistIdToPass;
     });
