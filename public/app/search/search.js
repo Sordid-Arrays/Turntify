@@ -1,6 +1,6 @@
 // //your controller code here
 angular.module('turntify.search', [])
-.controller('SearchController', function(SearchService){
+.controller('SearchController', function(SearchService, PlayerService){
   /**
   * 'vm' is short for 'view-model': it is used to designate context within the controller.
   */
@@ -25,6 +25,11 @@ angular.module('turntify.search', [])
   //   });
   // };
   // vm.init();
+
+  vm.addSong = function(song) {
+    console.log("song: ", song);
+    PlayerService.addFromSearch(song);
+  };
 
 
 });

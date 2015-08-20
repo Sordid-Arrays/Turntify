@@ -1,5 +1,5 @@
 <!-- this partial will be inserted into the "ui-view" in player.html labeled "search" -->
-<input type="text" name="search" ng-change="search.autoComplete(searh.userInput)" ng-model="searh.userInput">
+<input type="text" name="search" ng-change="search.autoComplete(search.userInput)" ng-model="search.userInput">
 <div class="autocomplete">
 
   <table>
@@ -7,6 +7,7 @@
       <td>{{candidate.songName}}</td>
       <td>{{candidate.artist}}</td>
       <td>({{candidate.album}})</td>
+      <td><button ng-click="search.addSong(candidate)">+</button></td>
     </tr>
   </table>
 </div>

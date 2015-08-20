@@ -24,7 +24,6 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
 
   vm.name = "";
 
-
   /**
   * Update the list of playlists. This is only called on initialization.
   */
