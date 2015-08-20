@@ -77,7 +77,7 @@ router.get('/song', function(req, res) {
 
   //first look in database
   var dbTargetSongs = _.map(searchWords, function(searchWord) {
-    return new RegExp(searchWord, 'i');
+    return new RegExp(util.escape(searchWord), 'i');
   });
 
   GhettoNest.find( { $or: [ { title: { $in: dbTargetSongs } }, { artist_name: dbTargetSongs } ] } )
@@ -92,35 +92,37 @@ router.get('/song', function(req, res) {
         spotifyUri: dbsong.spotify_id};
     });
 
-    //if result from db is less than 10 then do api request
-    if (dbSongs.length <= 10) {
-
-      return spotify.searchSong(searchWords, accessToken, 10 - dbSongs.length)
-      .catch(spotify.OldTokenError, function (err) {
-        // statusCode 401:  Unauthorized
-        return spotify.refreshToken(req.session.user.refresh_token)
-        .then(function (body) {
-          util.saveToken(req, body.access_token, body.refresh_token);
-          return spotify.searchSong(searchWords, body.access_token, 10 - dbSongs.length);
-        });
-      });
+    if (dbSongs.length >= 10) {
+      res.json(resultSongs);
+      return;
     }
-    res.json(resultSongs);
-  })
 
-  .then(function(songs) {
-    var searchResult = _.map(songs.tracks.items, function(song) {
-      return {
-        album: song.album.name,
-        artist: song.artists[0].name,
-        songName: song.name,
-        duration: song.duration_ms,
-        spotifyUri: song.uri
-      };
+    //if result from db is less than 10 then do api request
+    return spotify.searchSong(searchWords, accessToken, 10 - dbSongs.length)
+    .catch(spotify.OldTokenError, function (err) {
+      // statusCode 401:  Unauthorized
+      return spotify.refreshToken(req.session.user.refresh_token)
+      .then(function (body) {
+        util.saveToken(req, body.access_token, body.refresh_token);
+        return spotify.searchSong(searchWords, body.access_token, 10 - dbSongs.length);
+      });
+    })
+    .then(function(songs) {
+      var searchResult = _.map(songs.tracks.items, function(song) {
+        return {
+          album: song.album.name,
+          artist: song.artists[0].name,
+          songName: song.name,
+          duration: song.duration_ms,
+          spotifyUri: song.uri
+        };
+      });
+
+      res.json(resultSongs.concat(searchResult));
     });
-
-    res.json(resultSongs.concat(searchResult));
   });
+
+
 });
 
 /**
