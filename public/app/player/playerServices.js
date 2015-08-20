@@ -47,27 +47,32 @@ angular.module('turntify.player')
 
   PlayerService.removeFromCustomPlaylist = function(songIndex){
     this.customPlaylist.splice(songIndex, 1);
-  }
+  };
+
+  PlayerService.savePlaylist = function(playlistName){
+    RequestService.savePlaylist(playlistName, this.customPlaylist);
+    console.log("savePlaylist args: ", playlistName, this.customPlaylist);
+  };
   
 
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-  PlayerService.generateWidget = function(argsObj){
+  PlayerService.generateWidget = function(name){
     //Args object is in the following format: 
    // {queue: context.queue,
   //                       selectedPlaylist: selectedPlaylist,
   //                       selectedTurntness: turntness}
+    console.log("called!");
 
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();
     var trackIds = [];
-    var queue= argsObj.queue;
-    for(var i=0; i<queue.length; i++){
-      trackIds.push(queue[i]['spotify_id'].slice(14));
+    var playlist = PlayerService.customPlaylist;
+    for(var i=0; i<playlist.length; i++){
+      trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
-    var queueName = argsObj.selectedPlaylist.name + ", turnt to " + argsObj.selectedTurntness;
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+queueName+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
   };
 
   return PlayerService;

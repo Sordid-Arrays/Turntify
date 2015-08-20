@@ -17,3 +17,30 @@ template (NOT BOOTSTRAP) without modifying the template file*/
   width: 1250px;
   margin: 0 auto;
 }
+
+
+[ng-drag] {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+[ng-drag].drag-over {
+  border: solid 1px red;
+}
+
+[ng-drag].dragging {
+  opacity: 0.5;
+}
+
+[ng-drop].drag-enter {
+  border: solid 5px red;
+}
+
+[ng-drop] div {
+  position: relative;
+  z-index: 2;
+}
+

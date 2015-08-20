@@ -7,7 +7,7 @@
 /** 
 * TODO: refactor into multiple controllers
 */
-angular.module('turntify.player', ['ngMaterial'])
+angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
 .controller('PlayerController', function (PlayerService, turntToFilter) {
   
   /**
@@ -21,6 +21,9 @@ angular.module('turntify.player', ['ngMaterial'])
   * forget about them as it looks up their songs.
   */
   vm.playlistLoading = false;
+
+  vm.name = "";
+
 
 
   /**
@@ -41,6 +44,7 @@ angular.module('turntify.player', ['ngMaterial'])
   this.getPlaylist = function(playlistString){
     vm.playlistLoading = true;
     var playlist = JSON.parse(playlistString);
+    vm.name = playlist.name;
     PlayerService.getPlaylist(playlist).then(function(){
       vm.playlistLoading = false;
     });
