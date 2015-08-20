@@ -14,7 +14,9 @@ angular.module('turntify.search', [])
     }
     SearchService.autoComplete(input)
     .then(function (res) {
-      vm.candidates = res;
+      if (vm.userInput === input){
+        vm.candidates = res;
+      }
     });
   };
 
