@@ -59,6 +59,17 @@ angular.module('turntify.services', [])
     });
   };
 
+  var searchArtists = function (qs) {
+    return $http({
+      method: 'GET',
+      url: 'searchartist?' + qs
+    }).then(function (res) {
+      return res.data;
+    }).catch(function (error) {
+      console.log(error);
+    });
+  };
+
 /**
 * Dummy request to practice to testing the mock backend.
 * Can be fiddled with as needed.
@@ -79,6 +90,7 @@ angular.module('turntify.services', [])
     getListOfPlaylists: getListOfPlaylists,
     getPlaylist: getPlaylist,
     searchTracks: searchTracks,
+    searchArtists: searchArtists,
     savePlaylist: savePlaylist,
     dummyTest: dummyTest
   };
