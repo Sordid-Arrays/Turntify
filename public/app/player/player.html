@@ -4,8 +4,8 @@
   </div-->
   <div layout="row" class="playerRow">
     <!-- Column One Playlist and Turntness selectors -->
-    <md-sidenav md-component-id="left" md-is-locked-open="player.sideNavIsOpen" class="md-sidenav-left playlistControlContainer playerColumn">
-      <md-content>
+
+      <md-content class="playlistControlContainer" flex>
         <div class="playlistWrapper">
           <div layout="row">
             <md-input-container>
@@ -22,22 +22,9 @@
           <!-- <h4>Selected Playlist: {{ player.selectedPlaylist.name }}</h4> -->
         </div>
         <div ui-view="matchParams"></div>
+        <div ui-view="search"></div>
       </md-content>
-    </md-sidenav>
-    <div class="leftToolBar playerColumn" ng-click="player.toggleSideNav()" layout="column" layout-align="start center">
-      <md-icon>
-        <md-tooltip md-direction="right">
-          Change Playlist
-        </md-tooltip> 
-        playlist_add 
-      </md-icon>
-      <md-icon>
-        <md-tooltip md-direction="right">
-          Filter Playlist
-        </md-tooltip> 
-       filter_list 
-      </md-icon>
-    </div>
+
 
 
     <!-- Column Two -->
@@ -48,18 +35,8 @@
     <!-- Column Three -->
     <div class="customPlaylistContainer playerColumn" flex>
       <div ui-view="customPlaylist"></div>
+      <div class="widgetWrapper"></div>
     </div>
-
-    <!-- Column Four -->
-    <div class="leftToolBar playerColumn" ng-click="player.toggleSideNav()" layout="column" layout-align="start center">
-      <md-icon> playlist_add </md-icon>
-      <md-icon> filter_list </md-icon>
-    </div>
-    <md-sidenav md-component-id="right" md-is-locked-open="!(player.sideNavIsOpen)" class="md-sidenav-right queueContainer"><div class="queueContainer playerColumn" flex>
-      <md-content><div ui-view="search"></div>
-            <div ui-view="graph"></div>
-            <div class="widgetWrapper"></div></md-content>
-    </md-sidenav>
 
   </div>  
 
