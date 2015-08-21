@@ -256,6 +256,29 @@ var removeTracks = function(userId, playlistId, token, tracksTobeRemoved) {
   });
 };
 
+var searchArtist = function(searchWords, token) {
+  var qs = queryString.stringify({
+    type: 'artist',
+    limit: 10
+  });
+  qs += '&q=' + searchWords.join('+') + '*';
+  var option = {
+    url: 'https://api.spotify.com/v1/search?' + qs,
+    headers: { 'Authorization': 'Bearer ' + token },
+    json: true
+  };
+
+  return request.get(option)
+
+  .catch(function (err) {
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    console.error(err);
+    throw err;
+  });
+};
+
 module.exports = {
   getUser: getUser,
   getUserPlaylist: getUserPlaylist,
@@ -266,5 +289,6 @@ module.exports = {
   searchSong: searchSong,
   insertSong: insertSong,
   createPlaylist: createPlaylist,
-  removeTracks: removeTracks
+  removeTracks: removeTracks,
+  searchArtist: searchArtist
 };
