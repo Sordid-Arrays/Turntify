@@ -206,4 +206,31 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
   });
 });
 
+router.get('/searchartist', function(req, res) {
+  //var searchWords = ['chicago'];
+  var searchWords = req.query.artist;
+  var accessToken = req.session.user.access_token;
+  var refreshToken = req.session.user.refresh_token;
+
+  return spotify.searchArtist(searchWords, accessToken)
+  .catch(function(err) {
+    // statusCode 401:  Unauthorized
+      return spotify.refreshToken(req.session.user.refresh_token)
+      .then(function (body) {
+        util.saveToken(req, body.access_token, body.refresh_token);
+        return spotify.searchArtist(searchWords, body.access_token);
+      });
+  })
+  .then(function(artists) {
+    var searchResult = _.map(artists.artists.items, function(artist) {
+      return {
+        artist_name: artist.name,
+        artist_uri: artist.uri
+      };
+    });
+    console.log(searchResult);
+    res.json(searchResult);
+  });
+});
+
 module.exports = router;
