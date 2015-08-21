@@ -58,7 +58,7 @@ var getArtistTracks = function (spotifyUri) {
     format: "json",
     results: 100,
     bucket: ['audio_summary', 'id:spotify', 'tracks'],
-    artist_id: spotyfyUri
+    artist_id: spotifyUri
   });
 
   return request.get({
@@ -67,9 +67,15 @@ var getArtistTracks = function (spotifyUri) {
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
     // each song might have multiple tracks (in single, in album, in best hits, etc.)
-    _.each(songs, function (song) {
+    songs = _.chain(songs)
+    .filter(function(song) {
+      return song.tracks[0] !== undefined;
+    })
+    .each(function (song) {
+      console.log(song.tracks[0]);
       song.tracks = [song.tracks[0]];  // for now, just return first track
-    });
+    })
+    .value();
 
     if (songs === undefined) {
       return [];
