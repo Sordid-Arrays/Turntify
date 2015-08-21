@@ -9,6 +9,7 @@ angular.module('turntify.player')
   // the current value of turntness
   //NOTE: selected turntness is a string for some reason
   return function(input, selectedTurntness) {
+    console.log("input: ", input);
     var resultArray = [];
     var turntness = parseInt(selectedTurntness);
     var boundaries = [turntness-2, turntness+3];

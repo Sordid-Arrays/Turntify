@@ -20,11 +20,8 @@ angular.module('turntify', [
 */
 
 .config(function($stateProvider, $urlRouterProvider, $mdThemingProvider) {
-  //the $urlRouterProvider is the "otherwise" state
-  //TODO: make proper variable urls to fit our get requests
-  //TODO: add states and substates down the line
-
-  //normalizes urls to be lowercase
+  
+  //TODO: fix flashing url bar
   $urlRouterProvider.otherwise('/player');
   $stateProvider
   .state('login', {
@@ -33,9 +30,11 @@ angular.module('turntify', [
     controller: 'LoginController as login',
     data: {isRestricted: false}
   })
-  //this state contains the queue and player logic, so a persistent sidebar of music
-  //will be present as the user navigates between subviews like settings, party managers,
-  //and anything we extend down the line
+  
+  /**
+  * The "player" state is a single state that contains many views with many controllers.
+  * The ui-views are thus given aliases so that we can fit multiple views in a single state.
+  */
   .state('player', {
     url: '/player',
     data: {isRestricted: true},
@@ -75,16 +74,17 @@ angular.module('turntify', [
 *(which is usually stored in a separate module, like services, because it is hard to unit-test)
 */
 .run(function($state, $rootScope, $timeout, UserService) {
-  //TODO: use this to check scope from view
-  // $rootScope.$state = $state;
 
+  /**
+  * This checks to see if the requested state is tagged with "restricted":
+  * If so, the user is redirected to login.
+  */
   $rootScope.$on('$stateChangeStart', function(e, toState, toParams, fromState, fromParams) {
     if(toState.name === 'login'){
       return;
     }
     if(toState.data.isRestricted){
       var cookies = UserService.getUserCookies();
-      //TODO: check other, less reliable cookies. might have different exp.
       if(cookies.sessionId === undefined){
         e.preventDefault();
         $state.go('login');

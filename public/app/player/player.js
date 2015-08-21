@@ -22,6 +22,9 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
   */
   vm.playlistLoading = false;
 
+  /**
+  * The name of the current 
+  */
   vm.name = "";
 
   /**
@@ -64,7 +67,7 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
   * Called from view, this takes a stringified version of a selected playlist's description
   * and calls the  playerService to update playlists
   */
-  this.getPlaylist = function(playlistString){
+  vm.getPlaylist = function(playlistString){
     vm.playlistLoading = true;
     var playlist = JSON.parse(playlistString);
     vm.name = playlist.name;
