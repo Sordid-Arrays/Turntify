@@ -2,8 +2,9 @@
 the base CSS template file, so it takes priority over the generic 
 template (NOT BOOTSTRAP) without modifying the template file*/
 
-.bodyContainer, .viewContainer, .playerUIview, .playerContainer{
+body{
   height: 100%;
+  background-color: rgb(62, 62, 62);
 }
 md-content{
   background-color: rgb(62, 62, 62);
@@ -46,7 +47,7 @@ md-sidenav {
   color: #fff;
 }
 .navInnerContainer{
-  width: 1250px;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -91,6 +92,21 @@ md-sidenav {
 .songList md-list-item{
   position: relative;
   padding: 0 16px;
+}
+.songList md-list-item h3{
+  font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin: 0 0 6px 0;
+    line-height: 0.75em;
+}
+.songList md-list-item p{
+      font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin: 0 0 0 0;
+    line-height: 1.6em;
+        color: rgba(255,255,255,0.7);
 }
 md-list-item:hover .md-button.md-fab.md-mini{
   visibility: visible;

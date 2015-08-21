@@ -1,5 +1,6 @@
 <!-- This will hold the logic for the custom playlist that the user generates,
 as well as any buttons needed to persist or manipulate that playlist -->
+<h2>Custom Playlist</h2>
 <md-content>
   <form name="playlistName">
     <md-input-container>
@@ -10,9 +11,9 @@ as well as any buttons needed to persist or manipulate that playlist -->
 </md-content>
 <md-content class="customPlaylist md-whiteframe-z2">
   <md-list class="songList">
-    <md-list-item ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
+    <md-list-item class="" ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
       <div ng-drag="true" ng-drag-data="song">
-        <div class="md-list-item-text">{{song.title}}</div> 
+        <div class="md-list-item-text"><h3>{{song.title}}</h3><p>ArtistName</p></div> 
       </div>
       <md-button class="md-fab md-mini" ng-click="customPlaylist.removeSong($index)"><md-icon> clear </md-icon></md-button>
       <md-divider ng-if="!$last"></md-divider>
