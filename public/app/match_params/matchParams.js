@@ -1,13 +1,18 @@
+/**
+* MatchParams refers to the paramates we will use on existing playlists to filter
+* the matches we want to the match view. Right now, only the soon-to-be-deprecated "turntness" is used.
+*/
 angular.module('turntify.player')
   .controller('MatchParamsController', function(PlayerService){
-  //This handles the logic specific to our "custom playlist", such as:
-  // 1) save to spotify: function called when user tries to save the playlist to spotify
-  // 2) anything relating to the playlist name
-  // 3) remove songs, clear playlist, etc.
+  
+  /**
+  * Uses PlayerService to alert the sibling "matches" view to update. Called
+  * whenever sliders move.
+  */
   var vm = this;
   vm.updateMatches = function(){
-    PlayerService.updateMatches(vm.selectedTurntness);
+    console.log("selectedTurntness: ", vm.selectedTurntness);
+    PlayerService.updateTurntness(vm.selectedTurntness);
   };
-
 });
   

@@ -1,21 +1,21 @@
 /**
 * the playerService will hold any business logic relating to the player.
-* Directives will be in a seperate directive folder
+* Directives will be in a seperate directive folder.
+* TODO: move view-specific logic to view-specific service.
 */
 angular.module('turntify.player')
 .factory('PlayerService', function PlayerService ($rootScope, RequestService, turntToFilter) {
   var PlayerService = {};
   PlayerService.playlists = [];
-  PlayerService.playlist = [];  
-  PlayerService.matches = [];
+  PlayerService.playlistCollection = {};
+  PlayerService.playlist = [];
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
 
-  /**
-  * getListOfPlaylists is called on initialization, sends a get request from the request factory,
-  * and sets the playlists property equal to the result.
-  */
-
+/**
+* PLAYER CONTROLLER services:
+*/
+  //on initialization, 
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
@@ -25,51 +25,106 @@ angular.module('turntify.player')
     });
   };
 
-  //this function updates the "matches", and is run every time any of the filters
-  PlayerService.updateMatches = function(turntness){
-    if(arguments.length > 0){
-      this.turntness = turntness;
-    };
-    $rootScope.$broadcast('matchesUpdated', this.turntness);
-  };
-
-  //TODO: refactor to pass matches through an event instead of keeping them in service
-  PlayerService.addMatches = function(matches){
-    this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
-    console.log("current playlist: ", this.customPlaylist);
-    $rootScope.$broadcast('customPlaylistChanged');
-  };
-
   PlayerService.getPlaylist = function(playlist){
     var context = this;
     return RequestService.getPlaylist(playlist.ownerId, playlist.playlistId).then(function(data){
-      context.playlist = data;
-      console.log("playerservice playlist: ", context.playlist);
-      context.updateMatches();
+      // context.playlist = _.uniq(context.playlist.concat(data));
+      context.playlistCollection[playlist.name] = {checked: true,
+                                           songs:  data};
+      console.log("playerservice playlist collection:", context.playlistCollection);
+      context.updateCustomPlaylist();
     });
   };
 
+  // Call this when user "unchecks" a playlist
+  PlayerService.removePlaylist = function(playlist){
+    //changes the "checked" property of the selected playlist to false
+    this.playlistCollection[playlist.name].checked = false;
+    this.updateCustomPlaylist();
+  };
+
+  // call this when user "checks" a playlist
+  PlayerService.addPlaylist = function(playlist){
+    if(this.playlistCollection[playlist.name]){
+      this.playlistCollection[playlist.name].checked = true;
+      this.updateCustomPlaylist();
+    } else {
+      this.getPlaylist(playlist);
+    };
+  };
+
+  //CALL THIS from param view, passing in the selected playlist and the checked property
+  PlayerService.toggleCheck = function(playlist, checked){
+    if(checked){
+      this.addPlaylist(playlist);
+    } else {
+      this.removePlaylist(playlist);
+    }
+  }
+
+/**
+* CUSTOMPLAYLIST CONTROLLER services:
+*/
+  //removes song from custom playlist:
   PlayerService.removeFromCustomPlaylist = function(songIndex){
     this.customPlaylist.splice(songIndex, 1);
   };
-
+  
+  //saves playlist to spotify:
   PlayerService.savePlaylist = function(playlistName){
     RequestService.savePlaylist(playlistName, this.customPlaylist);
     console.log("savePlaylist args: ", playlistName, this.customPlaylist);
   };
 
-  PlayerService.addFromSearch = function(song){
-    this.customPlaylist.push(song);
-    $rootScope.$broadcast('customPlaylistChanged');
-  };
-
+  //swaps songs as they are dragged
   PlayerService.onDropComplete = function(index, song){
     var otherSong = this.customPlaylist[index];
     var otherIndex = this.customPlaylist.indexOf(song);
     this.customPlaylist[index] = song;
     this.customPlaylist[otherIndex] = otherSong;
   };
-  
+
+/**
+* OTHER services:
+*/
+  //this function updates the "matches", and is run every time any of the filters changes
+  PlayerService.updateTurntness = function(turntness){
+    if(arguments.length > 0){
+      this.turntness = turntness;
+    };
+    this.customPlaylist = turntToFilter(this.playlist, this.turntness);
+    $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
+  };
+
+  PlayerService.updateCustomPlaylist = function(){
+    var allBeforeUniq = [];
+    for(var key in this.playlistCollection){
+      if(this.playlistCollection[key].checked){
+        console.log("checked!");
+        console.log("this.playlistCollection[key]: ", this.playlistCollection[key]);
+        allBeforeUniq = allBeforeUniq.concat(this.playlistCollection[key].songs);
+      }
+    };
+    console.log("allBeforeUniq: ", allBeforeUniq);
+    this.playlist = _.uniq(allBeforeUniq);
+    console.log("this.playlist in customPlaylist: ", this.playlist);
+    this.customPlaylist = turntToFilter(this.playlist, this.turntness);
+    $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
+  };
+
+
+  // PlayerService.addMatches = function(matches){
+  //   this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
+  //   console.log("current playlist: ", this.customPlaylist);
+  //   $rootScope.$broadcast('customPlaylistChanged');
+  // };
+
+  //TODO: get this to get info about the song (echonest data missing);
+  // PlayerService.addFromSearch = function(song){
+  //   this.customPlaylist.push(song);
+  //   $rootScope.$broadcast('customPlaylistChanged');
+  // };
+
 
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
