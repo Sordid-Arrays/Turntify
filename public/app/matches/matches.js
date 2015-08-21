@@ -9,8 +9,6 @@ angular.module('turntify.player')
     PlayerService.addMatches(vm.matches);
   };
   $scope.$on('matchesUpdated', function(event, turntness){
-    console.log("heard event in matchesController!");
-    console.log("turntness passed: ", turntness);
     vm.matches = turntToFilter(PlayerService.playlist, turntness);
   });
 });
