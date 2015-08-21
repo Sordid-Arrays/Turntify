@@ -211,6 +211,9 @@ router.get('/searchartist', function(req, res) {
   var searchWords = req.query.artist;
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
+  if(typeof searchWords === 'string'){
+    searchWords = [searchWords];
+  }
 
   return spotify.searchArtist(searchWords, accessToken)
   .catch(function(err) {

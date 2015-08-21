@@ -8,14 +8,15 @@ angular.module('turntify.search')
     }
     return false;
   };
-  
+
   var autoComplete = function (input) {
     var searchWords = input.trim().split(/\s+/);
     var qs = searchWords.reduce(function (memo, word) {
-      return memo + 'song=' + word + '&';
+      return memo + 'artist=' + word + '&';
     },'');
     qs = qs.slice(0, qs.length - 1);
-    return RequestService.searchTracks(qs)
+    // return RequestService.searchTracks(qs)
+    return RequestService.searchArtists(qs)
     .then(function (tracks) {
       candidates[input] = tracks;
       return tracks;
