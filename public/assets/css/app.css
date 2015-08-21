@@ -67,9 +67,17 @@ md-sidenav {
 }
 
 [ng-drop] div {
+  width: 100%;
   position: relative;
   z-index: 2;
 }
 
+.customPlaylistContainer .md-button.md-fab.md-mini{
+      line-height: 30px;
+      min-height: 0px;
+    width: 30px;
+    height: 30px;
+    float: right;
+}
 
 

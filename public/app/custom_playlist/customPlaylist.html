@@ -8,13 +8,15 @@ as well as any buttons needed to persist or manipulate that playlist -->
     </md-input-container>
   </form>
 </md-content>
-<ul class="songList">
-  <li ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
-    <div ng-drag="true" ng-drag-data="song">
-      <div>{{song.title}}</div>
-      <button ng-click="customPlaylist.removeSong($index)">X</button>
-    </div>
-  </li>
-</ul>
+<md-content layout-padding>
+  <md-list class="songList">
+    <md-list-item ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
+      <div ng-drag="true" ng-drag-data="song">
+        <div>{{song.title}}<md-button class="md-fab md-mini" ng-click="customPlaylist.removeSong($index)">X</md-button></div>
+        <md-divider ng-if="!$last"></md-divider>
+      </div>
+    </md-list-item>
+  </md-list>
+</md-content>
 <md-button ng-click="customPlaylist.savePlaylist()">Save Playlist to Spotify</md-button>
 <md-button ng-click="customPlaylist.generateWidget()">Generate Preview</md-button>
