@@ -47,7 +47,6 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   var targetOwnerId = req.params.ownerId;
   var targetPlaylistId = req.params.playlistId;
 
-  console.log('BEGIN ', new Date());
   helper.getTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
     User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
@@ -62,25 +61,22 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
 });
 
 /**
+* (Not used)
 * route for searching song from all spotify
 */
 router.get('/song', function(req, res) {
   var searchWords = req.query.song;
   var accessToken = req.session.user.access_token;
   var refreshToken = req.session.user.refresh_token;
+  var resultSongs = [];
 
   if (typeof searchWords === 'string') {
     searchWords = [searchWords];
   }
 
-  var resultSongs = [];
-
   var dbSearchText = '"' + searchWords.join('" "') + '"';
-
   GhettoNest.find( { $text: { $search: dbSearchText}})
-  // GhettoNest.find( { $or: [ { title: { $in: dbTargetSongs } }, { artist_name: dbTargetSongs } ] } )
   .then(function(dbSongs) {
-
     resultSongs = _.map(dbSongs, function(dbsong) {
       return {
         album_name: dbsong.album_name,
@@ -104,24 +100,24 @@ router.get('/song', function(req, res) {
         util.saveToken(req, body.access_token, body.refresh_token);
         return spotify.searchSong(searchWords, body.access_token, 10 - dbSongs.length);
       });
-    })
-    .then(function(songs) {
-      var searchResult = _.map(songs.tracks.items, function(song) {
-        return {
-          album_name: song.album.name,
-          artist_name: song.artists[0].name,
-          title: song.name,
-          duration: song.duration_ms,
-          spotify_id: song.uri
-        };
-      });
-
-      res.json(resultSongs.concat(searchResult));
     });
+  })
+  .then(function(songs) {
+    var searchResult = _.map(songs.tracks.items, function(song) {
+      return {
+        album_name: song.album.name,
+        artist_name: song.artists[0].name,
+        title: song.name,
+        duration: song.duration_ms,
+        spotify_id: song.uri
+      };
+    });
+    res.json(resultSongs.concat(searchResult));
   });
 });
 
 /**
+* (Not used)
 * route for adding song to specific playlist
 */
 //this should be a post when connect to front end
@@ -167,14 +163,7 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
   var refreshToken = req.session.user.refresh_token;
   var userId = req.session.user.spotifyId;
   var playlistName = req.params.playlistName;
-  //var mockBody = [{"_id":"55d37de118796d701b4806df","spotify_id":"spotify:track:5bC230viUaRu4uXGQkQDRV","echonest_id":"SOLEIZN135CAD15595","artist_name":"Rainbow","title":"The Temple Of The King","danceability":0.360556,"energy":0.477005,"duration":284.89333,"album_name":"Anthology","turnt_bucket":4,"__v":0},{"_id":"55d386157fc3b93d24bd9b28","spotify_id":"spotify:track:5NDyPVjcjK0hw2sUjjWFIO","echonest_id":"SOJWMQV1377850D0F8","artist_name":"Deep Purple","title":"Soldier Of Fortune","danceability":0.533954,"energy":0.347959,"duration":195.07955,"album_name":"Stormbringer","turnt_bucket":5,"__v":0}];
   var songs = req.body.songs;
-  console.log("songs: ", songs);
-  console.log("typeof songs: ", typeof songs);
-  console.log("example song: ", songs[0]);
-  // var isPlaylistExist;
-  // var playlistIdToPass;
-  //coba to turntness 2: '0C6JGE0FhPhzjQIzzDazFy'
 
   spotify.getUserPlaylist(userId, accessToken)
   .catch(spotify.OldTokenError, function (err) {
@@ -186,11 +175,9 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
     });
   })
   .then(function(playListArr) {
-    console.log("getting playlistArr...", playListArr);
     return helper.getEmptyPlaylist(req, userId, playlistName, playListArr);
   })
   .then(function(playlistIdToPass) {
-    console.log("id to pass:", playlistIdToPass);
     var songArr = _.map(songs, function(song) {
       return song.spotify_id;
     });
@@ -206,6 +193,9 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
   });
 });
 
+/**
+* route for searching for artists
+*/
 router.get('/searchartist', function(req, res) {
   //var searchWords = ['chicago'];
   var searchWords = req.query.artist;
@@ -218,11 +208,11 @@ router.get('/searchartist', function(req, res) {
   return spotify.searchArtist(searchWords, accessToken)
   .catch(function(err) {
     // statusCode 401:  Unauthorized
-      return spotify.refreshToken(req.session.user.refresh_token)
-      .then(function (body) {
-        util.saveToken(req, body.access_token, body.refresh_token);
-        return spotify.searchArtist(searchWords, body.access_token);
-      });
+    return spotify.refreshToken(req.session.user.refresh_token)
+    .then(function (body) {
+      util.saveToken(req, body.access_token, body.refresh_token);
+      return spotify.searchArtist(searchWords, body.access_token);
+    });
   })
   .then(function(artists) {
     var searchResult = _.map(artists.artists.items, function(artist) {
@@ -231,33 +221,22 @@ router.get('/searchartist', function(req, res) {
         artist_uri: artist.uri
       };
     });
-    console.log(searchResult);
     res.json(searchResult);
   });
 });
 
+/**
+* route for getting songs of an artist
+*/
 router.get('/song/artist/:artistId', function(req, res) {
   var artistId = req.params.artistId;
-  //spotify:artist:3iDD7bnsjL9J4fO298r0L0 chicago
+  console.log('BEGIN!: ', new Date());
 
-  echonest.getArtistTracks(artistId)
-  .then(function(echonestSongs) {
-    var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
-      return {
-        spotify_id: echonestSong.tracks[0].foreign_id,
-        echonest_id: echonestSong.id,
-        artist_name: echonestSong.artist_name,
-        title: echonestSong.title,
-        danceability: echonestSong.audio_summary.danceability,
-        energy: echonestSong.audio_summary.energy,
-        duration: echonestSong.audio_summary.duration,
-        album_name: echonestSong.tracks[0].album_name,
-        turnt_bucket: util.getTurntness(echonestSong)
-      };
-    });
-    // insert to the database
-    GhettoNest.create(newGhettoNests);
-    res.json(newGhettoNests);
+  helper.getArtistTracks(artistId)
+  .then(function(artistSongs) {
+    console.log('FINISHED! ', artistSongs.length);
+    res.json(artistSongs);
+    console.log('FINISHED!: ', new Date());
   });
 });
 

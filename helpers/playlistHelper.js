@@ -201,8 +201,86 @@ var getEmptyPlaylist = function(req, userId, playlistName, playListArr) {
   });
 };
 
+/*
+* Get all tracks of an artist
+* Since Echonest API returns 100 songs at most for 1 request,
+* request multiple times asynchronously
+*/
+var getArtistTracks = function (artistId) {
+  var resultTracks = [];  // store all songs of the artist
+  var reqCount = 0;
+  var resCount = 0;
+  var total = 0;
+  var index = 0;
+
+  return new Promise(function (resolve, reject) {
+
+    echonest.getArtistTotal(artistId)
+    .then(function (totalNum) {
+      total = totalNum;
+      console.log('total: ', total);
+      // make requests asynchronously to get all songs
+      while (reqCount ===0 || index < total) {
+        echonestRequest(index);
+        // Echo Nest sends back 100 songs at most for 1 request
+        index += 100;
+      }
+    })
+    .catch(function (error) {
+      reject(error);
+    });
+
+    // Internal function
+    // Make an API request and  wait for all responses come back
+    function echonestRequest (index) {
+      reqCount ++;
+      getEchonestArtist(index, artistId)
+
+      .then(function (songs) {
+        resCount ++;
+        resultTracks = resultTracks.concat(songs);
+
+        // resolve the Promise when all response came back
+        if (reqCount === resCount) {
+          resolve(resultTracks);
+        }
+      })
+      .catch(function (error) {
+        reject(error);
+      });
+    }
+  });
+};
+
+/*
+* Make a request for Echonest API and save the songs in database
+* Return the songs and number of total sogs of the artist
+*/
+function getEchonestArtist (index, artistId) {
+  return echonest.getArtistTracks(artistId, index)
+  .then(function(echonestResponse) {
+    var newGhettoNests = _.map(echonestResponse, function(echonestSong) {
+      return {
+        spotify_id: echonestSong.tracks[0].foreign_id,
+        echonest_id: echonestSong.id,
+        artist_name: echonestSong.artist_name,
+        title: echonestSong.title,
+        danceability: echonestSong.audio_summary.danceability,
+        energy: echonestSong.audio_summary.energy,
+        duration: echonestSong.audio_summary.duration,
+        album_name: echonestSong.tracks[0].album_name,
+        turnt_bucket: util.getTurntness(echonestSong)
+      };
+    });
+    // insert to the database
+    GhettoNest.create(newGhettoNests);
+
+    return newGhettoNests;
+  });
+}
 
 module.exports = {
   getTracks: getTracks,
-  getEmptyPlaylist: getEmptyPlaylist
+  getEmptyPlaylist: getEmptyPlaylist,
+  getArtistTracks: getArtistTracks
 };

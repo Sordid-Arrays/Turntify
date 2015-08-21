@@ -52,30 +52,24 @@ var getTrackData = function (spotyfyURIs) {
 /*
  * getting Echo Nest track data of an artist
 **/
-var getArtistTracks = function (spotifyUri) {
+var getArtistTracks = function (spotifyUri, index) {
   var query = queryString.stringify({
     api_key: config.ECHONEST_API_KEY,
     format: "json",
     results: 100,
+    start: index,
     bucket: ['audio_summary', 'id:spotify', 'tracks'],
     artist_id: spotifyUri
   });
 
   return request.get({
-      url: 'http://developer.echonest.com/api/v4/song/search?' + query, //URL to hit
+      url: 'http://developer.echonest.com/api/v4/song/search?' + query,
   })
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
-    // each song might have multiple tracks (in single, in album, in best hits, etc.)
-    songs = _.chain(songs)
-    .filter(function(song) {
+    songs = _.filter(songs, function(song) {
       return song.tracks[0] !== undefined;
-    })
-    .each(function (song) {
-      console.log(song.tracks[0]);
-      song.tracks = [song.tracks[0]];  // for now, just return first track
-    })
-    .value();
+    });
 
     if (songs === undefined) {
       return [];
@@ -84,7 +78,28 @@ var getArtistTracks = function (spotifyUri) {
   });
 };
 
+/*
+ * getting total number of Echo Nest songs of an artist
+**/
+var getArtistTotal = function (spotifyUri) {
+  var query = queryString.stringify({
+    api_key: config.ECHONEST_API_KEY,
+    format: "json",
+    results: 1,
+    start: 0,
+    id: spotifyUri
+  });
+
+  return request.get({
+      url: 'http://developer.echonest.com/api/v4/artist/songs?' + query,
+  })
+  .then(function (body) {
+    return JSON.parse(body).response.total;
+  });
+};
+
 module.exports = {
   getTrackData: getTrackData,
-  getArtistTracks: getArtistTracks
+  getArtistTracks: getArtistTracks,
+  getArtistTotal: getArtistTotal
 };
