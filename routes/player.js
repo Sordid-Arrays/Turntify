@@ -233,4 +233,29 @@ router.get('/searchartist', function(req, res) {
   });
 });
 
+router.get('/song/artist/:artistId', function(req, res) {
+  var artistId = req.params.artistId;
+  //spotify:artist:3iDD7bnsjL9J4fO298r0L0 chicago
+
+  echonest.getArtistTracks(artistId)
+  .then(function(echonestSongs) {
+    var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
+      return {
+        spotify_id: echonestSong.tracks[0].foreign_id,
+        echonest_id: echonestSong.id,
+        artist_name: echonestSong.artist_name,
+        title: echonestSong.title,
+        danceability: echonestSong.audio_summary.danceability,
+        energy: echonestSong.audio_summary.energy,
+        duration: echonestSong.audio_summary.duration,
+        album_name: echonestSong.tracks[0].album_name,
+        turnt_bucket: util.getTurntness(echonestSong)
+      };
+    });
+    // insert to the database
+    GhettoNest.create(newGhettoNests);
+    res.json(newGhettoNests);
+  });
+});
+
 module.exports = router;
