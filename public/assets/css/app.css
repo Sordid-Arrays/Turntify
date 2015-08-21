@@ -5,12 +5,17 @@ template (NOT BOOTSTRAP) without modifying the template file*/
 .bodyContainer, .viewContainer, .playerUIview, .playerContainer{
   height: 100%;
 }
+md-content{
+  background-color: rgb(62, 62, 62);
+}
 .playerContainer{
   max-width: 100%;
   margin: 0 auto;
 }
 .playerContainer>.playerRow{
   height: 100%;
+      width: 80%;
+    margin: 0 auto;
 }
 .playerColumn{
   padding: 8px;
@@ -28,11 +33,10 @@ md-sidenav {
 .matchParamsWrapper md-content md-slider{
   margin-left: 9px;
 }
-.material-icons{
-  font-size: 36px;
-  height: 36px;
-  width: 36px;
-  margin: 40px 0;
+.customPlaylistContainer md-list-item .material-icons{
+      font-size: 18px;
+    height: 18px;
+    width: 18px;
 }
 .widgetContainer{
   text-align: center;
@@ -75,9 +79,23 @@ md-sidenav {
 .customPlaylistContainer .md-button.md-fab.md-mini{
       line-height: 30px;
       min-height: 0px;
-    width: 30px;
+        width: 32.32px;
     height: 30px;
     float: right;
+    visibility: hidden;
+    background-color: rgb(74,74,74);
 }
-
+.customPlaylist{
+  background-color: rgb(66,66,66);
+}
+.songList md-list-item{
+  position: relative;
+  padding: 0 16px;
+}
+md-list-item:hover .md-button.md-fab.md-mini{
+  visibility: visible;
+}
+md-list-item:hover .md-button.md-fab.md-mini:hover{
+  background-color: rgb(244,67,54);
+}
 
