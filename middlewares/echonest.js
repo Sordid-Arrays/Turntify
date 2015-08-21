@@ -48,6 +48,37 @@ var getTrackData = function (spotyfyURIs) {
   });
 };
 
+
+/*
+ * getting Echo Nest track data of an artist
+**/
+var getArtistTracks = function (spotifyUri) {
+  var query = queryString.stringify({
+    api_key: config.ECHONEST_API_KEY,
+    format: "json",
+    results: 100,
+    bucket: ['audio_summary', 'id:spotify', 'tracks'],
+    artist_id: spotyfyUri
+  });
+
+  return request.get({
+      url: 'http://developer.echonest.com/api/v4/song/search?' + query, //URL to hit
+  })
+  .then(function (body) {
+    var songs = JSON.parse(body).response.songs;
+    // each song might have multiple tracks (in single, in album, in best hits, etc.)
+    _.each(songs, function (song) {
+      song.tracks = [song.tracks[0]];  // for now, just return first track
+    });
+
+    if (songs === undefined) {
+      return [];
+    }
+    return songs;
+  });
+};
+
 module.exports = {
-  getTrackData: getTrackData
+  getTrackData: getTrackData,
+  getArtistTracks: getArtistTracks
 };

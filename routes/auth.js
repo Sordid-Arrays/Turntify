@@ -29,6 +29,11 @@ var stateKey = 'spotify_auth_state';
 * route for login
 */
 router.get('/login', function(req, res) {
+  // no need to authenticate if the user is already logged in
+  if (req.session.user) {
+    res.redirect('/#/player');
+    return;
+  }
 
   var state = util.generateRandomString(16);
   res.cookie(stateKey, state);
@@ -99,6 +104,14 @@ router.get('/callback', function(req, res) {
     res.status(e.status || 500);
     res.json('Internal server error');
   });
+});
+
+/**
+* destroy session on logout
+*/
+router.get('/logout', function(req, res) {
+  req.session.destroy();
+  res.json({success: true});
 });
 
 module.exports = router;
