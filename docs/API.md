@@ -46,3 +46,13 @@ to create playlist or update playlist with imported songs
 /saveplaylist/:playlistName
 you will send the songs in req.body.song
 this is a post
+
+to search an artist
+'/searchartist'
+you will send the artist in req.query.artist
+this is a get
+
+to get songs from specific artist
+'/song/artist/:artistId'
+artistId will be in req.params.artistId
+this is a get
