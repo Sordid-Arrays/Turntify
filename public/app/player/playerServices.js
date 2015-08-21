@@ -60,7 +60,7 @@ angular.module('turntify.player')
     } else {
       this.removePlaylist(playlist);
     }
-  }
+  };
 
 /**
 * CUSTOMPLAYLIST CONTROLLER services:

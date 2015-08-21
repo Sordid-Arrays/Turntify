@@ -86,8 +86,12 @@ md-sidenav {
     visibility: hidden;
     background-color: rgb(74,74,74);
 }
-.customPlaylist{
+.customPlaylist, .checkboxWrapper{
   background-color: rgb(66,66,66);
+}
+.checkboxWrapper{
+  max-height: 300px;
+  margin-bottom: 20px;
 }
 .songList md-list-item{
   position: relative;

@@ -37,12 +37,8 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
     }); 
 
   };
-  
-  vm.sideNavIsOpen = true;
-  vm.toggleSideNav = function(){
-    console.log('called toggle side nav');
-    vm.sideNavIsOpen = vm.sideNavIsOpen ? false : true;
-  };
+
+  vm.checked = {};
 
   /**
   * Update the view queue while the user is sliding the slider/turning the knob/radial-ing the radial.
@@ -61,6 +57,13 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
     var playlist = JSON.parse(selectedPlaylist);
     PlayerService.persistViewQueue(viewQueue, turntness, playlist);
     console.log("persisting View Queue!");
+  };
+
+
+  vm.toggleCheck = function(playlist, checked){
+    console.log('playlist: ', playlist);
+    console.log('checked: ', checked);
+     PlayerService.toggleCheck(playlist, checked);
   };
 
   /**
