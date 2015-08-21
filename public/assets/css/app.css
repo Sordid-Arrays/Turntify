@@ -2,8 +2,12 @@
 the base CSS template file, so it takes priority over the generic 
 template (NOT BOOTSTRAP) without modifying the template file*/
 
-.bodyContainer, .viewContainer, .playerUIview, .playerContainer{
+body{
   height: 100%;
+  background-color: rgb(62, 62, 62);
+}
+md-content{
+  background-color: rgb(62, 62, 62);
 }
 .playerContainer{
   max-width: 100%;
@@ -11,6 +15,8 @@ template (NOT BOOTSTRAP) without modifying the template file*/
 }
 .playerContainer>.playerRow{
   height: 100%;
+      width: 80%;
+    margin: 0 auto;
 }
 .playerColumn{
   padding: 8px;
@@ -28,11 +34,10 @@ md-sidenav {
 .matchParamsWrapper md-content md-slider{
   margin-left: 9px;
 }
-.material-icons{
-  font-size: 36px;
-  height: 36px;
-  width: 36px;
-  margin: 40px 0;
+.customPlaylistContainer md-list-item .material-icons{
+      font-size: 18px;
+    height: 18px;
+    width: 18px;
 }
 .widgetContainer{
   text-align: center;
@@ -42,7 +47,7 @@ md-sidenav {
   color: #fff;
 }
 .navInnerContainer{
-  width: 1250px;
+  width: 80%;
   margin: 0 auto;
 }
 
@@ -75,9 +80,42 @@ md-sidenav {
 .customPlaylistContainer .md-button.md-fab.md-mini{
       line-height: 30px;
       min-height: 0px;
-    width: 30px;
+        width: 32.32px;
     height: 30px;
     float: right;
+    visibility: hidden;
+    background-color: rgb(74,74,74);
 }
-
+.customPlaylist, .checkboxWrapper{
+  background-color: rgb(66,66,66);
+}
+.checkboxWrapper{
+  max-height: 300px;
+  margin-bottom: 20px;
+}
+.songList md-list-item{
+  position: relative;
+  padding: 0 16px;
+}
+.songList md-list-item h3{
+  font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin: 0 0 6px 0;
+    line-height: 0.75em;
+}
+.songList md-list-item p{
+      font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin: 0 0 0 0;
+    line-height: 1.6em;
+        color: rgba(255,255,255,0.7);
+}
+md-list-item:hover .md-button.md-fab.md-mini{
+  visibility: visible;
+}
+md-list-item:hover .md-button.md-fab.md-mini:hover{
+  background-color: rgb(244,67,54);
+}
 
