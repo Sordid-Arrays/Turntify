@@ -70,6 +70,17 @@ angular.module('turntify.services', [])
     });
   };
 
+  var getArtistSongs = function (artistUri) {
+    return $http({
+      method: 'GET',
+      url: 'song/artist/' + artistUri
+    }).then(function (res) {
+      return res.data;
+    }).catch(function (error) {
+      console.log(error);
+    })
+  }
+
 /**
 * Dummy request to practice to testing the mock backend.
 * Can be fiddled with as needed.
@@ -92,6 +103,7 @@ angular.module('turntify.services', [])
     searchTracks: searchTracks,
     searchArtists: searchArtists,
     savePlaylist: savePlaylist,
+    getArtistSongs: getArtistSongs,
     dummyTest: dummyTest
   };
 });

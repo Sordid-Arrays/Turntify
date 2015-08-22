@@ -29,9 +29,9 @@ angular.module('turntify.search', ['ngMaterial'])
   // };
   // vm.init();
 
-  vm.addSong = function(song) {
-    console.log("song: ", song);
-    PlayerService.addFromSearch(song);
+  vm.addSong = function(artist) {
+    console.log("artist: ", artist);
+    PlayerService.addFromSearch(artist);
   };
 
 

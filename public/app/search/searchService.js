@@ -28,9 +28,14 @@ angular.module('turntify.search')
     return RequestService.searchTracks(searchWords);
   };
 
+  var getArtistSongs = function (artist) {
+    return RequestService.getArtistSongs(artist.artist_uri);
+  };
+
   return {
     checkCache: checkCache,
     autoComplete: autoComplete,
-    searchTracks: searchTracks
+    searchTracks: searchTracks,
+    getArtistSongs: getArtistSongs
   };
 });

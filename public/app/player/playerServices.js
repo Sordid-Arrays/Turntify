@@ -15,7 +15,7 @@ angular.module('turntify.player')
 /**
 * PLAYER CONTROLLER services:
 */
-  //on initialization, 
+  //on initialization,
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
@@ -69,7 +69,7 @@ angular.module('turntify.player')
   PlayerService.removeFromCustomPlaylist = function(songIndex){
     this.customPlaylist.splice(songIndex, 1);
   };
-  
+
   //saves playlist to spotify:
   PlayerService.savePlaylist = function(playlistName){
     RequestService.savePlaylist(playlistName, this.customPlaylist);
@@ -138,6 +138,18 @@ angular.module('turntify.player')
       trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
     el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
+  };
+
+  PlayerService.addFromSearch = function (artist) {
+    var context = this;
+    context.playlists.push({name: artist.artist_name, spotify_id: artist.artist_uri});
+    RequestService.getArtistSongs(artist.artist_uri)
+    .then(function (songs) {
+      context.playlistCollection[name] = {checked: true,
+                                            songs: songs};
+      console.log("playerservice playlist collection:", context.playlistCollection);
+      context.updateCustomPlaylist();
+    });
   };
 
   return PlayerService;
