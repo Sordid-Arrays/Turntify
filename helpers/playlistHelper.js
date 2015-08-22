@@ -72,25 +72,38 @@ function getEchonestData (spotifyUris) {
     }
 
     console.log(new Date(), 'Got Echonest API response: ' + echonestSongs.length + ' songs');
-    var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
-      return {
-        spotify_id: echonestSong.tracks[0].foreign_id,
-        echonest_id: echonestSong.id,
-        artist_name: echonestSong.artist_name,
-        title: echonestSong.title,
-        danceability: echonestSong.audio_summary.danceability,
-        energy: echonestSong.audio_summary.energy,
-        duration: echonestSong.audio_summary.duration,
-        album_name: echonestSong.tracks[0].album_name,
-        turnt_bucket: util.getTurntness(echonestSong)
-      };
-    });
-    // insert to the database
-    GhettoNest.create(newGhettoNests);
+    var newGhettoNests = saveGhettonest(echonestSongs, false);
     tracks = tracks.concat(newGhettoNests);
 
     return tracks;
   });
+}
+
+function saveGhettonest(echonestSongs, update) {
+  var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
+    return {
+      spotify_id: echonestSong.tracks[0].foreign_id,
+      echonest_id: echonestSong.id,
+      artist_name: echonestSong.artist_name,
+      title: echonestSong.title,
+      danceability: echonestSong.audio_summary.danceability,
+      energy: echonestSong.audio_summary.energy,
+      duration: echonestSong.audio_summary.duration,
+      album_name: echonestSong.tracks[0].album_name,
+      turnt_bucket: util.getTurntness(echonestSong)
+    };
+  });
+
+  if (!update) {
+    // insert to the database
+    GhettoNest.create(newGhettoNests);
+    return newGhettoNests;
+  }
+  // TODO findAllAndUpdate ??
+  // insert if not exist in DB
+  var query;
+  // GhettoNest.findOneAndUpdate(newGhettoNests, {upsert: true});
+  return newGhettoNests;
 }
 
 /*
@@ -234,11 +247,12 @@ var getArtistTracks = function (artistId) {
     // Make an API request and  wait for all responses come back
     function echonestRequest (index) {
       reqCount ++;
-      getEchonestArtist(index, artistId)
+      echonest.getArtistTracks(artistId, index)
 
-      .then(function (songs) {
+      .then(function (echonestSongs) {
         resCount ++;
-        resultTracks = resultTracks.concat(songs);
+        var newGhettoNests = saveGhettonest(echonestSongs, true);
+        resultTracks = resultTracks.concat(newGhettoNests);
 
         // resolve the Promise when all response came back
         if (reqCount === resCount) {
@@ -251,33 +265,6 @@ var getArtistTracks = function (artistId) {
     }
   });
 };
-
-/*
-* Make a request for Echonest API and save the songs in database
-* Return the songs and number of total sogs of the artist
-*/
-function getEchonestArtist (index, artistId) {
-  return echonest.getArtistTracks(artistId, index)
-  .then(function(echonestResponse) {
-    var newGhettoNests = _.map(echonestResponse, function(echonestSong) {
-      return {
-        spotify_id: echonestSong.tracks[0].foreign_id,
-        echonest_id: echonestSong.id,
-        artist_name: echonestSong.artist_name,
-        title: echonestSong.title,
-        danceability: echonestSong.audio_summary.danceability,
-        energy: echonestSong.audio_summary.energy,
-        duration: echonestSong.audio_summary.duration,
-        album_name: echonestSong.tracks[0].album_name,
-        turnt_bucket: util.getTurntness(echonestSong)
-      };
-    });
-    // insert to the database
-    GhettoNest.create(newGhettoNests);
-
-    return newGhettoNests;
-  });
-}
 
 module.exports = {
   getTracks: getTracks,
