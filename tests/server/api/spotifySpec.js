@@ -1,6 +1,7 @@
 var expect = require('chai').expect;
 var assert = require('assert');
 var nock = require('nock');
+var queryString = require('query-string');
 
 var spotify = require('../../../middlewares/spotify.js');
 
@@ -22,7 +23,7 @@ var refreshToken = 'refresh token';
 var userId = '22cw4tmccteifpehid5awbaki';
 var playlistId = '0SzuoS1rVNdMR0Yj7RNPc0';
 var oldToken = 'old token';
-
+var index = 1;
 
 var api;
 
@@ -51,9 +52,9 @@ function mockGetUserPlaylists(userId) {
   });
 }
 
-function mockGetTracks(userId, playlistId) {
+function mockGetTracks(userId, playlistId, index) {
   return nock('https://api.spotify.com')
-  .get('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks')
+  .get('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?offset=' + index)
   .reply(200, {
     items: [{
       track: {
@@ -85,6 +86,47 @@ function mockOldToken(route) {
   return nock('https://api.spotify.com')
   .get(route)
   .reply(401);
+}
+
+function mockInsertSong(userId, playlistId, songId) {
+  var query = queryString.stringify({
+    uris: songId
+  });
+  return nock('https://api.spotify.com')
+  .post('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?' + query)
+  .reply(200, {
+    snapshot_id: 'whatever successful'
+  });
+}
+
+function mockCreatePlaylist(userId, playlistName) {
+  return nock('https://api.spotify.com')
+  .post('/v1/users/' + userId + '/playlists')
+  .reply(200, {
+    id: 'newPlaylistID'
+  });
+}
+
+function mockRemoveTracks(userId, playlistId, tracksTobeRemoved) {
+  return nock('https://api.spotify.com')
+  .delete('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks')
+  .reply(200, {
+    snapshot_id: 'whatever successful'
+  });
+}
+
+function mockSearchArtist(searchWords) {
+  var qs = queryString.stringify({
+    type: 'artist',
+    limit: 10
+  });
+  qs += '&q=' + searchWords.join('+') + '*';
+  return nock('https://api.spotify.com')
+  .get('/v1/search?' + qs)
+  .reply(200, {
+    artist_name: 'artist name',
+    artist_uri: 'spotify uri of the artist'
+  });
 }
 
 // /**
@@ -181,15 +223,15 @@ describe('getUserPlaylist', function () {
 
 describe('getPlaylistTracks', function () {
   it('should return Promise', function (done) {
-    api = mockGetTracks(userId, playlistId);
-    spotify.getPlaylistTracks(userId, playlistId, accessToken)
+    api = mockGetTracks(userId, playlistId, index);
+    spotify.getPlaylistTracks(userId, playlistId, accessToken, index)
     .then(function () {
       done();
     });
   });
   it('should get tracks information', function (done) {
-    api = mockGetTracks(userId, playlistId);
-    spotify.getPlaylistTracks(userId, playlistId, accessToken)
+    api = mockGetTracks(userId, playlistId, index);
+    spotify.getPlaylistTracks(userId, playlistId, accessToken, index)
     .then(function (tracks) {
       expect(tracks.items).to.be.an('array');
       expect(tracks.items[0].track.uri).to.be.a('string');
@@ -197,8 +239,8 @@ describe('getPlaylistTracks', function () {
     });
   });
   it('should throw OldTokenError when the token is expired', function (done) {
-    api = mockOldToken('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks');
-    spotify.getPlaylistTracks(userId, playlistId, oldToken)
+    api = mockOldToken('/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?offset=' + index);
+    spotify.getPlaylistTracks(userId, playlistId, oldToken, index)
     .catch(function (err) {
       expect(err).to.be.instanceof(spotify.OldTokenError);
       done();
@@ -238,6 +280,97 @@ describe('refresh token', function () {
     spotify.refreshToken(refreshToken)
     .then(function (body) {
       expect(body.access_token).to.be.a('string');
+      done();
+    });
+  });
+});
+
+describe('insert song', function() {
+  it('should insert song to playlist', function (done) {
+    var songsStr = [
+      {
+        "_id":"any id",
+        "spotify_id":"spotify id",
+        "echonest_id":"echonest id",
+        "artist_name":"artist name",
+        "title":"song name",
+        "danceability":0.5,
+        "energy":0.477005,
+        "duration":284.89333,
+        "album_name":"album name",
+        "turnt_bucket":4,
+        "__v":0
+      }
+    ];
+    api = mockInsertSong(userId, playlistId, songsStr);
+    spotify.insertSong(accessToken, userId, playlistId, songsStr)
+    .then(function (result) {
+      //spotify will return object result with snapshot_id if insert successful
+      expect(result.snapshot_id).to.be.a('string');
+      done();
+    });
+  });
+});
+
+describe('create spotify playlist', function() {
+  it('should create new playlist', function (done) {
+    var playlistName = 'NameOfPlaylist';
+
+    api = mockCreatePlaylist(userId, playlistName);
+    spotify.createPlaylist(accessToken, userId, playlistName)
+    .then(function(playlist) {
+      expect(playlist).to.have.property('id').that.is.a('string');
+      done();
+    });
+  });
+});
+
+describe('remove tracks from spotify playlist', function() {
+  it('should delete tracks from spotify playlist', function(done) {
+    var songsStr = [
+      {
+        "_id":"any id",
+        "spotify_id":"spotify id",
+        "echonest_id":"echonest id",
+        "artist_name":"artist name",
+        "title":"song name",
+        "danceability":0.5,
+        "energy":0.477005,
+        "duration":284.89333,
+        "album_name":"album name",
+        "turnt_bucket":4,
+        "__v":0
+      }
+    ];
+
+    api = mockRemoveTracks(userId, playlistId, songsStr);
+    spotify.removeTracks(userId, playlistId, accessToken, songsStr)
+    .then(function(result) {
+      //spotify will return object result with snapshot_id if remove successful
+      expect(result.snapshot_id).to.be.a('string');
+      done();
+    });
+  });
+});
+
+describe('search artists', function() {
+  var searchWords = ['any', 'word'];
+
+  if(typeof searchWords === 'string'){
+    searchWords = [searchWords];
+  }
+  it('should return Promise', function (done) {
+    api = mockSearchArtist(searchWords);
+    spotify.searchArtist(searchWords, accessToken)
+    .then(function () {
+      done();
+    });
+  });
+  it('should get artist data', function (done) {
+    api = mockSearchArtist(searchWords);
+    spotify.searchArtist(searchWords, accessToken)
+    .then(function (artist) {
+      expect(artist.artist_name).to.be.a('string');
       done();
     });
   });
