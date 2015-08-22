@@ -80,6 +80,12 @@ md-sidenav {
   width: 80%;
   margin: 0 auto;
 }
+.navInnerContainer h3{
+  float: left;
+  margin: 8px;
+  font-family: 'Fugaz One', cursive;
+  font-size: 22px;
+}
 .logoutButton{
   float: right;
 }
@@ -134,6 +140,11 @@ md-sidenav {
 .checkboxWrapper{
   max-height: 510px;
   margin-bottom: 20px;
+}
+md-checkbox md-progress-circular{
+  float: right;
+  margin-top: -24px;
+  top: 12px;
 }
 .songList md-list-item{
   position: relative;

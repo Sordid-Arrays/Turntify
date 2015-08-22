@@ -2,7 +2,7 @@
 
 <div class="navContainer md-primary" ng-controller="MainController as main" layout="row"><!-- add in "ng-if" to not show in login -->
   <div class="navInnerContainer">
-    <!-- <h3>aTuned</h3> -->
+    <h3>atuned</h3>
     <md-button class="logoutButton" ng-click="main.logout()" ng-controller="MainController as main">Logout</md-button>
   </div>
 </div>
@@ -19,18 +19,17 @@
           <div flex ng-repeat="playlist in player.playlists">
             <md-checkbox ng-model="playlist.checked" ng-click="player.toggleCheck(playlist, !playlist.checked)">
               {{ playlist.name }}
+              <md-progress-circular md-diameter="20" md-mode="indeterminate" ng-if="playlist.loading"></md-progress-circular>
             </md-checkbox>
-            <div class="playlistSpinnerWrapper" ng-if="playlist.loading">
-              <h4>Loading songs</h4>
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-          </div>
+            <div class="playlistSpinnerWrapper" >
+            </div>
           </div>
 
           <!-- loading-spinner -->
-          <div class="playlistSpinnerWrapper" ng-if="player.playlistLoading">
+<!--           <div class="playlistSpinnerWrapper" ng-if="player.playlistLoading">
             <h4>Grabbing your playlist!</h4>
             <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-          </div>
+          </div> -->
         </md-content>
 
       
