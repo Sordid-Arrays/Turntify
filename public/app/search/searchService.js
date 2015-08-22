@@ -10,7 +10,7 @@ angular.module('turntify.search')
   };
 
   var autoComplete = function (input) {
-    var searchWords = input.trim().split(/\s+/);
+    var searchWords = input.split(/\s+/);
     var qs = searchWords.reduce(function (memo, word) {
       return memo + 'artist=' + word + '&';
     },'');

@@ -1,5 +1,5 @@
-/* This contains our App-Specific CSS. it will be loaded AFTER 
-the base CSS template file, so it takes priority over the generic 
+/* This contains our App-Specific CSS. it will be loaded AFTER
+the base CSS template file, so it takes priority over the generic
 template (NOT BOOTSTRAP) without modifying the template file*/
 
 body{
@@ -118,4 +118,11 @@ md-list-item:hover .md-button.md-fab.md-mini{
 md-list-item:hover .md-button.md-fab.md-mini:hover{
   background-color: rgb(244,67,54);
 }
-
+.artist{
+  background-color: black;
+  cursor: default;
+}
+.artist:hover{
+  /*background-color: SteelBlue;*/
+  background-color: LightSteelBlue;
+}
