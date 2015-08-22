@@ -39,7 +39,7 @@ angular.module('turntify', [
     url: '/player',
     data: {isRestricted: true},
     views: {
-      "player": {
+      "": {
         templateUrl: './app/player/player.html',
         controller: "PlayerController as player"
       },
