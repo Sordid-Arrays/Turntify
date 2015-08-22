@@ -9,16 +9,20 @@ angular.module('turntify.player')
   // the current value of turntness
   //NOTE: selected turntness is a string for some reason
   return function(input, selectedTurntness) {
-    console.log("input: ", input);
-    var resultArray = [];
-    var turntness = parseInt(selectedTurntness);
-    var boundaries = [turntness-2, turntness+3];
+    var resultArray = [], filterArr = [[],[],[],[]], diff, songBucket, turntness = parseInt(selectedTurntness), boundaries = [(turntness-1), (turntness+4)];
+    // var filterArr = [[],[],[],[]];
+    // var diff;
+    // var songBucket;
+    // var turntness = parseInt(selectedTurntness);
+    // var boundaries = [(turntness-1), (turntness+4)];
     for(var i=0; i<input.length; i++){
-      var songBucket = input[i].turnt_bucket;
-      if ((boundaries[0] < songBucket) && (songBucket < boundaries[1])){
-        resultArray.push(input[i]);
-      }
+      songBucket = input[i].turnt_bucket;
+      diff = turntness - songBucket + 1;
+      if(diff === 0 || diff === 1 || diff === 2 || diff === 3){
+        filterArr[diff].push(input[i]);
+      };
     }
+    resultArray = resultArray.concat(filterArr[1].concat(filterArr[2].concat(filterArr[0].concat(filterArr[3]))));
     return resultArray;
   };
 });
