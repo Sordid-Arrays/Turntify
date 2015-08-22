@@ -143,6 +143,7 @@ angular.module('turntify.player')
     el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
   };
 
+  // add an artist playlist on playlist list and load song to custom playlist
   PlayerService.addFromSearch = function (artist) {
     var context = this;
     context.playlists.push({name: artist.artist_name, spotify_id: artist.artist_uri});
