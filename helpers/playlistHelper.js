@@ -46,7 +46,7 @@ function getSpotifyUris(userId, playlistId, index, req) {
 function getEchonestData (spotifyUris) {
   var tracks = [];
 
-  // 1) check database for existing song
+  // 1) check database for existing songs
   return GhettoNest.find({spotify_id: { $in: spotifyUris}})
   .then(function(dbSongs) {
     tracks = dbSongs;
@@ -79,6 +79,9 @@ function getEchonestData (spotifyUris) {
   });
 }
 
+/*
+*  Map the response form Echo Nest API and save it in DB
+*/
 function saveGhettonest(echonestSongs, update) {
   var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
     return {
@@ -107,10 +110,10 @@ function saveGhettonest(echonestSongs, update) {
 }
 
 /*
-*  MAIN FUNCTION
-*  get spotify URI and get Echonest data
-*  call spotify API multiple times because spotify API cannot return
-*  more than 100 songs at a time.
+*  1) Get Spotify URIs of songs in a playlist
+*  2) Get Echo Nest data
+*  Call spotify API multiple times synchronously
+*  because spotify API can return 100 songs at most for 1 request
 */
 function getTracks(userId, playlistId, req) {
   console.log(new Date(), 'getTracks START: ');
@@ -123,8 +126,8 @@ function getTracks(userId, playlistId, req) {
 
     /*
     * recursive function
-    * keep getting spotify URIs without waiting for spotify API, DB and Echonest API response
-    * until get all songs in the playlist
+    * keep getting spotify URIs synchronously until get all songs in the playlist
+    * and get Echo Nest data asynchronously
     */
     function makeRequest(index, first) {
       reqCount ++;
@@ -162,55 +165,51 @@ function getTracks(userId, playlistId, req) {
 }
 
 /*
-* this function will check if playlist exist, if it is it will delete all the tracks and save new tracks
-* that was passed in from req.body
-* if it doesn't exist, it will create the playlist and add the tracks from the req.body
+* Check if playlist exist
+* 1) If not exists, create a new playlist
+* 2) If exists, delete all the tracks
+* and return the playlistId
 */
-var getEmptyPlaylist = function(req, userId, playlistName, playListArr) {
-  var isPlaylistExist;
-  var playlistIdToPass;
+var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
+  var playlistId;
   var accessToken = req.session.user.access_token;
 
-  isPlaylistExist = _.some(playListArr, function(playlist) {
+  var targetPlaylist = _.filter(playlists, function(playlist) {
     return playlist.name === playlistName;
-  });
+  })[0];
+
+  var isPlaylistExist = !!targetPlaylist;
+
+  // 1) if playlistName not exists in playlists, create a new playlist
+  //    and return the playlist ID
   if (!isPlaylistExist) {
-    console.log("playlist doesn't exist yet");
-    console.log("playlistName: ",playlistName);
     return spotify.createPlaylist(accessToken, userId, playlistName)
     .then(function(playlist) {
       console.log("playlist created! with id: ", playlist.id);
-      playlistIdToPass = playlist.id;
-      return playlistIdToPass;
+      playlistId = playlist.id;
+      return playlistId;
     });
   }
-  //console.log('CREATE PLAYLIST ARR: ',playListArr);
-  playlistIdToPass = _.chain(playListArr)
-  .filter(function(playlist) {
-    return playlist.name === playlistName;
-  })
-  .map(function(item) {
-    return item.playlistId;
-  })
-  .value();
-  playlistIdToPass = playlistIdToPass[0];
-  //console.log('CREATE PLAYLIST ID: ', playlistIdToPass);
 
-  return getTracks(userId, playlistIdToPass, req)
+  // 2) if playlistName exist, get the playlist ID, delete all the songs
+  //    and return the playlist ID
+  playlistId = targetPlaylist.playlistId;
+
+  // get all tracks to delete
+  return getTracks(userId, playlistId, req)
   .then(function(songs) {
-    if (isPlaylistExist && songs.length > 0) {
-    //if (songs.length > 0) {
-      //delete all songs from playlist
-      var songUris = _.map(songs, function(song) {
-        return song.spotify_id;
-      });
-
-      return spotify.removeTracks(userId, playlistIdToPass, accessToken, songUris).
-      then(function(done) {
-        return playlistIdToPass;
-      });
+    if (songs.length === 0) {
+      return playlistId;
     }
-    return playlistIdToPass;
+    var songUris = _.map(songs, function(song) {
+      return song.spotify_id;
+    });
+
+    //delete all songs from the playlist
+    return spotify.removeTracks(userId, playlistId, accessToken, songUris);
+  })
+  .then(function() {
+    return playlistId;
   });
 };
 
@@ -221,16 +220,15 @@ var getEmptyPlaylist = function(req, userId, playlistName, playListArr) {
 */
 var getArtistTracks = function (artistId) {
   var resultTracks = [];  // store all songs of the artist
-  var reqCount = 0;
+  var reqCount = 0;       // keep track of response count and request count
   var resCount = 0;
-  var total = 0;
-  var index = 0;
 
   return new Promise(function (resolve, reject) {
 
     echonest.getArtistTotal(artistId)
     .then(function (totalNum) {
-      total = totalNum;
+      var total = totalNum;
+      var index = 0;
       console.log('total: ', total);
       // make requests asynchronously to get all songs
       while (reqCount ===0 || index < total) {
