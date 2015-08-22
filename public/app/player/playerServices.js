@@ -25,10 +25,13 @@ angular.module('turntify.player')
     });
   };
 
+  //this gets a playlist from our server, and sets the loading property on the input for the duration
   PlayerService.getPlaylist = function(playlist){
+    playlist.loading = true;
     var context = this;
     return RequestService.getPlaylist(playlist.ownerId, playlist.playlistId).then(function(data){
       // context.playlist = _.uniq(context.playlist.concat(data));
+      playlist.loading = false;
       context.playlistCollection[playlist.name] = {checked: true,
                                            songs:  data};
       console.log("playerservice playlist collection:", context.playlistCollection);
