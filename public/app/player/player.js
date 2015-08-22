@@ -1,22 +1,22 @@
-/** 
+/**
 * this module intantiates the "player" module, and holds the controller for the player and queue.
 * these views will persist across many states of the app, so those states will be subviews of the player
 */
 
 
-/** 
+/**
 * TODO: refactor into multiple controllers
 */
-angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
+angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
 .controller('PlayerController', function (PlayerService, turntToFilter, $scope) {
-  
+
   /**
   * 'vm' is short for 'view-model': it is used to designate context within the controller.
   */
   var vm = this;
 
   /**
-  * The name of the current 
+  * The name of the current
   */
   vm.name = "";
 
@@ -24,10 +24,10 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable'])
   * Update the list of playlists. This is only called on initialization.
   */
   vm.init = function(){
-    PlayerService.getListOfPlaylists().then(function(){    
+    PlayerService.getListOfPlaylists().then(function(){
       vm.playlists = PlayerService.playlists;
       return;
-    }); 
+    });
   };
 
   vm.checked = {};
