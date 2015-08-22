@@ -104,6 +104,7 @@ angular.module('turntify.search', ['ngMaterial'])
     }
     var action = actions[$event.keyCode];
     if (action) {
+      $event.preventDefault();
       action();
     }
   };
