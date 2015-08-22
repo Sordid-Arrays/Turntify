@@ -49,7 +49,8 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   helper.getTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
     //User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
-    res.json(tracks);
+    var resTracks = util.sortByTurntness(tracks);
+    res.json(resTracks);
   })
 
   .catch(function (e) {
@@ -143,6 +144,7 @@ router.get('/song/artist/:artistId', function(req, res) {
 
   helper.getArtistTracks(artistId)
   .then(function(artistSongs) {
+    artistSongs = util.sortByTurntness(artistSongs);
     res.json(artistSongs);
     console.log('FINISHED!: ', new Date(), artistSongs.length);
   })
