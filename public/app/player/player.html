@@ -9,7 +9,7 @@
         <h3>Your Playlists</h3>
         <md-content class="checkboxWrapper md-whiteframe-z2" layout="column">
           <div flex ng-repeat="playlist in player.playlists">
-            <md-checkbox ng-model="player.checked[playlist.name]" ng-click="player.toggleCheck(playlist, !player.checked[playlist.name])">
+            <md-checkbox ng-model="playlist.checked" ng-click="player.toggleCheck(playlist, !playlist.checked)">
               {{ playlist.name }}
             </md-checkbox>
             <div class="playlistSpinnerWrapper" ng-if="playlist.loading">
@@ -37,6 +37,6 @@
       <div class="widgetWrapper"></div>
     </div>
 
-  </div>  
+  </div>
 
 </md-content>
