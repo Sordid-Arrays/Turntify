@@ -81,7 +81,7 @@ angular.module('turntify.search', ['ngMaterial'])
   * enter key event
   */
   var enter = function () {
-    if (vm.selected < 1) {
+    if (vm.selected < 0) {
       return;
     }
     vm.addSong(vm.candidates[vm.selected]);
