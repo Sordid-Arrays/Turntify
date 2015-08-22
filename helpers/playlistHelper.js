@@ -99,10 +99,24 @@ function saveGhettonest(echonestSongs, update) {
     GhettoNest.create(newGhettoNests);
     return newGhettoNests;
   }
-  // TODO findAllAndUpdate ??
+
   // insert if not exist in DB
-  var query;
-  // GhettoNest.findOneAndUpdate(newGhettoNests, {upsert: true});
+  var spotifyIdArr = _.map(newGhettoNests, function(newGhettoNest) {
+    return newGhettoNest.spotify_id;
+  });
+  var query = {spotify_id: spotifyIdArr};
+  var updateGhetto = newGhettoNests;
+
+  GhettoNest.update(
+    query,
+    updateGhetto,
+    { upsert: true },
+    function(err, doc) {
+      if (err) {
+        console.log('error inside GhettoNest.update: ', err);
+      }
+    }
+  );
   return newGhettoNests;
 }
 
