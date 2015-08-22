@@ -9,6 +9,36 @@ body{
 md-content{
   background-color: rgb(62, 62, 62);
 }
+.bodyContainer, .viewContainer, .playerUIview{
+  height: 100%;
+}
+.loginContainer{
+  padding-top: 1px;
+  height: 100%;
+  background: url("../images/milford_sound.jpg") no-repeat center 0% fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+.loginContainer .appTitleContainer{
+  text-align: center;
+  color: #fff;
+}
+.loginContainer .appTitleContainer h1{
+  font-family: 'Fugaz One', cursive;
+  color: #fff;
+  font-size: 90px;
+  margin-top: 14%;
+  margin-bottom: 0;
+}
+.loginContainer .appTitleContainer p{
+    margin-top: -6px;
+    margin-bottom: 20px;
+  }
+.loginButtonContainer{
+  text-align: center;
+}
 .playerContainer{
   max-width: 100%;
   margin: 0 auto;

@@ -1,4 +1,12 @@
 <!-- This is where we put the "player" partial. the "ui-view" section of index.html will house this view, and the "ui-view" of this partial holds any sub-views that need the player and queue to be persistent -->
+
+<div class="navContainer md-primary" ng-controller="MainController as main" layout="row"><!-- add in "ng-if" to not show in login -->
+  <div class="navInnerContainer">
+    <!-- <h3>aTuned</h3> -->
+    <md-button class="logoutButton" ng-click="main.logout()" ng-controller="MainController as main">Logout</md-button>
+  </div>
+</div>
+
 <md-content class="playerContainer">
   <!--div id="iFrameHolder">
   </div-->
