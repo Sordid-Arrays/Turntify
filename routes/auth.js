@@ -63,6 +63,7 @@ router.get('/callback', function(req, res) {
   var state = req.query.state || null;
   var storedState = req.cookies ? req.cookies[stateKey] : null;
 
+  // check to see the request is redirected form Spotify
   if (state === null || state !== storedState) {
     res.redirect('/#' +
       querystring.stringify({
@@ -84,12 +85,13 @@ router.get('/callback', function(req, res) {
   .then(function(user){
     // save the user data in db
     var query = {spotifyId : user.id};
-    var newData = {
+    var newUser = {
       spotifyId : user.id,
       name: user.display_name || user.id
     };
-    return User.findOneAndUpdate(query, newData, {upsert: true});
-  }).then(function(user) {
+    return User.findOneAndUpdate(query, newUser, {upsert: true});
+  })
+  .then(function(user) {
     req.session.user = {
       spotifyId: user.spotifyId,
       access_token: access_token,
@@ -100,7 +102,7 @@ router.get('/callback', function(req, res) {
   })
 
   .catch(function (e) {
-    console.error('Got error: ',e);
+    console.error('Got error: ', e, e.stack);
     res.status(e.status || 500);
     res.json('Internal server error');
   });
