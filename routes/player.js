@@ -48,7 +48,7 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
 
   helper.getTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
-    User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
+    //User.findOneAndUpdate({ spotifyId: userId }, { songQueue: tracks }).exec();
     res.json(tracks);
   })
 
