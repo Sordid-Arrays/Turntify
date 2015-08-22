@@ -81,7 +81,29 @@ var getTurntness = function (song) {
 * escape a string for regEx
 */
 var escape = function(s) {
-    return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+};
+
+/**
+* map and sort songs by turntness
+*/
+var sortByTurntness = function(songs) {
+  return _.chain(songs)
+  .map(function (song) {
+    return {
+      spotify_id: song.spotify_id,
+      echonest_id: song.echonest_id,
+      artist_name: song.artist_name,
+      title: song.title,
+      danceability: song.danceability,
+      energy: song.energy,
+      duration: song.duration,
+      turnt_bucket: song.turnt_bucket,
+      turntness: (song.energy + song.danceability) / 2
+    };
+  })
+  .sortBy('turntness')
+  .value();
 };
 
 module.exports = {
@@ -89,5 +111,6 @@ module.exports = {
   saveToken: saveToken,
   danceableFiltering: danceableFiltering,
   getTurntness: getTurntness,
-  escape: escape
+  escape: escape,
+  sortByTurntness: sortByTurntness
 };
