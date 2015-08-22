@@ -32,7 +32,7 @@ md-sidenav {
   padding-left: 20px;
 }
 .matchParamsWrapper md-content md-slider{
-  margin-left: 9px;
+      margin: 0 25px;
 }
 .customPlaylistContainer md-list-item .material-icons{
       font-size: 18px;
@@ -49,6 +49,9 @@ md-sidenav {
 .navInnerContainer{
   width: 80%;
   margin: 0 auto;
+}
+.logoutButton{
+  float: right;
 }
 
 [ng-drag] {
@@ -77,6 +80,9 @@ md-sidenav {
   z-index: 2;
 }
 
+.customPlaylistContainer{
+  padding-left: 15px;
+}
 .customPlaylistContainer .md-button.md-fab.md-mini{
       line-height: 30px;
       min-height: 0px;
@@ -86,11 +92,17 @@ md-sidenav {
     visibility: hidden;
     background-color: rgb(74,74,74);
 }
-.customPlaylist, .checkboxWrapper{
+.customPlaylist, .checkboxWrapper, .turntometerWrapper{
   background-color: rgb(66,66,66);
 }
+.turntometerWrapper{
+  margin-bottom: 20px;
+}
+.customPlaylist{
+  max-height: 400px;
+}
 .checkboxWrapper{
-  max-height: 300px;
+  max-height: 510px;
   margin-bottom: 20px;
 }
 .songList md-list-item{
@@ -118,6 +130,7 @@ md-list-item:hover .md-button.md-fab.md-mini{
 md-list-item:hover .md-button.md-fab.md-mini:hover{
   background-color: rgb(244,67,54);
 }
+
 .artist{
   background-color: black;
   cursor: default;
@@ -288,4 +301,18 @@ md-list-item:hover .md-button.md-fab.md-mini:hover{
     opacity: 0;
     right: -300px;
     /*height: 0px;*/
+}
+.playlistControlContainer{
+  padding-right: 15px;
+}
+
+.playlistControlContainer h2{
+  margin-bottom: 12px;
+}
+.playlistControlContainer h4{
+  margin-top: 0px;
+  margin-bottom: 14px;
+}
+md-input-container label, md-input-container .md-placeholder{
+      color: rgba(255, 255, 255, 0.49);
 }
