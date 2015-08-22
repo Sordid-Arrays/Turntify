@@ -11,7 +11,7 @@ var GhettoNest = require('../models/ghettoNest.js');
 var router = express.Router();
 
 /**
-* route for getting playlist based on user id
+* route for getting playlists based on user id
 */
 router.get('/user/playlists', function(req,res) {
   var access_token = req.session.user.access_token;
@@ -27,18 +27,17 @@ router.get('/user/playlists', function(req,res) {
     });
   })
   .then(function(playListArr) {
-    //console.log(playListArr);
     res.json(playListArr);
   })
   .catch(function (e) {
-    console.error('Got error: ',e);
+    console.error('Got error: ', e, e.stack);
     res.status(e.status || 500);
     res.json('Internal server error');
   });
 });
 
 /**
-* route for getting songs/tracks from playlist
+* route for getting songs/tracks in a playlist
 */
 router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   var accessToken = req.session.user.access_token;
@@ -54,118 +53,25 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   })
 
   .catch(function (e) {
-    console.error('Got error: ',e.stack);
+    console.error('Got error: ', e, e.stack);
     res.status(e.status || 500);
     res.json('Internal server error');
   });
 });
 
-/**
-* (Not used)
-* route for searching song from all spotify
-*/
-router.get('/song', function(req, res) {
-  var searchWords = req.query.song;
-  var accessToken = req.session.user.access_token;
-  var refreshToken = req.session.user.refresh_token;
-  var resultSongs = [];
-
-  if (typeof searchWords === 'string') {
-    searchWords = [searchWords];
-  }
-
-  var dbSearchText = '"' + searchWords.join('" "') + '"';
-  GhettoNest.find( { $text: { $search: dbSearchText}})
-  .then(function(dbSongs) {
-    resultSongs = _.map(dbSongs, function(dbsong) {
-      return {
-        album_name: dbsong.album_name,
-        artist_name: dbsong.artist_name,
-        title: dbsong.title,
-        duration:dbsong.duration,
-        spotify_id: dbsong.spotify_id};
-    });
-
-    if (dbSongs.length >= 10) {
-      res.json(resultSongs);
-      return;
-    }
-
-    //if result from db is less than 10 then do api request
-    return spotify.searchSong(searchWords, accessToken, 10 - dbSongs.length)
-    .catch(spotify.OldTokenError, function (err) {
-      // statusCode 401:  Unauthorized
-      return spotify.refreshToken(req.session.user.refresh_token)
-      .then(function (body) {
-        util.saveToken(req, body.access_token, body.refresh_token);
-        return spotify.searchSong(searchWords, body.access_token, 10 - dbSongs.length);
-      });
-    });
-  })
-  .then(function(songs) {
-    var searchResult = _.map(songs.tracks.items, function(song) {
-      return {
-        album_name: song.album.name,
-        artist_name: song.artists[0].name,
-        title: song.name,
-        duration: song.duration_ms,
-        spotify_id: song.uri
-      };
-    });
-    res.json(resultSongs.concat(searchResult));
-  });
-});
 
 /**
-* (Not used)
-* route for adding song to specific playlist
+* route for adding a new playlist
+* 1) get the user's playlist
+* 2) prepare an empty playlist with specified name
+* 3) add songs to the playlist
 */
-//this should be a post when connect to front end
-//router.get('/addsong/:playlistId', function(req, res) {
-//router.post('/add/:ownerId/:playlistId/song', function(req, res) {
-router.post('/addsong/:playlistId', function(req, res) {
-  var accessToken = req.session.user.access_token;
-  var refreshToken = req.session.user.refresh_token;
-  var targetUserId = req.session.user.spotifyId;
-  var targetPlaylistId = req.params.playlistId;
-  var targetSongId = req.body.songId;
-  //this is for teting, uncomment 3 lines on top when working with front end
-  //var targetSongId = 'spotify:track:40riOy7x9W7GXjyGp4pjAv';  //hotel california
-  // var targetSongId = 'spotify:track:5bC230viUaRu4uXGQkQDRV';  //temple of the king
-  // var targetPlaylistId = '7obYR1XGAi1XqnyOpRiorR';
-  // var targetOwnerId = 'rickyhendrawan';
-
-  spotify.insertSong(accessToken, targetUserId, targetPlaylistId, targetSongId)
-  .catch(spotify.OldTokenError, function (err) {
-    // statusCode 401:  Unauthorized
-    return spotify.refreshToken(req.session.user.refresh_token)
-    .then(function (body) {
-      util.saveToken(req, body.access_token, body.refresh_token);
-      return spotify.insertSong(body.access_token, targetUserId, targetPlaylistId, targetSongId);
-    });
-  })
-  .then(function(done) {
-    res.json({success: true});
-  })
-  .catch(function(e) {
-    console.log('Got error: ', e.stack);
-    res.json({success:false});
-  });
-});
-
-
-/**
-* route for adding new playlist
-*/
-//router.get('/saveplaylist/:playlistName/:turntness', function(req, res) {
 router.post('/saveplaylist/:playlistName', function(req, res) {
-  var accessToken = req.session.user.access_token;
-  var refreshToken = req.session.user.refresh_token;
   var userId = req.session.user.spotifyId;
   var playlistName = req.params.playlistName;
   var songs = req.body.songs;
 
-  spotify.getUserPlaylist(userId, accessToken)
+  spotify.getUserPlaylist(userId, req.session.user.access_token)
   .catch(spotify.OldTokenError, function (err) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
@@ -178,18 +84,19 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
     return helper.getEmptyPlaylist(req, userId, playlistName, playListArr);
   })
   .then(function(playlistIdToPass) {
-    var songArr = _.map(songs, function(song) {
+    var songUris = _.map(songs, function(song) {
       return song.spotify_id;
     });
-    var songsStr = songArr.toString();
-    return spotify.insertSong(accessToken, userId, playlistIdToPass, songsStr);
+    var songsStr = songUris.toString();
+    return spotify.insertSong(req.session.user.access_token, userId, playlistIdToPass, songsStr);
   })
   .then(function(done) {
     res.json({success: true});
   })
-  .catch(function(e) {
-    console.log('Got error: ', e.stack);
-    res.json({success:false});
+  .catch(function (e) {
+    console.error('Got error: ', e, e.stack);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
@@ -197,16 +104,13 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
 * route for searching for artists
 */
 router.get('/searchartist', function(req, res) {
-  //var searchWords = ['chicago'];
   var searchWords = req.query.artist;
-  var accessToken = req.session.user.access_token;
-  var refreshToken = req.session.user.refresh_token;
   if(typeof searchWords === 'string'){
     searchWords = [searchWords];
   }
 
-  return spotify.searchArtist(searchWords, accessToken)
-  .catch(function(err) {
+  return spotify.searchArtist(searchWords, req.session.user.access_token)
+  .catch(spotify.OldTokenError, function(err) {
     // statusCode 401:  Unauthorized
     return spotify.refreshToken(req.session.user.refresh_token)
     .then(function (body) {
@@ -222,6 +126,11 @@ router.get('/searchartist', function(req, res) {
       };
     });
     res.json(searchResult);
+  })
+  .catch(function (e) {
+    console.error('Got error: ', e, e.stack);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
@@ -234,9 +143,13 @@ router.get('/song/artist/:artistId', function(req, res) {
 
   helper.getArtistTracks(artistId)
   .then(function(artistSongs) {
-    console.log('FINISHED! ', artistSongs.length);
     res.json(artistSongs);
-    console.log('FINISHED!: ', new Date());
+    console.log('FINISHED!: ', new Date(), artistSongs.length);
+  })
+  .catch(function (e) {
+    console.error('Got error: ', e, e.stack);
+    res.status(e.status || 500);
+    res.json('Internal server error');
   });
 });
 
