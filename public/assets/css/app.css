@@ -4,10 +4,10 @@ template (NOT BOOTSTRAP) without modifying the template file*/
 
 body{
   height: 100%;
-  background-color: rgb(62, 62, 62);
+  background-color: #303030;
 }
 md-content{
-  background-color: rgb(62, 62, 62);
+  background-color: #303030;
 }
 .bodyContainer, .viewContainer, .playerUIview{
   height: 100%;
@@ -73,7 +73,7 @@ md-sidenav {
   text-align: center;
 }
 .navContainer{
-  background-color: #303F9F;
+  background-color: #212121;
   color: #fff;
 }
 .navInnerContainer{
@@ -169,7 +169,7 @@ md-list-item:hover .md-button.md-fab.md-mini{
   visibility: visible;
 }
 md-list-item:hover .md-button.md-fab.md-mini:hover{
-  background-color: rgb(244,67,54);
+  background-color: rgb(233,30,99);
 }
 
 .artist{
