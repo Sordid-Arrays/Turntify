@@ -19,7 +19,7 @@
           <div flex ng-repeat="playlist in player.playlists">
             <md-checkbox ng-model="playlist.checked" ng-click="player.toggleCheck(playlist, !playlist.checked)">
               {{ playlist.name }}
-              <md-progress-circular md-diameter="20" md-mode="indeterminate" ng-if="playlist.loading"></md-progress-circular>
+              <md-progress-circular class="md-accent" md-diameter="20" md-mode="indeterminate" ng-if="playlist.loading"></md-progress-circular>
             </md-checkbox>
             <div class="playlistSpinnerWrapper" >
             </div>
