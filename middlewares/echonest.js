@@ -59,7 +59,8 @@ var getArtistTracks = function (spotifyUri, index) {
     results: 100,
     start: index,
     bucket: ['audio_summary', 'id:spotify', 'tracks'],
-    artist_id: spotifyUri
+    artist_id: spotifyUri,
+    sort: 'song_hotttnesss-desc'
   });
 
   return request.get({
