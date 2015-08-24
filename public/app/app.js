@@ -22,7 +22,8 @@ angular.module('turntify', [
 .config(function($stateProvider, $urlRouterProvider, $mdThemingProvider) {
   
   //TODO: fix flashing url bar
-  $urlRouterProvider.otherwise('/player');
+  $urlRouterProvider.otherwise('/player');  
+
   $stateProvider
   .state('login', {
     url: '/login',
@@ -94,3 +95,11 @@ angular.module('turntify', [
     }
   });
 });
+
+angular.module('appSvgIconSets', ['ngMaterial'])
+  .controller('DemoCtrl', function($scope) {})
+  .config(function($mdIconProvider) {
+    $mdIconProvider
+      .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+      .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+  });

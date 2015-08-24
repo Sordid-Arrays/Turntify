@@ -1,24 +1,28 @@
 <!-- This will hold the logic for the custom playlist that the user generates,
 as well as any buttons needed to persist or manipulate that playlist -->
-<h2>Custom Playlist</h2>
-<md-content>
-  <form name="playlistName">
-    <md-input-container>
-      <label>Playlist Name</label>
-      <input name="name" ng-model="customPlaylist.name">
-    </md-input-container>
-  </form>
-</md-content>
-<md-content class="customPlaylist md-whiteframe-z2">
-  <md-list class="songList">
-    <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
-      <div ng-drag="true" ng-drag-data="song">
-        <div class="md-list-item-text"><h3>{{song.title}}</h3><p>ArtistName</p></div>
-      </div>
-      <md-button class="md-fab md-mini" ng-click="customPlaylist.removeSong($index)"><md-icon> clear </md-icon></md-button>
-      <md-divider ng-if="!$last"></md-divider>
-    </md-list-item>
-  </md-list>
-</md-content>
-<md-button ng-click="customPlaylist.savePlaylist()">Save Playlist to Spotify</md-button>
-<md-button ng-click="customPlaylist.generateWidget()">Generate Preview</md-button>
+<div ng-hide="customPlaylist.customPlaylist.length > 0">No songs at this turnt level.</div>
+<div ng-show="customPlaylist.customPlaylist.length > 0">
+  <h2>Constructed Playlist</h2>
+  <!-- <md-content>
+    <form name="playlistName">
+      <md-input-container>
+        <label>Playlist Name</label>
+        <input name="name" ng-model="customPlaylist.name">
+      </md-input-container>
+    </form>
+  </md-content> -->
+  <md-content class="customPlaylist md-whiteframe-z2">
+    <md-list class="songList">
+      <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
+        <div ng-drag="true" ng-drag-data="song">
+          <div class="md-list-item-text"><h3>{{song.title | limitTo: 50}}{{song.title.length > 50 ? '...' : ''}}</h3><p>{{song.artist_name}}</p></div> 
+        </div>
+        <md-button class="md-fab md-mini" ng-click="customPlaylist.removeSong($index)"><md-icon> clear </md-icon></md-button>
+        <md-divider ng-if="!$last"></md-divider>
+      </md-list-item>
+    </md-list>
+  </md-content>
+  <md-button ng-click="customPlaylist.savePlaylist()">Save Playlist to Spotify</md-button>
+  <md-button ng-click="customPlaylist.generateWidget()">Generate Preview</md-button>
+</div>
+

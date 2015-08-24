@@ -52,6 +52,7 @@ angular.module('turntify.player')
       this.playlistCollection[playlist.name].checked = true;
       this.updateCustomPlaylist();
     } else {
+      this.playlistCollection[playlist.name] = { checked: true , songs: [] };
       this.getPlaylist(playlist);
     };
   };
