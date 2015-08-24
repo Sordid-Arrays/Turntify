@@ -19,13 +19,19 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
   * The name of the current
   */
   vm.name = "";
+  vm.isPlaylistExist = true;
 
   /**
   * Update the list of playlists. This is only called on initialization.
   */
   vm.init = function(){
     PlayerService.getListOfPlaylists().then(function(){
-      vm.playlists = PlayerService.playlists;
+      if (PlayerService.playlists.length > 0) {
+        vm.playlists = PlayerService.playlists;
+        vm.isPlaylistExist = true;
+      } else {
+        vm.isPlaylistExist= false;
+      }
       return;
     });
   };
