@@ -28,11 +28,13 @@ angular.module('turntify.search', ['ngMaterial'])
       vm.candidates = [];
       return;
     }
+
     var cache = SearchService.checkCache(input);
     if (cache) {
       vm.candidates = cache;
       return;
     }
+
     SearchService.autoComplete(input)
     .then(function (res) {
       // do not change candidates if user input has been changed
@@ -53,12 +55,12 @@ angular.module('turntify.search', ['ngMaterial'])
 
   /**
   * up key event
+  * move cursor up
   */
   var up = function () {
     if (vm.selected < 1) {
       return;
     }
-
     vm.candidates[vm.selected].backgroundColor = COLORS.default;
     vm.selected --;
     vm.candidates[vm.selected].backgroundColor = COLORS.selected;
@@ -66,6 +68,7 @@ angular.module('turntify.search', ['ngMaterial'])
 
   /**
   * down key event
+  * move cursor down
   */
   var down = function () {
     if (vm.selected >= vm.candidates.length - 1) {
@@ -80,6 +83,7 @@ angular.module('turntify.search', ['ngMaterial'])
 
   /**
   * enter key event
+  * add selected artists' songs to custom playlist
   */
   var enter = function () {
     if (vm.selected < 0) {
@@ -99,7 +103,6 @@ angular.module('turntify.search', ['ngMaterial'])
   * keypress event routing
   */
   vm.keypress = function ($event) {
-    console.log($event.keyCode);
     if (vm.candidates.length === 0) {
       return;
     }

@@ -147,6 +147,13 @@ angular.module('turntify.player')
   // add an artist playlist on playlist list and load song to custom playlist
   PlayerService.addFromSearch = function (artist) {
     var context = this;
+    // do not add new playlist if it already exist
+    var isExist = _.some(context.playlists, function (playlist) {
+      return playlist.spotify_id === artist.artist_uri;
+    });
+    if (isExist) {
+      return;
+    }
     var artistPlaylist = {name: artist.artist_name, spotify_id: artist.artist_uri, checked: true, loading: true};
     context.playlists.push(artistPlaylist);
     RequestService.getArtistSongs(artist.artist_uri)
