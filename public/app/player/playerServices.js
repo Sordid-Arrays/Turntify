@@ -154,6 +154,7 @@ angular.module('turntify.player')
     if (isExist) {
       return;
     }
+
     var artistPlaylist = {name: artist.artist_name, spotify_id: artist.artist_uri, checked: true, loading: true};
     context.playlists.push(artistPlaylist);
     RequestService.getArtistSongs(artist.artist_uri)

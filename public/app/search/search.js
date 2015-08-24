@@ -89,6 +89,7 @@ angular.module('turntify.search', ['ngMaterial'])
     if (vm.selected < 0) {
       return;
     }
+    vm.candidates[vm.selected].backgroundColor = COLORS.default;
     vm.addSong(vm.candidates[vm.selected]);
   };
 
