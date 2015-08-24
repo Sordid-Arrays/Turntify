@@ -194,7 +194,9 @@ md-input-container label, md-input-container .md-placeholder{
   /*background-color: SteelBlue;*/
   background-color: LightSteelBlue;
 }
-
+.autocomplete{
+  margin: 8px;
+}
 /*.fade.ng-enter {
   transition:0.5s linear all;
   opacity:0;
@@ -315,6 +317,3 @@ md-input-container label, md-input-container .md-placeholder{
         left: 0px;
     }
 }*/
-
-
-

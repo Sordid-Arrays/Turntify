@@ -25,6 +25,7 @@ angular.module('turntify.search', ['ngMaterial'])
     vm.selected = -1;
     input = input.trim();
     if (input.length === 0) {
+      vm.candidates = [];
       return;
     }
     var cache = SearchService.checkCache(input);
