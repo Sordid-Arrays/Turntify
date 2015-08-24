@@ -85,7 +85,7 @@ router.get('/callback', function(req, res) {
   .then(function(user){
     // remember the user data in session
     req.session.user = {
-      spotifyId: user.spotifyId,
+      spotifyId: user.id,
       access_token: access_token,
       refresh_token: refresh_token
     };
