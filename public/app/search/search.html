@@ -1,7 +1,7 @@
 <!-- this partial will be inserted into the "ui-view" in player.html labeled "search" -->
-<input type="text" name="search" ng-change="search.autoComplete(search.userInput)"
- ng-model="search.userInput" placeholder="search for artist" ng-keydown="search.keypress($event)">
 <div class="autocomplete">
+  <input type="text" name="search" ng-change="search.autoComplete(search.userInput)"
+   ng-model="search.userInput" placeholder="search for artist" ng-keydown="search.keypress($event)">
   <table>
     <tr class="artist" ng-repeat="candidate in search.candidates" ng-click="search.addSong(candidate)" ng-style="{'background-color': candidate.backgroundColor}">
       <td>{{candidate.artist_name}}</td>
