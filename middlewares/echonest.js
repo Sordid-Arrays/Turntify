@@ -62,7 +62,6 @@ var getArtistTracks = function (spotifyUri, index) {
     artist_id: spotifyUri,
     sort: 'song_hotttnesss-desc'
   });
-  console.log(query);
 
   return request.get({
       url: 'http://developer.echonest.com/api/v4/song/search?' + query,
