@@ -241,7 +241,7 @@ var getArtistTracks = function (artistId) {
 
     echonest.getArtistTotal(artistId)
     .then(function (totalNum) {
-      var total = totalNum;
+      var total = Math.min(totalNum, 1000);
       var index = 0;
       console.log('total: ', total);
       // make requests asynchronously to get all songs
