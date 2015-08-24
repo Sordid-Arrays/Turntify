@@ -19,10 +19,15 @@ angular.module('turntify', [
 * The config block gets executed first, and manages state
 */
 
-.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider) {
+.config(function($stateProvider, $urlRouterProvider, $mdThemingProvider, $mdIconProvider) {
   
   //TODO: fix flashing url bar
   $urlRouterProvider.otherwise('/player');
+
+  // $mdIconProvider
+  //     .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+  //     .defaultIconSet('img/icons/sets/core-icons.svg', 24);    
+
   $stateProvider
   .state('login', {
     url: '/login',
@@ -94,3 +99,11 @@ angular.module('turntify', [
     }
   });
 });
+
+angular.module('appSvgIconSets', ['ngMaterial'])
+  .controller('DemoCtrl', function($scope) {})
+  .config(function($mdIconProvider) {
+    $mdIconProvider
+      .iconSet('social', 'img/icons/sets/social-icons.svg', 24)
+      .defaultIconSet('img/icons/sets/core-icons.svg', 24);
+  });
