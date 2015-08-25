@@ -42,6 +42,9 @@ angular.module('turntify.search', ['ngMaterial'])
         // do not change candidates if user input has been changed
         if (vm.userInput === input){
           vm.candidates = res;
+          console.log('should have scrolled');
+          var checkboxContainer = angular.element(document.querySelector("md-content.checkboxWrapper"));
+          checkboxContainer[0].scrollTop = checkboxContainer[0].scrollHeight;
         }
       });
     }, 300);
