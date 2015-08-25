@@ -52,6 +52,11 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
     res.json(tracks);
   })
 
+  .catch(echonest.TooManyRequestsError, function (e) {
+    console.error(e, e.stack);
+    res.status(429);
+    res.json(e.tracks);
+  })
   .catch(function (e) {
     console.error('Got error: ', e, e.stack);
     res.status(e.status || 500);
@@ -145,6 +150,11 @@ router.get('/song/artist/:artistId', function(req, res) {
   .then(function(artistSongs) {
     res.json(artistSongs);
     console.log('FINISHED!: ', new Date(), artistSongs.length);
+  })
+  .catch(echonest.TooManyRequestsError, function (e) {
+    console.error(e, e.stack);
+    res.status(429);
+    res.json(e.tracks);
   })
   .catch(function (e) {
     console.error('Got error: ', e, e.stack);

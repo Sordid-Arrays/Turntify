@@ -76,6 +76,10 @@ function getEchonestData (spotifyUris) {
     tracks = tracks.concat(newGhettoNests);
 
     return tracks;
+  })
+  .catch(echonest.TooManyRequestsError, function (error) {
+    error.tracks = tracks;
+    throw error;
   });
 }
 
@@ -169,8 +173,20 @@ function getTracks(userId, playlistId, req) {
           console.log(new Date(), 'getTracks FINISH: return ' + allTracks.length + ' songs');
         }
       })
-      .catch(function (err) {
-        reject(err);
+      .catch(echonest.TooManyRequestsError, function (error) {
+        resCount ++;
+        // save the song data retrieved from DB
+        allTracks = allTracks.concat(error.tracks);
+
+        // reject when all response come back
+        if (resCount === reqCount) {
+          error.tracks = allTracks;
+          console.log(new Date(), 'getTracks FINISH with TooManyRequestsError: return ' + allTracks.length + ' songs');
+          reject(error);
+        }
+      })
+      .catch(function (error) {
+        reject(error);
       });
     }
 
@@ -269,6 +285,13 @@ var getArtistTracks = function (artistId) {
         // resolve the Promise when all response came back
         if (reqCount === resCount) {
           resolve(resultTracks);
+        }
+      })
+      .catch(echonest.TooManyRequestsError, function (error) {
+        resCount ++;
+        if (reqCount === resCount) {
+          error.tracks = resultTracks;
+          reject(error);
         }
       })
       .catch(function (error) {
