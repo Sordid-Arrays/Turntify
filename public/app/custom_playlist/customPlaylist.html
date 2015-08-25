@@ -1,6 +1,8 @@
 <!-- This will hold the logic for the custom playlist that the user generates,
 as well as any buttons needed to persist or manipulate that playlist -->
-<div ng-hide="customPlaylist.customPlaylist.length > 0">No songs at this turnt level.</div>
+<!-- <div ng-hide="customPlaylist.customPlaylist.length > 0">No songs at this turnt level.</div> -->
+<div ng-hide="player.playlistCounter <= 0 || customPlaylist.customPlaylist.length > 0">No songs at this turnt level.</div>
+<div ng-hide="player.playlistCounter > 0">No playlist selected.</div>
 <div ng-show="customPlaylist.customPlaylist.length > 0">
   <h2>Constructed Playlist</h2>
   <!-- <md-content>
@@ -15,7 +17,7 @@ as well as any buttons needed to persist or manipulate that playlist -->
     <md-list class="songList">
       <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist" ng-drop="true" ng-drop-success="customPlaylist.onDropComplete($index, $data,$event)">
         <div ng-drag="true" ng-drag-data="song">
-          <div class="md-list-item-text"><h3>{{song.title | limitTo: 50}}{{song.title.length > 50 ? '...' : ''}}</h3><p>{{song.artist_name}}</p></div> 
+          <div class="md-list-item-text"><h3>{{song.title | limitTo: 50}}{{song.title.length > 50 ? '...' : ''}}</h3><p>{{song.artist_name}}</p></div>
         </div>
         <md-button class="md-fab md-mini" ng-click="customPlaylist.removeSong($index)"><md-icon> clear </md-icon></md-button>
         <md-divider ng-if="!$last"></md-divider>

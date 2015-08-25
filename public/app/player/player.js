@@ -19,7 +19,8 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
   * The name of the current
   */
   vm.name = "";
-  vm.isPlaylistExist = true;
+  vm.isPlaylistExist = true;    //this variable is for showing if no playlist exist
+  vm.playlistCounter = 0;     //this variable is for showing no playlist selected or no song in that turnt level
 
   /**
   * Update the list of playlists. This is only called on initialization.
@@ -61,6 +62,12 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
   vm.toggleCheck = function(playlist, checked){
     console.log('playlist: ', playlist);
     console.log('checked: ', checked);
+    if (checked === true) {
+      vm.playlistCounter++;
+    } else {
+      vm.playlistCounter--;
+    }
+    console.log('NUMBER OF PLAYLIST SELECTED: ', vm.playlistCounter);
     PlayerService.toggleCheck(playlist, checked);
   };
 
