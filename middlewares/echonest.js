@@ -1,5 +1,5 @@
 /*
- * for accessing Echonest API
+ * module for accessing Echonest API
 **/
 var queryString = require('query-string');
 var request = require('request-promise');
@@ -12,6 +12,19 @@ if(process.env.SPOTIFY_CLIENT_ID){
 }else{
   var config = require('../config.js');
 }
+
+
+/**
+* Custom Error to throw when we hit the rate limit of the API
+*/
+var TooManyRequestsError = function () {
+  this.name = "TooManyRequestsError";
+  this.tracks = [];
+  Error.captureStackTrace(this, TooManyRequestsError);
+};
+TooManyRequestsError.prototype = Object.create(Error.prototype);
+TooManyRequestsError.prototype.constructor = TooManyRequestsError;
+
 
 /*
  * getting Echo Nest track data
@@ -45,6 +58,12 @@ var getTrackData = function (spotyfyURIs) {
       return [];
     }
     return songs;
+  })
+  .catch(function (err) {
+    if (err.statusCode === 429) {
+      throw new TooManyRequestsError();
+    }
+    throw err;
   });
 };
 
@@ -76,6 +95,12 @@ var getArtistTracks = function (spotifyUri, index) {
       return [];
     }
     return songs;
+  })
+  .catch(function (err) {
+    if (err.statusCode === 429) {
+      throw new TooManyRequestsError();
+    }
+    throw err;
   });
 };
 
@@ -96,11 +121,18 @@ var getArtistTotal = function (spotifyUri) {
   })
   .then(function (body) {
     return JSON.parse(body).response.total;
+  })
+  .catch(function (err) {
+    if (err.statusCode === 429) {
+      throw new TooManyRequestsError();
+    }
+    throw err;
   });
 };
 
 module.exports = {
   getTrackData: getTrackData,
   getArtistTracks: getArtistTracks,
-  getArtistTotal: getArtistTotal
+  getArtistTotal: getArtistTotal,
+  TooManyRequestsError: TooManyRequestsError
 };
