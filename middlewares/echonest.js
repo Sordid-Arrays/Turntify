@@ -46,17 +46,29 @@ var getTrackData = function (spotyfyURIs) {
   })
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
+    if (songs === undefined) {
+      return [];
+    }
+
+    var uriHash = {};
+    _.each(spotyfyURIs, function (uri) {
+      uriHash[uri] = true;
+    });
     // each song might have multiple tracks (in single, in album, in best hits, etc.)
     // we only need the track whose spotify URI is in given spotify URIs
     _.each(songs, function (song) {
       song.tracks = _.filter(song.tracks, function (track) {
-        return _.contains(spotyfyURIs, track.foreign_id);
+        if (spotifyUri[track.foreign_id]) {
+          spotifyUri[track.foreign_id] = false;
+          return true;
+        }
+        return false;
       });
     });
-
-    if (songs === undefined) {
-      return [];
-    }
+    // if there is remainder, compensate them
+    var remainder = _.map(uriHash, function (uri) {
+      return uri;
+    });
     return songs;
   })
   .catch(function (err) {
@@ -117,7 +129,7 @@ var getArtistTotal = function (spotifyUri) {
   });
 
   return request.get({
-      url: 'http://developer.echonest.com/api/v4/artist/songs?' + query,
+    url: 'http://developer.echonest.com/api/v4/artist/songs?' + query,
   })
   .then(function (body) {
     return JSON.parse(body).response.total;
