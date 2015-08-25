@@ -113,10 +113,15 @@ angular.module('turntify.player')
     this.playlist = _.uniq(allBeforeUniq);
     console.log("this.playlist in customPlaylist: ", this.playlist);
     this.customPlaylist = turntToFilter(this.playlist, this.turntness);
-    $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
+    $rootScope.$broadcast('playlistCollectionUpdated');
   };
 
-
+  PlayerService.loadAllMatches = function(){
+    $rootScope.$broadcast('loadAllMatches');
+  };
+  PlayerService.destroyExtras = function(){
+    $rootScope.$broadcast('playlistCollectionUpdated');
+  }
   // PlayerService.addMatches = function(matches){
   //   this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
   //   console.log("current playlist: ", this.customPlaylist);

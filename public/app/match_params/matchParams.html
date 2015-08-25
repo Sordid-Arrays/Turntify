@@ -6,7 +6,7 @@
         <md-option ng-repeat="turntness in player.turntLevels" value="{{turntness}}">{{turntness}}</md-option>
       </md-select>-->
       <div class="turntometerWrapper md-whiteframe-z2">
-        <md-slider ng-model="matchParams.selectedTurntness" min="1" max="11" ng-change="matchParams.updateMatches()" aria-label="Select Turntness" class="md-accent">
+        <md-slider ng-model="matchParams.selectedTurntness" min="1" max="11" ng-change="matchParams.updateMatches()" aria-label="Select Turntness" class="md-accent" ng-mousedown="matchParams.destroyExtras()" ng-mouseup="matchParams.loadAllMatches()">
         </md-slider>
       </div>
     </md-content>
