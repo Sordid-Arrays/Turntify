@@ -64,6 +64,9 @@ md-sidenav {
 .matchParamsWrapper md-content md-slider{
       margin: 0 25px;
 }
+md-slider.md-min .md-thumb:after {
+    background-color: #424242;
+}
 .customPlaylistContainer md-list-item .material-icons{
       font-size: 18px;
     height: 18px;
