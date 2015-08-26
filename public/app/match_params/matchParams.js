@@ -10,6 +10,9 @@ angular.module('turntify.player')
   * whenever sliders move.
   */
   var vm = this;
+
+  vm.selectedTurntness = 2;
+
   vm.updateMatches = function(){
     console.log("selectedTurntness: ", vm.selectedTurntness);
     PlayerService.updateTurntness(vm.selectedTurntness);
