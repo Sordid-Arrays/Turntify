@@ -1,11 +1,15 @@
 <!-- this partial will be inserted into the "ui-view" in player.html labeled "search" -->
-<div class="autocomplete">
-  <input type="text" name="search" ng-change="search.autoComplete(search.userInput)"
-   ng-model="search.userInput" placeholder="search for artist" ng-keydown="search.keypress($event)">
-  <table>
-    <tr class="artist" ng-repeat="candidate in search.candidates" ng-click="search.addSong(candidate)" ng-style="{'background-color': candidate.backgroundColor}">
-      <td>{{candidate.artist_name}}</td>
-    </tr>
-  </table>
+<div class="autocomplete artistSearchContain">
+  <md-input-container class="md-accent">
+    <label>Add an artist-based playlist</label>
+    <input type="text" name="search" ng-change="search.autoComplete(search.userInput)"
+     ng-model="search.userInput" ng-keydown="search.keypress($event)">
+  </md-input-container>
+  <md-list>
+    <md-list-item class="artist" ng-repeat="candidate in search.candidates" ng-click="search.addSong(candidate)" ng-style="{'background-color': candidate.backgroundColor}">
+      {{candidate.artist_name}}
+    </md-list-item>
+  </md-list>
 </div>
 <!--button name="enter" ng-click="search.searchTracks(searh.userInput)"></button-->
+
