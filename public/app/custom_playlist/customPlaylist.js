@@ -1,5 +1,5 @@
 angular.module('turntify.player')
-  .controller('CustomPlaylistController', function(PlayerService, $scope, turntToFilter, limitToFilter){
+  .controller('CustomPlaylistController', function(PlayerService, $scope, turntToFilter){
   /**
   * The user's custom playlist is managed here, along with any functions to add or remove songs from WITHIN this view.
   * The listeners ("$scope.$on") listen for changes outside the state and simply tell the playlist to match the playlist in

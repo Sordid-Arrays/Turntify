@@ -8,7 +8,6 @@ angular.module('turntify.player')
   var PlayerService = {};
   PlayerService.playlists = [];
   PlayerService.playlistCollection = {};
-  PlayerService.playlist = [];
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
 
@@ -32,8 +31,7 @@ angular.module('turntify.player')
     return RequestService.getPlaylist(playlist.ownerId, playlist.playlistId).then(function(data){
       // context.playlist = _.uniq(context.playlist.concat(data));
       playlist.loading = false;
-      context.playlistCollection[playlist.name] = {checked: true,
-                                           songs:  data};
+      context.playlistCollection[playlist.name].songs = data;
       console.log("playerservice playlist collection:", context.playlistCollection);
       context.updateCustomPlaylist();
     });
@@ -163,11 +161,12 @@ angular.module('turntify.player')
 
     var artistPlaylist = {name: artist.artist_name, spotify_id: artist.artist_uri, checked: true, loading: true};
     context.playlists.push(artistPlaylist);
+    context.playlistCollection[artist.artist_name] = {checked: true,
+                                                      songs: []};
     RequestService.getArtistSongs(artist.artist_uri)
     .then(function (songs) {
       artistPlaylist.loading = false;
-      context.playlistCollection[artist.artist_name] = {checked: true,
-                                                          songs: songs};
+      context.playlistCollection[artist.artist_name].songs = songs;
       context.updateCustomPlaylist();
     });
   };
