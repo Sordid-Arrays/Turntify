@@ -1,6 +1,5 @@
 angular.module('turntify.player')
   .controller('CustomPlaylistController', function(PlayerService, $scope, turntToFilter){
-
   /**
   * The user's custom playlist is managed here, along with any functions to add or remove songs from WITHIN this view.
   * The listeners ("$scope.$on") listen for changes outside the state and simply tell the playlist to match the playlist in
@@ -52,6 +51,10 @@ angular.module('turntify.player')
   */
   $scope.$on('playlistCollectionUpdated', function(event){
     console.log("playlistUpdated received!");
+    vm.customPlaylist = PlayerService.customPlaylist.slice(0,9);
+  });
+  $scope.$on('loadAllMatches', function(event){
+    console.log("loadingAllMatches!");
     vm.customPlaylist = PlayerService.customPlaylist;
   });
 });

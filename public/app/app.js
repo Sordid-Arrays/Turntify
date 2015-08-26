@@ -52,17 +52,9 @@ angular.module('turntify', [
         templateUrl: './app/custom_playlist/customPlaylist.html',
         controller: 'CustomPlaylistController as customPlaylist'
       },
-      "matches@player": {
-        templateUrl: './app/matches/matches.html',
-        controller: 'MatchesController as matches'
-      },
       "matchParams@player": {
         templateUrl: './app/match_params/matchParams.html',
         controller: 'MatchParamsController as matchParams'
-      },
-      "graph@player": {
-        templateUrl: './app/graph/graph.html',
-        controller: 'GraphController as Graph'
       }
     }
   });

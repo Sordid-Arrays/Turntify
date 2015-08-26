@@ -14,5 +14,13 @@ angular.module('turntify.player')
     console.log("selectedTurntness: ", vm.selectedTurntness);
     PlayerService.updateTurntness(vm.selectedTurntness);
   };
+  vm.loadAllMatches = function(){
+    console.log("selectedTurntness: ", vm.selectedTurntness);
+    PlayerService.loadAllMatches();
+  };
+  vm.destroyExtras = function(){
+    console.log("removing extra list elements!");
+    PlayerService.destroyExtras();
+  }
 });
   
