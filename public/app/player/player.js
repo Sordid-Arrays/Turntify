@@ -21,6 +21,7 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
   vm.name = "";
   vm.isPlaylistExist = true;    //this variable is for showing if no playlist exist
   vm.playlistCounter = 0;     //this variable is for showing no playlist selected or no song in that turnt level
+  vm.isListOfUserPlaylistLoading = true; //this variable is for spinner when loading playlists at beginning
 
   /**
   * Update the list of playlists. This is only called on initialization.
@@ -33,6 +34,7 @@ angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
       } else {
         vm.isPlaylistExist= false;
       }
+      vm.isListOfUserPlaylistLoading = false;
       return;
     });
   };
