@@ -106,11 +106,23 @@ var sortByTurntness = function(songs) {
   .value();
 };
 
+var solveDuplication = function (playlistItems) {
+  return _.filter(playlistItems, function (playlistItem, i) {
+    for (var j = i + 1; j < playlistItems.length; j++) {
+      if (playlistItems[j].track.uri === playlistItem.track.uri) {
+        return false;
+      }
+    }
+    return true;
+  });
+};
+
 module.exports = {
   generateRandomString: generateRandomString,
   saveToken: saveToken,
   danceableFiltering: danceableFiltering,
   getTurntness: getTurntness,
   escape: escape,
-  sortByTurntness: sortByTurntness
+  sortByTurntness: sortByTurntness,
+  solveDuplication: solveDuplication
 };
