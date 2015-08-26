@@ -24,6 +24,7 @@ as well as any buttons needed to persist or manipulate that playlist -->
       </md-list-item>
     </md-list>
   </md-content>
+  <input type="text" name="playlistName" ng-model="customPlaylist.newPlaylist" placeholder="playlist name">
   <md-button ng-click="customPlaylist.savePlaylist()">Save Playlist to Spotify</md-button>
   <md-button ng-click="customPlaylist.generateWidget()">Generate Preview</md-button>
 </div>
