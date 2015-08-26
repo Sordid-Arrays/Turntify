@@ -106,26 +106,14 @@ var sortByTurntness = function(songs) {
   .value();
 };
 
-var makeUpGhettonest = function (remainderUris, spotifyDatas) {
-  var result = [];
-  // match the remainderUris with spotifyDatas
-  _.each(spotifyDatas, function (spotifyData) {
-    _.each(remainderUris, function (uri) {
-      if (uri === spotifyData.track.uri) {
-        // make up a Ghettonest Object
-        result.push( {
-          spotify_id: uri,
-          echonest_id: 'unknown',
-          artist_name: spotifyData.track.artists[0].name,
-          title: spotifyData.track.name,
-          danceability: 0,
-          energy: 0,
-          duration: spotifyData.track.duration_ms / 1000,
-          album_name: spotifyData.track.album.name,
-          turnt_bucket: util.getTurntness(echonestSong)
-        });
+var solveDuplication = function (playlistItems) {
+  return _.filter(playlistItems, function (playlistItem, i) {
+    for (var j = i + 1; j < playlistItems.length; j++) {
+      if (playlistItems[j].track.uri === playlistItem.track.uri) {
+        return false;
       }
-    });
+    }
+    return true;
   });
 };
 
@@ -135,5 +123,6 @@ module.exports = {
   danceableFiltering: danceableFiltering,
   getTurntness: getTurntness,
   escape: escape,
-  sortByTurntness: sortByTurntness
+  sortByTurntness: sortByTurntness,
+  solveDuplication: solveDuplication
 };

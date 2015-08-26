@@ -25,7 +25,7 @@ function mapUris(playlist) {
 /*
 *  call spotify API to get tracks in the playlist
 */
-function getSpotifyUris(userId, playlistId, index, req) {
+function getSpotifySongs(userId, playlistId, index, req) {
   return spotify.getPlaylistTracks(userId, playlistId, req.session.user.access_token, index)
   .catch(spotify.OldTokenError, function () {
     // statusCode 401:  Unauthorized
@@ -38,12 +38,14 @@ function getSpotifyUris(userId, playlistId, index, req) {
 }
 
 /*
-*  functions to get data of songs
+*  function to get data of songs
 *  1) from DB
 *  2) from Echonest API if they are not in DB and save them in DB
 *  after getting data, concat and return them
 */
-function getEchonestData (spotifyUris) {
+function getEchonestData (playlistSongs) {
+  playlistSongs.items = util.solveDuplication(playlistSongs.items);
+  var spotifyUris = mapUris(playlistSongs);
   var tracks = [];
 
   // 1) check database for existing songs
@@ -71,6 +73,17 @@ function getEchonestData (spotifyUris) {
   })
 
   .then(function(echonestSongs) {
+    // save the songs which are not in Echo Nest into Ghettonest as "unknown"
+    var remainderUris = _.filter(spotifyUris, function (uri) {
+      return !_.some(echonestSongs, function (echonestSong) {
+        return echonestSong.tracks[0].foreign_id === uri;
+      });
+    });
+    if (remainderUris.length > 0) {
+      var unknownGhettonests = makeUpGhettonest(remainderUris, playlistSongs);
+      tracks = tracks.concat(unknownGhettonests);
+    }
+
     if (echonestSongs.length < 1) {
       return tracks;
     }
@@ -128,6 +141,41 @@ function saveGhettonest(echonestSongs, update) {
 }
 
 /*
+*  Make up Ghettonest data from Spotify data
+*/
+function makeUpGhettonest (remainderUris, spotifyDatas) {
+  var newGhettoNests = [];
+  // match the remainderUris with spotifyDatas
+  _.each(spotifyDatas.items, function (spotifyData) {
+    var found = false;
+    _.each(remainderUris, function (uri) {
+      if (uri === spotifyData.track.uri) {
+        // make up a Ghettonest Object
+        newGhettoNests.push( {
+          spotify_id: uri,
+          echonest_id: 'unknown',
+          artist_name: spotifyData.track.artists[0].name,
+          title: spotifyData.track.name,
+          danceability: 0,  // set danceability and energy to 0 for now
+          energy: 0,
+          duration: spotifyData.track.duration_ms / 1000,
+          album_name: spotifyData.track.album.name,
+          turnt_bucket: 0
+        });
+        found = true;
+        return;
+      }
+    });
+    if (found) {
+      return;
+    }
+  });
+  GhettoNest.create(newGhettoNests);
+  console.log('newGhettoNests: ', newGhettoNests.length);
+  return newGhettoNests;
+}
+
+/*
 *  1) Get Spotify URIs of songs in a playlist
 *  2) Get Echo Nest data
 *  Call spotify API multiple times synchronously
@@ -149,10 +197,13 @@ function getTracks(userId, playlistId, req) {
     */
     function makeRequest(index, first) {
       reqCount ++;
-      getSpotifyUris(userId, playlistId, index, req)
-      .then(function (playlist) {
+      getSpotifySongs(userId, playlistId, index, req)
+      .then(function (playlistSongs) {
         console.log(new Date(), 'got spotify URI ' + index + ' ~ ' + (index + 100));
-        var totalTracks = playlist.total;
+        var totalTracks = playlistSongs.total;
+        if (first) {
+          console.log(totalTracks, 'songs in total');
+        }
 
         // keep calling spotify API without waiting for the response
         // only on the first call, recurse to get spotify uri of all songs
@@ -162,7 +213,7 @@ function getTracks(userId, playlistId, req) {
           makeRequest(index, false);
         }
 
-        return getEchonestData(mapUris(playlist));
+        return getEchonestData(playlistSongs);
       })
       .then(function (tracks) {
         resCount ++;
