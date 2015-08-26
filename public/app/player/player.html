@@ -6,7 +6,10 @@
     <md-button class="logoutButton" ng-click="main.logout()" ng-controller="MainController as main">Logout</md-button>
   </div>
 </div>
-
+<div ng-show="player.isPlaylistLoading">
+  <md-progress-circular class="md-accent" md-diameter="20" md-mode="indeterminate">
+  </md-progress-circular>
+</div>
 <md-content class="playerContainer">
   <!--div id="iFrameHolder">
   </div-->
@@ -15,6 +18,7 @@
     <md-content class="playlistControlContainer" flex  layout-padding>
       <h2>Filter Your Playlists</h2>
         <h4>Choose One or Many</h4>
+
         <div ng-hide="player.isPlaylistExist">Please make one or more playlists public.</div>
         <md-content class="checkboxWrapper md-whiteframe-z2" layout="column">
           <div flex ng-repeat="playlist in player.playlists">
