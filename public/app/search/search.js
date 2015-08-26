@@ -34,14 +34,17 @@ angular.module('turntify.search', ['ngMaterial'])
       vm.candidates = cache;
       return;
     }
-
-    SearchService.autoComplete(input)
-    .then(function (res) {
-      // do not change candidates if user input has been changed
-      if (vm.userInput === input){
-        vm.candidates = res;
-      }
-    });
+    // wait until the user finish typing
+    clearTimeout(vm.timeoutId);
+    vm.timeoutId = setTimeout(function () {
+      SearchService.autoComplete(input)
+      .then(function (res) {
+        // do not change candidates if user input has been changed
+        if (vm.userInput === input){
+          vm.candidates = res;
+        }
+      });
+    }, 300);
   };
 
   /**
