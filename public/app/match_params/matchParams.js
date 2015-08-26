@@ -18,6 +18,15 @@ angular.module('turntify.player')
       PlayerService.updateTurntness(vm.selectedTurntness);
     };
 
+    vm.loadAllMatches = function(){
+      console.log("selectedTurntness: ", vm.selectedTurntness);
+      PlayerService.loadAllMatches();
+    };
+    vm.destroyExtras = function(){
+      console.log("removing extra list elements!");
+      PlayerService.destroyExtras();
+    };
+
   };
 
   return {
@@ -28,12 +37,5 @@ angular.module('turntify.player')
     bindToController: true, //required in 1.3+ with controllerAs
     templateUrl: '/app/match_params/matchParams.html'
   };
-  vm.loadAllMatches = function(){
-    console.log("selectedTurntness: ", vm.selectedTurntness);
-    PlayerService.loadAllMatches();
-  };
-  vm.destroyExtras = function(){
-    console.log("removing extra list elements!");
-    PlayerService.destroyExtras();
-  }
+  
 });
