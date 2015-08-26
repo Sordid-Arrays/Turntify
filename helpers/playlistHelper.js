@@ -7,6 +7,8 @@ var util = require('../helpers/util');
 var Songs = require('../models/songs.js');
 var GhettoNest = require('../models/ghettoNest.js');
 
+var UNKNOWN = 'unknown';
+
 /*
 *  map the spotify URI in the playlist and return an array of URIs
 */
@@ -51,11 +53,15 @@ function getEchonestData (playlistSongs) {
   // 1) check database for existing songs
   return GhettoNest.find({spotify_id: { $in: spotifyUris}})
   .then(function(dbSongs) {
-    tracks = dbSongs;
+    // add db songs to tracks
+    tracks = _.filter(dbSongs, function (dbSong) {
+      return dbSong.echonest_id !== UNKNOWN;
+    });
+
+    // do not request for songs which are found in the database
     var dbSongUris = _.map(dbSongs, function(dbSong) {
       return dbSong.spotify_id;
     });
-    // do not request for songs which are in the database
     spotifyUris = _.filter(spotifyUris, function(spotifyUri) {
       return !_.contains(dbSongUris, spotifyUri);
     });
@@ -81,7 +87,6 @@ function getEchonestData (playlistSongs) {
     });
     if (remainderUris.length > 0) {
       var unknownGhettonests = makeUpGhettonest(remainderUris, playlistSongs);
-      tracks = tracks.concat(unknownGhettonests);
     }
 
     if (echonestSongs.length < 1) {
@@ -153,7 +158,7 @@ function makeUpGhettonest (remainderUris, spotifyDatas) {
         // make up a Ghettonest Object
         newGhettoNests.push( {
           spotify_id: uri,
-          echonest_id: 'unknown',
+          echonest_id: UNKNOWN,
           artist_name: spotifyData.track.artists[0].name,
           title: spotifyData.track.name,
           danceability: 0,  // set danceability and energy to 0 for now
