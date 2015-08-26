@@ -1,8 +1,0 @@
-<!--lists the matches of the search result -->
-<h3>Matching songs:</h3>
-<md-list class="songList">
-  <md-list-item ng-repeat="song in matches.matches">
-    <div>{{song.title}}</div><button ng-click="matches.addSong(song)">+</button>
-  </md-list-item>
-</md-list>
-<md-button class="md-raised md-primary" ng-click="matches.addAllMatches()">Add All Songs</md-button>

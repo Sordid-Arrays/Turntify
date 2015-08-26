@@ -143,7 +143,8 @@ angular.module('turntify.player')
     el.empty();
     var trackIds = [];
     var playlist = PlayerService.customPlaylist;
-    for(var i=0; i<playlist.length; i++){
+    var length = playlist.length<25 ? playlist.length : 25;
+    for(var i=0; i<25; i++){
       trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
     el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');

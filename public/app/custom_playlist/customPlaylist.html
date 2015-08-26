@@ -5,14 +5,7 @@ as well as any buttons needed to persist or manipulate that playlist -->
 <div ng-hide="player.playlistCounter > 0">No playlist selected.</div>
 <div ng-show="customPlaylist.customPlaylist.length > 0">
   <h2>Constructed Playlist</h2>
-  <!-- <md-content>
-    <form name="playlistName">
-      <md-input-container>
-        <label>Playlist Name</label>
-        <input name="name" ng-model="customPlaylist.name">
-      </md-input-container>
-    </form>
-  </md-content> -->
+  <h3>{{player.playlistCounter}}</h3>
   <md-content class="customPlaylist md-whiteframe-z2">
     <md-list class="songList">
       <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist">
