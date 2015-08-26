@@ -11,7 +11,7 @@ angular.module('turntify.player')
   */
   var vm = this;
 
-  vm.selectedTurntness = 2;
+  vm.selectedTurntness = 1;
 
   vm.updateMatches = function(){
     console.log("selectedTurntness: ", vm.selectedTurntness);
