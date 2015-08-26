@@ -61,7 +61,11 @@ function getEchonestData (spotifyUris) {
     // 2) request echonest with songs
     if (spotifyUris.length > 0) {
       console.log(new Date(), 'Request Echonest API ' + spotifyUris.length + ' songs');
-      return echonest.getTrackData(spotifyUris);
+      return echonest.getTrackData(spotifyUris)
+      .catch(echonest.TooManyRequestsError, function (error) {
+        error.tracks = tracks;
+        throw error;
+      });
     }
     return [];
   })
@@ -76,10 +80,6 @@ function getEchonestData (spotifyUris) {
     tracks = tracks.concat(newGhettoNests);
 
     return tracks;
-  })
-  .catch(echonest.TooManyRequestsError, function (error) {
-    error.tracks = tracks;
-    throw error;
   });
 }
 
