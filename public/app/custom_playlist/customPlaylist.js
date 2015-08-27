@@ -20,14 +20,6 @@ angular.module('turntify.player')
   }
 
   /**
-  * When a dragged song is dropped into position, PlayerService perfoms a swapping operation.
-  */
-  vm.onDropComplete = function (index, song, evt) {
-    PlayerService.onDropComplete(index, song);
-    vm.customPlaylist = PlayerService.customPlaylist;
-  }
-
-  /**
   * Perist the playlist to spotify, grabbing the custom name in the input field
   */
   vm.savePlaylist = function(){
