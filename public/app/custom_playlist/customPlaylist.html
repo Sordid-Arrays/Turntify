@@ -7,7 +7,7 @@ as well as any buttons needed to persist or manipulate that playlist -->
   <h2>Constructed Playlist</h2>
   <md-content class="customPlaylist md-whiteframe-z2">
     <md-list class="songList">
-      <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist">
+      <md-list-item class="fade" ng-repeat="song in customPlaylist.customPlaylist" layout="row" layout-align="space-between center">
         <div>
           <div class="md-list-item-text"><h3>{{::song.title | limitTo: 50}}{{::song.title.length > 50 ? '...' : ''}}</h3><p>{{::song.artist_name}}</p></div> 
         </div>
