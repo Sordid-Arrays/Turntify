@@ -36,7 +36,6 @@ var getTrackData = function (spotyfyURIs) {
   var query = queryString.stringify({
     api_key: config.ECHONEST_API_KEY,
     format: "json",
-    results: 1,
     bucket: ['audio_summary', 'id:spotify', 'tracks'],
     track_id: spotyfyURIs
   });
@@ -58,16 +57,12 @@ var getTrackData = function (spotyfyURIs) {
     // we only need the track whose spotify URI is in given spotify URIs
     _.each(songs, function (song) {
       song.tracks = _.filter(song.tracks, function (track) {
-        if (spotifyUri[track.foreign_id]) {
-          spotifyUri[track.foreign_id] = false;
+        if (uriHash[track.foreign_id]) {
+          uriHash[track.foreign_id] = false;
           return true;
         }
         return false;
       });
-    });
-    // if there is remainder, compensate them
-    var remainder = _.map(uriHash, function (uri) {
-      return uri;
     });
     return songs;
   })
@@ -99,6 +94,7 @@ var getArtistTracks = function (spotifyUri, index) {
   })
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
+    // some songs do not have tracks, 
     songs = _.filter(songs, function(song) {
       return song.tracks[0] !== undefined;
     });

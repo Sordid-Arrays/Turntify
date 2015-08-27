@@ -46,7 +46,7 @@ router.get('/user/playlist/:ownerId/:playlistId/', function(req, res) {
   var targetOwnerId = req.params.ownerId;
   var targetPlaylistId = req.params.playlistId;
 
-  helper.getTracks(targetOwnerId, targetPlaylistId, req)
+  helper.getPlaylistTracks(targetOwnerId, targetPlaylistId, req)
   .then(function (tracks) {
     var resTracks = util.sortByTurntness(tracks);
     res.json(resTracks);

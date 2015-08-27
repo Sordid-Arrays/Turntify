@@ -9,6 +9,9 @@ var GhettoNest = require('../models/ghettoNest.js');
 
 var UNKNOWN = 'unknown';
 
+////////////////////////////////////////////////////
+////  for getting tracks of playlists           ////
+////////////////////////////////////////////////////
 /*
 *  map the spotify URI in the playlist and return an array of URIs
 */
@@ -103,6 +106,8 @@ function getEchonestData (playlistSongs) {
 
 /*
 *  Map the response form Echo Nest API and save it in DB
+*  1) called with update = false in getPlaylistTracks
+*  2) called with update = true in getArtistTracks
 */
 function saveGhettonest(echonestSongs, update) {
   var newGhettoNests = _.map(echonestSongs, function(echonestSong) {
@@ -120,21 +125,20 @@ function saveGhettonest(echonestSongs, update) {
   });
 
   if (!update) {
-    // insert to the database
+    // 1) insert to the database
     GhettoNest.create(newGhettoNests);
     return newGhettoNests;
   }
 
-  // insert if not exist in DB
+  // 2) insert if not exist in DB
   var spotifyIdArr = _.map(newGhettoNests, function(newGhettoNest) {
     return newGhettoNest.spotify_id;
   });
   var query = {spotify_id: spotifyIdArr};
-  var updateGhetto = newGhettoNests;
 
   GhettoNest.update(
     query,
-    updateGhetto,
+    newGhettoNests,
     { upsert: true },
     function(err, doc) {
       if (err) {
@@ -176,17 +180,17 @@ function makeUpGhettonest (remainderUris, spotifyDatas) {
     }
   });
   GhettoNest.create(newGhettoNests);
-  console.log('newGhettoNests: ', newGhettoNests.length);
+  console.log('madeUpGhettoNests: ', newGhettoNests.length);
   return newGhettoNests;
 }
 
 /*
 *  1) Get Spotify URIs of songs in a playlist
 *  2) Get Echo Nest data
-*  Call spotify API multiple times synchronously
+*  Call spotify API multiple times asynchronously
 *  because spotify API can return 100 songs at most for 1 request
 */
-function getTracks(userId, playlistId, req) {
+function getPlaylistTracks(userId, playlistId, req) {
   console.log(new Date(), 'getTracks START: ');
   var allTracks = [];  // push tracks when DB response or Echonest response come back
   var resCount = 0; // keep track of response count and request count
@@ -250,6 +254,10 @@ function getTracks(userId, playlistId, req) {
   });
 }
 
+
+////////////////////////////////////////////////////
+////  for saving a new playlist in Spotify      ////
+////////////////////////////////////////////////////
 /*
 * Check if playlist exist
 * 1) If not exists, create a new playlist
@@ -299,6 +307,10 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
   });
 };
 
+
+////////////////////////////////////////////////////
+//// for getting songs of an artist from Echo Nest//
+////////////////////////////////////////////////////
 /*
 * Get all tracks of an artist
 * Since Echonest API returns 100 songs at most for 1 request,
@@ -358,7 +370,7 @@ var getArtistTracks = function (artistId) {
 };
 
 module.exports = {
-  getTracks: getTracks,
+  getPlaylistTracks: getPlaylistTracks,
   getEmptyPlaylist: getEmptyPlaylist,
   getArtistTracks: getArtistTracks
 };

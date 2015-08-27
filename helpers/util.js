@@ -42,30 +42,6 @@ var saveToken = function (req, newAccessToken, newRefreshToken) {
 };
 
 /**
-* sort and filter the songs according to danceability
-*/
-var danceableFiltering = function (songs, turntness) {
-  turntness = Number(turntness);
-  if (turntness < 1) {
-    turntness = 1;
-  }
-  var numBuckets = 4;
-  var lowLimit = breakPoints[turntness -1];
-  var highLimit = breakPoints[turntness + numBuckets -1];
-
-  return _.chain(songs)
-  .filter(function (song) {
-    var danceability = (song.audio_summary.danceability + song.audio_summary.energy) /2;
-    return danceability >= lowLimit &&
-           danceability <= highLimit;
-  })
-  .sortBy(function (song) {
-    return song.audio_summary.danceability;
-  })
-  .value();
-};
-
-/**
 * get Turntness for each song that will be returned to frot end and save to db
 */
 var getTurntness = function (song) {
@@ -78,14 +54,7 @@ var getTurntness = function (song) {
 };
 
 /**
-* escape a string for regEx
-*/
-var escape = function(s) {
-  return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-};
-
-/**
-* map and sort songs by turntness
+* add turntness property and sort songs by turntness
 */
 var sortByTurntness = function(songs) {
   return _.chain(songs)
@@ -106,6 +75,9 @@ var sortByTurntness = function(songs) {
   .value();
 };
 
+/**
+* eliminate duplicated songs
+*/
 var solveDuplication = function (playlistItems) {
   return _.filter(playlistItems, function (playlistItem, i) {
     for (var j = i + 1; j < playlistItems.length; j++) {
@@ -120,9 +92,7 @@ var solveDuplication = function (playlistItems) {
 module.exports = {
   generateRandomString: generateRandomString,
   saveToken: saveToken,
-  danceableFiltering: danceableFiltering,
   getTurntness: getTurntness,
-  escape: escape,
   sortByTurntness: sortByTurntness,
   solveDuplication: solveDuplication
 };
