@@ -85,8 +85,8 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
       return spotify.getUserPlaylist(userId, body.access_token);
     });
   })
-  .then(function(playListArr) {
-    return helper.getEmptyPlaylist(req, userId, playlistName, playListArr);
+  .then(function(playLists) {
+    return helper.getEmptyPlaylist(req, userId, playlistName, playLists);
   })
   .then(function(playlistIdToPass) {
     var songUris = _.map(songs, function(song) {

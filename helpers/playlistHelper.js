@@ -156,29 +156,25 @@ function makeUpGhettonest (remainderUris, spotifyDatas) {
   var newGhettoNests = [];
   // match the remainderUris with spotifyDatas
   _.each(spotifyDatas.items, function (spotifyData) {
-    var found = false;
     _.each(remainderUris, function (uri) {
-      if (uri === spotifyData.track.uri) {
-        // make up a Ghettonest Object
-        newGhettoNests.push( {
-          spotify_id: uri,
-          echonest_id: UNKNOWN,
-          artist_name: spotifyData.track.artists[0].name,
-          title: spotifyData.track.name,
-          danceability: 0,  // set danceability and energy to 0 for now
-          energy: 0,
-          duration: spotifyData.track.duration_ms / 1000,
-          album_name: spotifyData.track.album.name,
-          turnt_bucket: 0
-        });
-        found = true;
+      if (uri !== spotifyData.track.uri) {
         return;
       }
+      // make up a Ghettonest Object if uri matches spotify data
+      newGhettoNests.push( {
+        spotify_id: uri,
+        echonest_id: UNKNOWN,
+        artist_name: spotifyData.track.artists[0].name,
+        title: spotifyData.track.name,
+        danceability: 0,  // set danceability and energy to 0 for now
+        energy: 0,
+        duration: spotifyData.track.duration_ms / 1000,
+        album_name: spotifyData.track.album.name,
+        turnt_bucket: 0
+      });
     });
-    if (found) {
-      return;
-    }
   });
+
   GhettoNest.create(newGhettoNests);
   console.log('madeUpGhettoNests: ', newGhettoNests.length);
   return newGhettoNests;
@@ -217,8 +213,9 @@ function getPlaylistTracks(userId, playlistId, req) {
         // keep calling spotify API without waiting for the response
         // only on the first call, recurse to get spotify uri of all songs
         while (first && totalTracks > index + 100) {
+          // Spotify send back 100 songs at most for 1 request
           index += 100;
-          // recurse with second argument false to avoid recursing
+          // recurse with second argument false not to get into this loop again
           makeRequest(index, false);
         }
 
@@ -275,7 +272,6 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
   var isPlaylistExist = !!targetPlaylist;
 
   // 1) if playlistName not exists in playlists, create a new playlist
-  //    and return the playlist ID
   if (!isPlaylistExist) {
     return spotify.createPlaylist(accessToken, userId, playlistName)
     .then(function(playlist) {
@@ -286,19 +282,18 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
   }
 
   // 2) if playlistName exist, get the playlist ID, delete all the songs
-  //    and return the playlist ID
   playlistId = targetPlaylist.playlistId;
 
   // get all tracks to delete
-  return getTracks(userId, playlistId, req)
+  return getPlaylistTracks(userId, playlistId, req)
   .then(function(songs) {
     if (songs.length === 0) {
       return playlistId;
     }
+
     var songUris = _.map(songs, function(song) {
       return song.spotify_id;
     });
-
     //delete all songs from the playlist
     return spotify.removeTracks(userId, playlistId, accessToken, songUris);
   })
@@ -321,11 +316,13 @@ var getArtistTracks = function (artistId) {
   var reqCount = 0;       // keep track of response count and request count
   var resCount = 0;
 
+  // wait until all response to come back
   return new Promise(function (resolve, reject) {
 
     echonest.getArtistTotal(artistId)
-    .then(function (totalNum) {
-      var total = Math.min(totalNum, 1000);
+    .then(function (total) {
+      // Echo Nest cannot accespt index over 1000
+      total = Math.min(total, 1000);
       var index = 0;
       console.log('total: ', total);
       // make requests asynchronously to get all songs
@@ -357,6 +354,7 @@ var getArtistTracks = function (artistId) {
       })
       .catch(echonest.TooManyRequestsError, function (error) {
         resCount ++;
+        // reject and send back tracks returned so far
         if (reqCount === resCount) {
           error.tracks = resultTracks;
           reject(error);
