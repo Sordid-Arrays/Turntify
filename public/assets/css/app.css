@@ -208,6 +208,11 @@ md-input-container label, md-input-container .md-placeholder{
 .artistSearchContain md-list-item, .artistSearchContain md-list-item .md-list-item-inner{
   min-height: 36px;
 }
+
+md-dialog .md-actions .md-button{
+  color: #fff;
+}
+
 /*.fade.ng-enter {
   transition:0.5s linear all;
   opacity:0;

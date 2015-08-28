@@ -42,14 +42,51 @@ angular.module('turntify.player')
       $mdDialog.hide();
   };
 
-  vm.savePlaylistConfirm = function(){
-      // check if there is already a playlist with that name
-        // if there is, display another dialog box asking if they want to overwrite
-          // if they want to overwrite, save the playlist
-          // otherwise bring them back to the name-the-playlist dialog
+  vm.confirmPlaylistOverwrite = function(){
+    $mdDialog.show(
+          {
+            // targetEvent: ev,
+            clickOutsideToClose: true,
+            scope: $scope,
+            preserveScope: true,
+            template:
+                      '<md-dialog>' +
+                      '<md-dialog-content>' +
+                      '  <h2 class="md-title">You already have a playlist with that name. Would you like to overwrite it?</h2>' +
+                      '  <div class="md-actions">' +
+                      '    <md-button ng-click="customPlaylist.savePlaylistDialog()" class="dialog-close">' +
+                      '      Choose Another Name' +
+                      '    </md-button>' +
+                      '    <md-button ng-click="customPlaylist.savePlaylist(); customPlaylist.closeDialog()" class="">' +
+                      '      Overwrite Existing Playlist' +
+                      '    </md-button>' +
+                      '  </div>' +
+                      '</md-dialog-content>' +
+                      '</md-dialog>',
+          }
+        );
   };
 
-  vm.showAlert = function(ev) {
+  vm.savePlaylistConfirm = function(){
+      var playlistExists = false;
+      // check if there is already a playlist with that name
+      angular.forEach(PlayerService.playlists, function(playlist){
+        if( angular.lowercase(playlist.name) === angular.lowercase(vm.newPlaylist) ){
+          playlistExists = true;
+        }
+      });
+      if(playlistExists){
+        // if there is, display another dialog box asking if they want to overwrite
+          vm.confirmPlaylistOverwrite();
+          // if they want to overwrite, save the playlist
+          // otherwise bring them back to the name-the-playlist dialog
+      }else{
+        // if not, save the playlist
+        vm.savePlaylist();
+      }
+  };
+
+  vm.savePlaylistDialog = function(ev) {
     console.log('called show alert');
     // Appending dialog to document.body to cover sidenav in docs app
     // Modal dialogs should fully cover application
@@ -62,28 +99,20 @@ angular.module('turntify.player')
         preserveScope: true,
         template:
                     '<md-dialog>' +
-                    '<md-input-container class="md-accent"><input type="text" name="playlistName" ng-model="customPlaylist.newPlaylist" placeholder="playlist name"></md-input-container>' +
+                    '<md-dialog-content>' +
+                    '  <h2 class="md-title">Name your new playlist</h2>' +
+                    '  <md-input-container class="md-accent">' +
+                    '    <label>playlist name</label>' +
+                    '    <input type="text" name="playlistName" ng-model="customPlaylist.newPlaylist">' +
+                    '  </md-input-container>' +
                     '  <div class="md-actions">' +
-                    '    <md-button ng-click="customPlaylist.savePlaylist(); customPlaylist.closeDialog()" class="">' +
+                    '    <md-button ng-click="customPlaylist.savePlaylistConfirm(); customPlaylist.closeDialog()" class="">' +
                     '      Save Playlist' +
                     '    </md-button>' +
                     '  </div>' +
+                    '</md-dialog-content>' +
                     '</md-dialog>',
-
-
       }
-    //   $mdDialog.confirm()
-    //     .parent(angular.element(document.querySelector('#popupContainer')))
-    //     .clickOutsideToClose(true)
-    //     .title('Name your playlist')
-    //     .content('<md-input-container class="md-accent"><input type="text" name="playlistName" ng-model="customPlaylist.newPlaylist" placeholder="playlist name"></md-input-container>')
-    //     .ariaLabel('Alert Dialog Demo')
-    //     .ok('Save to Spotify!')
-    //     .targetEvent(ev)
-    // )
-    // .then(function(){
-    //   vm.savePlaylist();
-    // }
     );
   };
 
