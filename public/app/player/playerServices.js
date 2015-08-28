@@ -7,6 +7,7 @@ angular.module('turntify.player')
 .factory('PlayerService', function PlayerService ($rootScope, RequestService, turntToFilter) {
   var PlayerService = {};
   PlayerService.playlists = [];
+  PlayerService.basePlaylist = [];
   PlayerService.playlistCollection = {};
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
@@ -94,7 +95,7 @@ angular.module('turntify.player')
     if(arguments.length > 0){
       this.turntness = turntness;
     };
-    this.customPlaylist = turntToFilter(this.playlist, this.turntness);
+    this.customPlaylist = turntToFilter(this.basePlaylist, this.turntness);
     $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
   };
 
@@ -108,9 +109,9 @@ angular.module('turntify.player')
       }
     };
     console.log("allBeforeUniq: ", allBeforeUniq);
-    this.playlist = _.uniq(allBeforeUniq);
-    console.log("this.playlist in customPlaylist: ", this.playlist);
-    this.customPlaylist = turntToFilter(this.playlist, this.turntness);
+    this.basePlaylist = _.uniq(allBeforeUniq);
+    console.log("this.baseplaylist in customPlaylist: ", this.basePlaylist);
+    this.customPlaylist = turntToFilter(this.basePlaylist, this.turntness);
     $rootScope.$broadcast('playlistCollectionUpdated');
   };
 
