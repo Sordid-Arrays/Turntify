@@ -50,7 +50,7 @@ var getUser = function(token) {
 */
 var getUserPlaylist = function(userId, token) {
   var options = {
-    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists',
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists?' + queryString.stringify({limit: 50}),
     headers: { 'Authorization': 'Bearer ' + token },
     json: true
   };
