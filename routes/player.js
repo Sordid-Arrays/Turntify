@@ -16,6 +16,7 @@ var router = express.Router();
 router.get('/user/playlists', function(req,res) {
   var access_token = req.session.user.access_token;
   var target_id = req.session.user.spotifyId;
+  var userName  = req.session.user.name;
 
   spotify.getUserPlaylist(target_id, access_token)
   .catch(spotify.OldTokenError, function (err) {
@@ -27,7 +28,11 @@ router.get('/user/playlists', function(req,res) {
     });
   })
   .then(function(playListArr) {
-    res.json(playListArr);
+    //res.json(playListArr);
+    res.json({
+      username: userName,
+      playlists: playListArr
+    });
   })
   .catch(function (e) {
     console.error('Got error: ', e, e.stack);

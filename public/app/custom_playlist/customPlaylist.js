@@ -7,6 +7,7 @@ angular.module('turntify.player')
   */
   var vm = this;
   vm.customPlaylist = PlayerService.customPlaylist;
+  vm.fullCustomPlaylistLength = 0;
   //vm.newPlaylist = '';
 
   /**
@@ -17,6 +18,12 @@ angular.module('turntify.player')
   vm.removeSong = function(songIndex){
     PlayerService.removeFromCustomPlaylist(songIndex);
     vm.customPlaylist = PlayerService.customPlaylist;
+    vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
+    if (vm.fullCustomPlaylistLength > 1) {
+      vm.songsOrSong = 'songs';
+    } else {
+      vm.songsOrSong = 'song';
+    }
   };
 
   /**
@@ -124,9 +131,21 @@ angular.module('turntify.player')
   $scope.$on('playlistCollectionUpdated', function(event){
     console.log("playlistUpdated received!");
     vm.customPlaylist = PlayerService.customPlaylist.slice(0,9);
+    vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
+    if (vm.fullCustomPlaylistLength > 1) {
+      vm.songsOrSong = 'songs';
+    } else {
+      vm.songsOrSong = 'song';
+    }
   });
   $scope.$on('loadAllMatches', function(event){
     console.log("loadingAllMatches!");
     vm.customPlaylist = PlayerService.customPlaylist;
+    vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
+    if (vm.fullCustomPlaylistLength > 1) {
+      vm.songsOrSong = 'songs';
+    } else {
+      vm.songsOrSong = 'song';
+    }
   });
 });
