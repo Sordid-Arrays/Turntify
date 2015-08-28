@@ -1,0 +1,32 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+iisnode.yml
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+node_modules/
+bower_components/
+data/db/
+client/lib
+config.js
+
+
+# node
+node_modules
+npm-debug.log
+
+# api keys
+APIs/keys
+
+# bower
+bower_components
+public/assets/libs
+
+# Minified CSS
+public/assets/css/min
+

@@ -1,0 +1,51 @@
+<!-- This is our overall index view -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Turntify</title>
+    <!-- Load angular-material framework and dependencies from CDN -->
+    <link rel="stylesheet" href="https://gitcdn.xyz/repo/angular/bower-material/v0.10.1-master-333984f/angular-material.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=RobotoDraft:300,400,500,700,400italic">
+    <!--link rel="stylesheet" type="text/css" href="./assets/libs/TODO:CHOOSE BASE CSS" /-->
+    <link href='https://fonts.googleapis.com/css?family=Fugaz+One' rel='stylesheet' type='text/css'>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="./assets/css/app.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="./assets/css/min/app.min.css" /> -->
+    <!--link rel="icon" type="image/jpg" href="./assets/favicon.jpg" (or .ico)-->
+  </head>
+  <body ng-app='turntify'>
+    
+    <!-- this is where we put the navbar. now, it's just buttons. -->
+    <div class="bodyContainer">
+      <div class="viewContainer">
+          <div ui-view class="playerUIview"></div>
+      </div>
+    </div>
+    <script src="./assets/libs/angular/angular.js"></script>
+    <script src="./assets/libs/angular-animate/angular-animate.js"></script>
+    <script src="./assets/libs/angular-aria/angular-aria.js"></script>
+    <script src="./assets/libs/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="./assets/libs/angular-messages/angular-messages.js"></script>
+    <script src="https://gitcdn.xyz/repo/angular/bower-material/master/angular-material.js"></script>
+    <script src="./assets/libs/angular-cookies/angular-cookies.min.js"></script>
+    <script src="./assets/libs/console.loge/dist/console.loge.min.js"></script>
+    <script src="./assets/libs/underscore/underscore-min.js"></script>
+    <script src="./assets/libs/ngDraggable/ngDraggable.js"></script>
+    <!-- other libs scripts loaded first -->
+    <script src="./app/services/requests.js"></script>
+    <script src="./app/services/sharedServices.js"></script>
+    <script src="./app/player/player.js"></script>
+    <script src="./app/player/playerServices.js"></script>
+    <script src="./app/player/playerFilters.js"></script>
+    <script src="./app/search/search.js"></script>
+    <script src="./app/search/searchService.js"></script>
+    <script src="./app/match_params/matchParams.js"></script>
+    <script src="./app/custom_playlist/customPlaylist.js"></script>
+    <script src="./app/login/login.js"></script>
+    <script src="./app/login/loginServices.js"></script>
+    <script src="./app/main/main.js"></script>
+    <script src="./app/main/mainServices.js"></script>
+    <script src="./app/app.js"></script>
+  </body>
+</html>

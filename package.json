@@ -1,0 +1,59 @@
+{
+  "name": "turntify",
+  "version": "1.0.0",
+  "private": true,
+  "main": "app.js",
+  "engines": {
+    "node": "0.12.x",
+    "npm": "2.x"
+  },
+  "scripts": {
+    "start": "node app.js",
+    "postinstall": "./node_modules/bower/bin/bower install"
+  },
+  "dependencies": {
+    "bluebird": "^2.9.34",
+    "body-parser": "~1.13.2",
+    "bower": "^1.4.1",
+    "connect-mongo": "^0.8.2",
+    "cookie-parser": "^1.3.5",
+    "express": "~4.13.1",
+    "express-session": "^1.11.3",
+    "mongodb-uri": "^0.9.7",
+    "mongoose": "^4.1.1",
+    "query-string": "^2.4.0",
+    "request": "^2.60.0",
+    "request-promise": "^0.4.3",
+    "serve-favicon": "~2.3.0",
+    "underscore": "^1.8.3"
+  },
+  "devDependencies": {
+    "chai": "^3.2.0",
+    "chai-as-promised": "^5.1.0",
+    "del": "^1.2.0",
+    "gulp": "^3.9.0",
+    "gulp-autoprefixer": "^2.3.1",
+    "gulp-jshint": "^1.11.2",
+    "gulp-minify-css": "^1.2.0",
+    "gulp-rename": "^1.2.2",
+    "jshint-stylish": "^2.0.1",
+    "karma": "^0.12.16",
+    "karma-chai": "^0.1.0",
+    "karma-chai-as-promised": "^0.1.2",
+    "karma-chrome-launcher": "^0.1.4",
+    "karma-cli": "0.0.4",
+    "karma-jasmine": "^0.1.5",
+    "karma-mocha": "^0.2.0",
+    "karma-mocha-reporter": "^1.1.1",
+    "karma-nested-reporter": "^0.1.1",
+    "karma-nyan-reporter": "0.0.43",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "karma-sinon": "^1.0.4",
+    "karma-unicorn-reporter": "^0.1.4",
+    "mocha": "^2.2.5",
+    "nock": "^2.10.0",
+    "nodemon": "^1.3.7",
+    "phantomjs": "^1.9.17",
+    "sinon": "^1.15.4"
+  }
+}

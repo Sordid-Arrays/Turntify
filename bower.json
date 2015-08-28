@@ -1,0 +1,35 @@
+{
+  "name": "Turntify",
+  "version": "0.0.0",
+  "homepage": "https://github.com/Sordid-Arrays/Turntify",
+  "authors": [
+    "mjsgreen01 <mjsgreen01@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "./public/assets/libs",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3",
+    "angular-ui-router": "~0.2.15",
+    "angular-cookies": "~1.4.3",
+    "angular-material": "~0.10.1-rc5",
+    "angular-messages": "~1.4.4",
+    "bower": "*",
+    "install": "~1.0.4",
+    "console.loge": "https://github.com/toddmotto/console.loge.git#~1.0.0",
+    "underscore": "~1.8.3",
+    "ngDraggable": "~0.1.8"
+  },
+  "devDependencies": {
+    "angular-mocks": "~1.4.3"
+  },
+  "resolutions": {
+    "angular": "1.4.4"
+  }
+}
