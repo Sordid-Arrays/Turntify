@@ -125,7 +125,7 @@ md-slider.md-min .md-thumb:after {
 .customPlaylistContainer .md-button.md-fab.md-mini{
       line-height: 30px;
       min-height: 0px;
-        width: 32.32px;
+        width: 30px;
     height: 30px;
     float: right;
     visibility: hidden;
@@ -139,6 +139,9 @@ md-slider.md-min .md-thumb:after {
 }
 .customPlaylist{
   max-height: 400px;
+}
+md-dialog-content h2{
+  color: #fff;
 }
 .checkboxWrapper{
   max-height: 510px;
