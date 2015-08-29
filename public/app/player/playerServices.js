@@ -11,6 +11,7 @@ angular.module('turntify.player')
   PlayerService.playlistCollection = {};
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
+  PlayerService.username = "";
 
 /**
 * PLAYER CONTROLLER services:
@@ -19,9 +20,10 @@ angular.module('turntify.player')
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
-      context.playlists = data;
-      console.log("playlists: ", context.playlists);
-      console.log("playlists type: ", typeof context.playlists[0]);
+     context.playlists = data.playlists;
+     context.username = data.username;
+     // console.log("playlists: ", context.playlists);
+     // console.log("playlists type: ", typeof context.playlists[0]);
     });
   };
 

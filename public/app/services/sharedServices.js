@@ -1,4 +1,4 @@
-/** 
+/**
 * This will contain information needed throughout the app, and methods to update and relate
 * this information
 */
@@ -11,8 +11,8 @@ angular.module('turntify.services')
   //Functions could access different parts of the persistent data needed by different
   //parts of the app: the player view might need app id, but the queue might just list track
   // names, etc.
-  
-  /** 
+
+  /**
   * This simply removes the cookies and redirects the user to login. TODO: add "hide" in view so that
   * it doesn't show in the 'login' view
   */
@@ -32,15 +32,23 @@ angular.module('turntify.services')
       sessionId: sessionId
     };
   };
-  
 
+  var songsOrSong = function(fullCustomPlaylistLength) {
+    if (fullCustomPlaylistLength > 1) {
+      songsOrSong = 'songs';
+    } else {
+      songsOrSong = 'song';
+    }
+    return songsOrSong;
+  };
 
   return {
-    //return functions to access persistent data. 
+    //return functions to access persistent data.
     //Probably don't want to return persistent data itself, just functions
     //also returns any view-agnostic and user-session-y functions
     getUserCookies: getUserCookies,
-    logoutUser: logoutUser
+    logoutUser: logoutUser,
+    songsOrSong: songsOrSong
   };
 });
 

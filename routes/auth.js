@@ -87,7 +87,8 @@ router.get('/callback', function(req, res) {
     req.session.user = {
       spotifyId: user.id,
       access_token: access_token,
-      refresh_token: refresh_token
+      refresh_token: refresh_token,
+      name: user.display_name || user.id
     };
     req.session.save();
     // save the user data in database
