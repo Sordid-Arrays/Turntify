@@ -1,5 +1,5 @@
 angular.module('turntify.player')
-  .controller('CustomPlaylistController', function(PlayerService, $scope, $mdDialog, turntToFilter){
+  .controller('CustomPlaylistController', function(PlayerService, UserService, $scope, $mdDialog, turntToFilter){
   /**
   * The user's custom playlist is managed here, along with any functions to add or remove songs from WITHIN this view.
   * The listeners ("$scope.$on") listen for changes outside the state and simply tell the playlist to match the playlist in
@@ -19,11 +19,7 @@ angular.module('turntify.player')
     PlayerService.removeFromCustomPlaylist(songIndex);
     vm.customPlaylist = PlayerService.customPlaylist;
     vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
-    if (vm.fullCustomPlaylistLength > 1) {
-      vm.songsOrSong = 'songs';
-    } else {
-      vm.songsOrSong = 'song';
-    }
+    vm.songsOrSong = UserService.songsOrSong(vm.fullCustomPlaylistLength);
   };
 
   /**
@@ -132,20 +128,12 @@ angular.module('turntify.player')
     console.log("playlistUpdated received!");
     vm.customPlaylist = PlayerService.customPlaylist.slice(0,9);
     vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
-    if (vm.fullCustomPlaylistLength > 1) {
-      vm.songsOrSong = 'songs';
-    } else {
-      vm.songsOrSong = 'song';
-    }
+    vm.songsOrSong = UserService.songsOrSong(vm.fullCustomPlaylistLength);
   });
   $scope.$on('loadAllMatches', function(event){
     console.log("loadingAllMatches!");
     vm.customPlaylist = PlayerService.customPlaylist;
     vm.fullCustomPlaylistLength = PlayerService.customPlaylist.length;
-    if (vm.fullCustomPlaylistLength > 1) {
-      vm.songsOrSong = 'songs';
-    } else {
-      vm.songsOrSong = 'song';
-    }
+    vm.songsOrSong = UserService.songsOrSong(vm.fullCustomPlaylistLength);
   });
 });
