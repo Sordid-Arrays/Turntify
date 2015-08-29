@@ -88,13 +88,7 @@ describe('PlayerController', function(){
     });
 
   });
-  describe('turntLevels', function(){
 
-    it('should be an array', function(){
-      expect(PlayerController.turntLevels).to.be.an('array');
-    });
-
-  });
 
 
 

@@ -18,7 +18,7 @@
     "angular": "~1.4.3",
     "angular-ui-router": "~0.2.15",
     "angular-cookies": "~1.4.3",
-    "angular-material": "~0.10.1-rc5",
+    "angular-material": "master",
     "angular-messages": "~1.4.4",
     "bower": "*",
     "install": "~1.0.4",
