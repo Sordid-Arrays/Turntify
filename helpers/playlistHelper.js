@@ -4,7 +4,6 @@ var Promise = require('bluebird');
 var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
 var util = require('../helpers/util');
-var Songs = require('../models/songs.js');
 var GhettoNest = require('../models/ghettoNest.js');
 
 var UNKNOWN = 'unknown';

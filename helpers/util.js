@@ -2,23 +2,6 @@
 * util func return random string
 */
 var _ = require('underscore');
-var breakPoints = [
-  0,      // 0
-  0.206,  // 1
-  0.286,  // 2
-  0.342,  // 3
-  0.387,  // 4
-  0.427,  // 5
-  0.464,  // 6
-  0.5,    // 7
-  0.536,  // 8
-  0.573,  // 9
-  0.613,  //10
-  0.658,  //11
-  0.713,  //12
-  0.793,  //13
-  1       //14
-];
 
 var generateRandomString = function(length) {
   var text = '';
@@ -45,9 +28,26 @@ var saveToken = function (req, newAccessToken, newRefreshToken) {
 * get Turntness for each song that will be returned to frot end and save to db
 */
 var getTurntness = function (song) {
-  for ( var i = 0; i < breakPoints.length - 1; i++) {
+  var BREAK_POINTS = [
+    0,      // 0
+    0.206,  // 1
+    0.286,  // 2
+    0.342,  // 3
+    0.387,  // 4
+    0.427,  // 5
+    0.464,  // 6
+    0.5,    // 7
+    0.536,  // 8
+    0.573,  // 9
+    0.613,  //10
+    0.658,  //11
+    0.713,  //12
+    0.793,  //13
+    1       //14
+  ];
+  for ( var i = 0; i < BREAK_POINTS.length - 1; i++) {
     var danceability = (song.audio_summary.danceability + song.audio_summary.energy) / 2;
-    if (breakPoints[i] <= danceability && breakPoints[i + 1] >= danceability) {
+    if (BREAK_POINTS[i] <= danceability && BREAK_POINTS[i + 1] >= danceability) {
       return i;
     }
   }
