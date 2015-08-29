@@ -26,6 +26,7 @@ module.exports = function(config) {
 
       // our app code
       'public/app/*.js',
+      'public/app/player/player.js',
       'public/app/**/*.js'
     ],
 

@@ -7,7 +7,7 @@
 /**
 * TODO: refactor into multiple controllers
 */
-angular.module('turntify.player', ['ngMaterial', 'ngDraggable', 'ngAnimate'])
+angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
 .controller('PlayerController', function (PlayerService, turntToFilter, $scope, filterFilter) {
 
   /**
