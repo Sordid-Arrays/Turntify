@@ -31,18 +31,30 @@ angular.module('turntify.player')
     vm.newPlaylist = '';
   };
 
-  /**
-  * Generates a widget for a preview
-  */
-
-  vm.generateWidget = function(){
-    PlayerService.generateWidget(vm.name);
-  };
 
   vm.closeDialog = function() {
       // Easily hides most recent dialog shown...
       // no specific instance reference is needed.
       $mdDialog.hide();
+  };
+
+  vm.playlistIframeModal = function(){
+    $mdDialog.show(
+          {
+            // targetEvent: ev,
+            clickOutsideToClose: true,
+            scope: $scope,
+            preserveScope: true,
+            onComplete: PlayerService.generateWidget,
+            template:
+                      '<md-dialog>' +
+                      '<md-dialog-content>' +
+                      '  <div class="exitIframeModal" ng-click="customPlaylist.closeDialog()"><md-button class="md-fab md-mini"><md-icon> clear </md-icon></md-button></div>' +
+                      '  <div class="widgetWrapper"></div>' +
+                      '</md-dialog-content>' +
+                      '</md-dialog>',
+          }
+        );
   };
 
   vm.confirmPlaylistOverwrite = function(){

@@ -4,7 +4,7 @@ as well as any buttons needed to persist or manipulate that playlist -->
 <div ng-hide="player.playlistCounter <= 0 || customPlaylist.customPlaylist.length > 0">No songs at this energy level.</div>
 <div ng-hide="player.playlistCounter > 0">No playlist selected.</div>
 <div ng-show="customPlaylist.customPlaylist.length > 0">
-  <h2>Constructed Playlist <small>  ( {{customPlaylist.fullCustomPlaylistLength}} {{customPlaylist.songsOrSong}} )</small></h2>
+  <h2>Atuned Playlist <small>  ( {{customPlaylist.fullCustomPlaylistLength}} {{customPlaylist.songsOrSong}} )</small></h2>
 
   <md-content class="customPlaylist md-whiteframe-z2">
     <md-list class="songList">
@@ -19,6 +19,6 @@ as well as any buttons needed to persist or manipulate that playlist -->
   </md-content>
 
   <md-button class="" ng-click="customPlaylist.savePlaylistDialog()">Save Playlist to Spotify</md-button>
-  <md-button ng-click="customPlaylist.generateWidget()">Generate Preview</md-button>
+  <md-button ng-click="customPlaylist.playlistIframeModal()">Generate Preview</md-button>
 </div>
 

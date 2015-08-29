@@ -208,7 +208,16 @@ md-input-container label, md-input-container .md-placeholder{
 .artistSearchContain md-list-item, .artistSearchContain md-list-item .md-list-item-inner{
   min-height: 36px;
 }
-
+.widgetWrapper{
+  min-height: 384px;
+  min-width: 300px;
+}
+.exitIframeModal a.md-button.md-fab, .md-button.md-fab{
+    position: absolute;
+    right: 0;
+    top: 0px;
+    background-color: rgb(74,74,74);
+}
 md-dialog .md-actions .md-button{
   color: #fff;
 }
