@@ -1,13 +1,12 @@
-var express = require('express'); // Express web server framework
-var request = require('request'); // "Request" library
+var express = require('express');
+var request = require('request');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
-var mongoose = require('./models/dbConnection.js');
 
-//var routes = require('./controllers/index');
-var routes = require('./routes/auth.js');
+var mongoose = require('./models/dbConnection.js');
+var auth = require('./routes/auth.js');
 var player = require('./routes/player.js');
 
 var app = express();
@@ -23,7 +22,7 @@ app.use(session({
   // httpOnly is for dev-environment only
   cookie: { httpOnly: false }
 }));
-app.use('/', routes);
+app.use('/', auth);
 app.use('/', player);
 
 
@@ -61,5 +60,5 @@ app.use(function(err, req, res, next) {
 });
 
 var port = process.env.PORT || 8888;
-console.log('Listening on 8888');
+console.log('Listening on ' + port);
 app.listen(port);
