@@ -139,7 +139,9 @@ angular.module('turntify.player')
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-  PlayerService.generateWidget = function(name){
+  PlayerService.generateWidget = function(){
+
+    console.log("turntness in widg: ", PlayerService.turntness);
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();
     var trackIds = [];
@@ -148,7 +150,7 @@ angular.module('turntify.player')
     for(var i=0; i<length; i++){
       trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset: Preview for energy level '+PlayerService.turntness+':'+trackIds+'&view=coverart" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
   };
 
   // add an artist playlist on playlist list and load song to custom playlist
