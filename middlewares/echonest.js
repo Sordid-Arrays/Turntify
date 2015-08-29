@@ -94,7 +94,7 @@ var getArtistTracks = function (spotifyUri, index) {
   })
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
-    // some songs do not have tracks, 
+    // some songs do not have tracks,
     songs = _.filter(songs, function(song) {
       return song.tracks[0] !== undefined;
     });
@@ -128,9 +128,11 @@ var getArtistTotal = function (spotifyUri) {
     url: 'http://developer.echonest.com/api/v4/artist/songs?' + query,
   })
   .then(function (body) {
+    console.log('NO ERROR',body);
     return JSON.parse(body).response.total;
   })
   .catch(function (err) {
+    console.log('ERORRRRRRR!!!!!!!!!!!!!!!',err);
     if (err.statusCode === 429) {
       throw new TooManyRequestsError();
     }
