@@ -200,7 +200,7 @@ function getPlaylistTracks(userId, playlistId, req) {
     * keep getting spotify URIs synchronously until get all songs in the playlist
     * and get Echo Nest data asynchronously
     */
-    function makeRequest(index, first) {
+    function get100Tracks(index, first) {
       reqCount ++;
       getSpotifySongs(userId, playlistId, index, req)
       .then(function (playlistSongs) {
@@ -216,7 +216,7 @@ function getPlaylistTracks(userId, playlistId, req) {
           // Spotify send back 100 songs at most for 1 request
           index += 100;
           // recurse with second argument false not to get into this loop again
-          makeRequest(index, false);
+          get100Tracks(index, false);
         }
 
         return getEchonestData(playlistSongs);
@@ -247,7 +247,7 @@ function getPlaylistTracks(userId, playlistId, req) {
       });
     }
 
-    makeRequest(0, true);
+    get100Tracks(0, true);
   });
 }
 
@@ -327,8 +327,7 @@ var getArtistTracks = function (artistId) {
       console.log('total: ', total);
       // make requests asynchronously to get all songs
       while (reqCount ===0 || index < total) {
-        echonestRequest(index);
-        // Echo Nest sends back 100 songs at most for 1 request
+        get100Tracks(index);
         index += 100;
       }
     })
@@ -338,7 +337,7 @@ var getArtistTracks = function (artistId) {
 
     // Internal function
     // Make an API request and  wait for all responses come back
-    function echonestRequest (index) {
+    function get100Tracks (index) {
       reqCount ++;
       echonest.getArtistTracks(artistId, index)
 
