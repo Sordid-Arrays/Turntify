@@ -3,7 +3,7 @@
 */
 
 angular.module('turntify.search', ['ngMaterial'])
-.controller('SearchController', function(SearchService, PlayerService){
+.controller('SearchController', function(SearchService, PlayerService, $location, $anchorScroll){
 
   /**
   * 'vm' is short for 'view-model': it is used to designate context within the controller.
@@ -18,36 +18,39 @@ angular.module('turntify.search', ['ngMaterial'])
     default: 'inherited'
   };
 
+  var scroll = function () {
+    // var checkboxContainer = angular.element(document.querySelector("md-content.checkboxWrapper"));
+    $location.hash('searchArtist');
+    setTimeout(function () {
+      // checkboxContainer[0].scrollTop = checkboxContainer[0].scrollHeight;
+      $anchorScroll();
+    }, 1);
+  };
+
   /**
   * get artists from Spotify API and show them
   */
   vm.autoComplete = function (input) {
-    vm.selected = -1;
-    input = input.trim();
-    if (input.length === 0) {
-      vm.candidates = [];
-      return;
+    if (vm.candidates[vm.selected]) {
+      vm.candidates[vm.selected].backgroundColor = COLORS.default;
     }
+    vm.selected = -1;
 
     var cache = SearchService.checkCache(input);
     if (cache) {
       vm.candidates = cache;
+      scroll();
       return;
     }
-    // wait until the user finish typing
-    clearTimeout(vm.timeoutId);
-    vm.timeoutId = setTimeout(function () {
-      SearchService.autoComplete(input)
-      .then(function (res) {
-        // do not change candidates if user input has been changed
-        if (vm.userInput === input){
-          vm.candidates = res;
-          console.log('should have scrolled');
-          var checkboxContainer = angular.element(document.querySelector("md-content.checkboxWrapper"));
-          checkboxContainer[0].scrollTop = checkboxContainer[0].scrollHeight;
-        }
-      });
-    }, 300);
+
+    SearchService.autoComplete(input, function (res) {
+      // do not change candidates if user input has been changed
+      if (vm.userInput !== input){
+        return;
+      }
+      vm.candidates = res;
+      scroll();
+    });
   };
 
   /**
@@ -99,7 +102,7 @@ angular.module('turntify.search', ['ngMaterial'])
     vm.addSong(vm.candidates[vm.selected]);
   };
 
-  // keyCode: event
+  // keyCode: action
   var actions = {
     13: enter,
     38: up,
@@ -109,13 +112,13 @@ angular.module('turntify.search', ['ngMaterial'])
   /**
   * keypress event routing
   */
-  vm.keypress = function ($event) {
+  vm.keypress = function (event) {
     if (vm.candidates.length === 0) {
       return;
     }
-    var action = actions[$event.keyCode];
+    var action = actions[event.keyCode];
     if (action) {
-      $event.preventDefault();
+      event.preventDefault();
       action();
     }
   };
