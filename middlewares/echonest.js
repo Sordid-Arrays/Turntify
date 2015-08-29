@@ -94,7 +94,7 @@ var getArtistTracks = function (spotifyUri, index) {
   })
   .then(function (body) {
     var songs = JSON.parse(body).response.songs;
-    // some songs do not have tracks, 
+    // some songs do not have tracks,
     songs = _.filter(songs, function(song) {
       return song.tracks[0] !== undefined;
     });
