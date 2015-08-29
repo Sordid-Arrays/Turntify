@@ -128,11 +128,9 @@ var getArtistTotal = function (spotifyUri) {
     url: 'http://developer.echonest.com/api/v4/artist/songs?' + query,
   })
   .then(function (body) {
-    console.log('NO ERROR',body);
     return JSON.parse(body).response.total;
   })
   .catch(function (err) {
-    console.log('ERORRRRRRR!!!!!!!!!!!!!!!',err);
     if (err.statusCode === 429) {
       throw new TooManyRequestsError();
     }
