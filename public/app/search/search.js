@@ -19,11 +19,11 @@ angular.module('turntify.search', ['ngMaterial'])
   };
 
   var scroll = function () {
-    var checkboxContainer = angular.element(document.querySelector("md-content.checkboxWrapper"));
-    // $location.hash('autoComplete');
+    // var checkboxContainer = angular.element(document.querySelector("md-content.checkboxWrapper"));
+    $location.hash('autoComplete');
     setTimeout(function () {
-      checkboxContainer[0].scrollTop = checkboxContainer[0].scrollHeight;
-      // $anchorScroll();
+      // checkboxContainer[0].scrollTop = checkboxContainer[0].scrollHeight;
+      $anchorScroll();
     }, 1);
   };
 
