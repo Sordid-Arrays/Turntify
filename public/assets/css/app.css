@@ -212,7 +212,7 @@ md-input-container label, md-input-container .md-placeholder{
   min-height: 384px;
   min-width: 300px;
 }
-.exitIframeModal a.md-button.md-fab, .md-button.md-fab{
+.exitIframeModal a.md-button.md-fab, .exitIframeModal  .md-button.md-fab{
     position: absolute;
     right: 0;
     top: 0px;
