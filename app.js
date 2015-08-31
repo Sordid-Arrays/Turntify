@@ -1,4 +1,5 @@
 var express = require('express');
+var favicon = require('serve-favicon');
 var request = require('request');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -10,6 +11,7 @@ var auth = require('./routes/auth.js');
 var player = require('./routes/player.js');
 
 var app = express();
+app.use(favicon(__dirname + '/public/assets/images/favicon.ico'));
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(express.static(__dirname + '/public'))
