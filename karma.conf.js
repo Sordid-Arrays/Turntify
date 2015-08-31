@@ -7,7 +7,15 @@ module.exports = function(config) {
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
 
-
+    plugins: [
+      require('karma-mocha'),
+      require('karma-chai'),
+      require('karma-chai-as-promised'),
+      require('karma-sinon'),
+      require('karma-unicorn-reporter'),
+      require('karma-nyan-reporter'),
+      require('karma-chrome-launcher')
+    ],
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
     frameworks: ['mocha', 'chai-as-promised', 'chai', 'sinon' ],
@@ -27,6 +35,7 @@ module.exports = function(config) {
       // our app code
       'public/app/*.js',
       'public/app/player/player.js',
+      'public/app/search/search.js',
       'public/app/**/*.js'
     ],
 
