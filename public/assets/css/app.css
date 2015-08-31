@@ -64,6 +64,17 @@ md-sidenav {
 .matchParamsWrapper md-content md-slider{
       margin: 0 25px;
 }
+.matchParamsWrapper .sliderTitle{
+  margin-bottom: 12px;
+}
+.matchParamsWrapper .sliderLabel.lowEnd, .matchParamsWrapper .sliderLabel.highEnd{
+  margin-top: 0px;
+  margin-bottom: 14px;
+  float: left;
+}
+.matchParamsWrapper .sliderLabel.highEnd{
+  float: right;
+}
 md-slider.md-min .md-thumb:after {
     background-color: #424242;
 }
@@ -136,9 +147,10 @@ md-slider.md-min .md-thumb:after {
 }
 .turntometerWrapper{
   margin-bottom: 20px;
+  clear: both;
 }
 .customPlaylist{
-  max-height: 400px;
+  max-height: 374px;
 }
 md-dialog-content h2{
   color: #fff;
