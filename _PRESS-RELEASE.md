@@ -17,31 +17,28 @@ Once the project moves into development, the press release can be used as a touc
  -->
 
 ## Heading ##
-  > Name the product in a way the reader (i.e. your target customers) will understand.
-  Sorts playlists to curate music to fit your party's current energy, and incorporates
-  suggestions from your friends into your playlist
+  >atuned
 ## Sub-Heading ##
-  > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
-  >Party hosts can cut out the stress of managing guest requests and DJ-ing, collecting requests from guests using a simple energy dial to play the right type of song at the right time.
+  > A playlist builder that lets users create a playlists sonically-tailored to their energy level.
 
 ## Summary ##
-  > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
+  > Atuned uses song data to help users sort their music into energy-based playlists. Users can take their favorite playlists, or get songs from their favorite artists, to make a playlist with songs whose tempo and sound profile fits their mood. Atuned then allows users to listen to their custom playlist, and save it to their spotify account to listen on the go.
   
 
 ## Problem ##
-  > Describe the problem your product solves.
+  > Faster music can be jarring to someone in a relaxed mood, and slower music puts a damper on someone trying to get pumped up. We wanted a way to take the music we like, and only play songs that match our energy level.
   
 ## Solution ##
-  > Describe how your product elegantly solves the problem.
+  > Atuned lets users select their existing spotify playlist to filter. The sonic attributes of every song are then distills them into a single "energy level", which atuned uses to filter playlists by energy. Users can then play the playlist through a Spotify widget, or export them to Spotify for future use.
 
 ## Quote from You ##
-  > A quote from a spokesperson in your company.
+  > "As avid music listeners, we created atuned so we could listen to the perfect music for the moment. We hope our product makes your music harmonize with you!" -Brendan Dugan, Product Owner
 
 ## How to Get Started ##
-  > Describe how easy it is to get started.
+  >Log in to Spotify through our site, and a list of your playlists appears. Select one or more playlists, and slide the slider to your desired energy level. Your original playlists are dynamically filtered into a single playlist containing songs with sonic attributes that match the selected energy level. Listen to the newly-generated playlist through a Spotify widget on our page, and save the playlist to their Spotify profile to listen anytime.
 
 ## Customer Quote ##
-  > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
+  > "Sometimes I want to hear fast music for a pick-me-up, and other times I want something more downtempo. Atuned lets me do just that, I can say goodbye to mood dissonance forever!" -Person
 
 ## Closing and Call to Action ##
-  > Wrap it up and give pointers where the reader should go next.
+  > We've built an easy-to-use way to select the right music for the moment. Now it's time to build your perfect pick-me-up playlist or lullabye medley! Give atuned a try at: http://atuned.herokuapp.com/

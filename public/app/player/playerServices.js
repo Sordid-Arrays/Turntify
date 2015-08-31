@@ -20,9 +20,10 @@ angular.module('turntify.player')
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
+     console.log("data: ", data);
      context.playlists = data.playlists;
      context.username = data.username;
-     // console.log("playlists: ", context.playlists);
+     console.log("playlists: ", context.playlists);
      // console.log("playlists type: ", typeof context.playlists[0]);
     });
   };
