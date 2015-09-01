@@ -1,9 +1,9 @@
-//player.test.js
+/*
+* Test for controller
+*/
 describe('SearchController', function(){
   var $scope, $controller;
-  /**
-  * Any "beforeEach" blocks go in the following function:
-  */
+
   beforeEach(module('turntify.search'));
   beforeEach(inject(function ($injector) {
     $rootScope = $injector.get('$rootScope');
@@ -22,7 +22,7 @@ describe('SearchController', function(){
         return false;
       }),
       autoComplete: sinon.spy(function () {
-        return [];
+        return;
       })
     };
     PlayerServiceMock = {
@@ -73,17 +73,87 @@ describe('SearchController', function(){
       expect(PlayerServiceMock.addFromSearch.calledOnce).to.equal(true);
     });
   });
-
-
 });
 
-xdescribe('SearchService', function(){
 
-  // TODO: Mock PlayerService's dependencies
+/*
+* Test for service
+*/
+describe('SearchService', function(){
+  var SearchService, $q;
+  beforeEach(module('turntify.search'));
+  // mock RequestService
+  beforeEach(module(function($provide) {
+    RequestServiceMock = {
+      searchArtists: sinon.spy(function(){
+        return $q(function () {
+          return ['artist1, artsit2'];
+        });
+      })
+    };
+    $provide.value("RequestService", RequestServiceMock);
+  }));
+  beforeEach(inject(function ($injector) {
+    $q = $injector.get('$q');
+    SearchService = $injector.get('SearchService');
+  }));
 
-  describe('getListOfPlaylists', function(){
 
+  describe('checkCache', function(){
+    it('should return false on the first call', function () {
+      expect(SearchService.checkCache('test')).to.be.false;
+    });
+
+    it('should return cached array after autoComplete was called with the same input', function () {
+      var searchResult;
+      $q(function(resolve, reject){
+        resolve(SearchService.autoComplete('test'));
+      })
+      .then(function (res) {
+        console.log('CALLBACK', res);
+        searchResult = res;
+        return SearchService.checkCache('test');
+      })
+      .should.eventually.equal(searchResult);
+    });
   });
 
+  describe('autoComplete', function () {
+    it('should call RequestService.searchArtist', function () {
+      SearchService.autoComplete('input', function (res) {
+        expect(RequestServiceMock.searchArtist.calledOnce).to.be.true;
+      });
+    });
 
+    it('should call RequestService.searchArtist only once if invoked multiple times', function () {
+      SearchService.autoComplete('input1', function (res) {
+        expect(RequestServiceMock.searchArtist.calledOnce).to.be.false;
+      });
+      SearchService.autoComplete('input2', function (res) {
+        expect(RequestServiceMock.searchArtist.calledOnce).to.be.false;
+      });
+      SearchService.autoComplete('input3', function (res) {
+        expect(RequestServiceMock.searchArtist.calledOnce).to.be.true;
+      });
+    });
+
+    it('should call RequestService.searchArtist again if called with interval of 300ms', function () {
+      SearchService.autoComplete('input1', function (res) {
+        expect(RequestServiceMock.searchArtist.calledOnce).to.be.true;
+      });
+      setTimeout(function () {
+        SearchService.autoComplete('input2', function (res) {
+          expect(RequestServiceMock.searchArtist.calledOnce).to.be.true;
+        });
+      }, 300);
+    });
+
+    it('should cache the result', function () {
+      var input = 'input';
+      expect(SearchService.checkCache(input)).to.be.false;
+      SearchService.autoComplete(input, function () {
+        expect(SearchService.checkCache(input).to.be.an('array'));
+      });
+    });
+  });
 });
