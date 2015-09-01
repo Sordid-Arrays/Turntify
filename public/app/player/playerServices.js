@@ -12,6 +12,7 @@ angular.module('turntify.player')
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
   PlayerService.username = "";
+  PlayerService.playlistCounter = 0;
 
 /**
 * PLAYER CONTROLLER services:
@@ -62,8 +63,10 @@ angular.module('turntify.player')
   //CALL THIS from param view, passing in the selected playlist and the checked property
   PlayerService.toggleCheck = function(playlist, checked){
     if(checked){
+      this.playlistCounter++;
       this.addPlaylist(playlist);
     } else {
+      this.playlistCounter--;
       this.removePlaylist(playlist);
     }
   };
@@ -167,6 +170,7 @@ angular.module('turntify.player')
 
     var artistPlaylist = {name: artist.artist_name, spotify_id: artist.artist_uri, checked: true, loading: true};
     context.playlists.push(artistPlaylist);
+    this.playlistCounter++;
     context.playlistCollection[artist.artist_name] = {checked: true,
                                                       songs: []};
     RequestService.getArtistSongs(artist.artist_uri)
