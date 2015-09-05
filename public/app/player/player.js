@@ -40,15 +40,6 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
     vm.updatePlaylistCounter(); //this sets the var for showing no playlist selected
   };
 
-  /**
-  * Persists the view queue to PlayerService.
-  */
-  this.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
-    var playlist = JSON.parse(selectedPlaylist);
-    PlayerService.persistViewQueue(viewQueue, turntness, playlist);
-    console.log("persisting View Queue!");
-  };
-
   vm.updatePlaylistCounter = function(){
     vm.playlistCounter = PlayerService.playlistCounter;
   };

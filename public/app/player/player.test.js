@@ -20,7 +20,7 @@ describe('PlayerController', function(){
             resolve();
           });
         },
-        
+
         getListOfPlaylists: sinon.spy(function(){
           return $q(function(resolve, reject){
             resolve();
@@ -95,7 +95,9 @@ describe('PlayerController', function(){
 
   });
 
+  describe('getListOfPlaylists', function(){
 
+  });
 
 
 });
