@@ -48,12 +48,6 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
   vm.toggleCheck = function(playlist, checked){
     console.log('playlist: ', playlist);
     PlayerService.toggleCheck(playlist, checked);
-    
-  };
-
-  vm.updateOthers = function(){
-    var currentlyChecked = filterFilter(vm.playlists, {checked: true});
-    PlayerService.updateChecks();
   };
 
   // Dummy List of Playlists
