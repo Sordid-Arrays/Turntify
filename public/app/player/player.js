@@ -40,15 +40,6 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
     vm.updatePlaylistCounter(); //this sets the var for showing no playlist selected
   };
 
-  /**
-  * Persists the view queue to PlayerService.
-  */
-  this.persistViewQueue = function(viewQueue, turntness, selectedPlaylist){
-    var playlist = JSON.parse(selectedPlaylist);
-    PlayerService.persistViewQueue(viewQueue, turntness, playlist);
-    console.log("persisting View Queue!");
-  };
-
   vm.updatePlaylistCounter = function(){
     vm.playlistCounter = PlayerService.playlistCounter;
   };
@@ -57,24 +48,8 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
   vm.toggleCheck = function(playlist, checked){
     console.log('playlist: ', playlist);
     PlayerService.toggleCheck(playlist, checked);
-    
   };
 
-  vm.updateOthers = function(){
-    var currentlyChecked = filterFilter(vm.playlists, {checked: true});
-    PlayerService.updateChecks();
-  };
-  /**
-  * Called from view, this takes a stringified version of a selected playlist's description
-  * and calls the  playerService to update playlists
-  */
-  vm.getPlaylist = function(playlistString){
-    var playlist = JSON.parse(playlistString);
-    vm.name = playlist.name;
-    PlayerService.getPlaylist(playlist).then(function(){
-      vm.playlistLoading = false;
-    });
-  };
   // Dummy List of Playlists
   // this.playlists = [{"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"},{"name":"Minimal // Deep House","playlistId":"2POsysj8dTuOCAMPYVsgeO"},{"name":"Sample","playlistId":"5zA1FfniCXXT2e7gLu8igS"},{"name":"Soul Classics","playlistId":"3q9TPV3tR3sW30ChwNUInG"},{"name":"soul/funk/jazz/afro/latin/60's psychedelia","playlistId":"6iwuMjD6RPaFG0vBENgYaK"},{"name":"Electro Swing","playlistId":"0ZdkjCY51DTu7wjrcReIIl"},{"name":"Neo Disco","playlistId":"0jXuFjs93Tavfsy19s1lk6"},{"name":"Soulfunkisticated","playlistId":"7vKhVBM3kMcuPjtwrHZB8Q"},{"name":"Neo-Disco","playlistId":"3qOoxtnh8AHJV7jQODk9PJ"},{"name":"Gammal Hederlig Reggae","playlistId":"1mxFzXQr7S892OeO4ttz47"},{"name":"All Reggae until 2015 from Roots to Dancehall","playlistId":"3dhsw3G11F9nVbPU72lQiA"},{"name":"Liked from Radio","playlistId":"4MpZz1jhAoV6BSHr1m7i3M"},{"name":"October 1st Show","playlistId":"67nnPuurEMPR6AX1b5MoiB"},{"name":"Starred in Moodsnap","playlistId":"6pjbGz7ryFBRthokhUmQzw"}];
 

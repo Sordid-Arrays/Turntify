@@ -57,7 +57,7 @@ angular.module('turntify.player')
     } else {
       this.playlistCollection[playlist.name] = { checked: true , songs: [] };
       this.getPlaylist(playlist);
-    };
+    }
   };
 
   //CALL THIS from param view, passing in the selected playlist and the checked property
@@ -100,7 +100,7 @@ angular.module('turntify.player')
   PlayerService.updateTurntness = function(turntness){
     if(arguments.length > 0){
       this.turntness = turntness;
-    };
+    }
     this.customPlaylist = turntToFilter(this.basePlaylist, this.turntness);
     $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
   };
@@ -113,7 +113,7 @@ angular.module('turntify.player')
         console.log("this.playlistCollection[key]: ", this.playlistCollection[key]);
         allBeforeUniq = allBeforeUniq.concat(this.playlistCollection[key].songs);
       }
-    };
+    }
     console.log("allBeforeUniq: ", allBeforeUniq);
     this.basePlaylist = _.uniq(allBeforeUniq);
     console.log("this.baseplaylist in customPlaylist: ", this.basePlaylist);
@@ -126,7 +126,7 @@ angular.module('turntify.player')
   };
   PlayerService.destroyExtras = function(){
     $rootScope.$broadcast('playlistCollectionUpdated');
-  }
+  };
   // PlayerService.addMatches = function(matches){
   //   this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
   //   console.log("current playlist: ", this.customPlaylist);
