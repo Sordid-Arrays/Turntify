@@ -120,7 +120,30 @@ describe('PlayerController', function(){
 
 describe('PlayerService', function(){
 
-  // TODO: Mock PlayerService's dependencies
+  /**
+  * Mock the player service
+  */ 
+  var PlayerService, RequestServiceMock;
+
+  beforeEach( function() {
+    module('turntify.player');
+
+    RequestServiceMock = {
+
+    };
+
+    // control dependencies injected into PlayerService
+    module(function($provide) {
+      $provide.value("RequestService", RequestServiceMock);
+    });
+
+    inject(function(_$rootScope_, _PlayerService_, _$q_){
+      // The injector unwraps the underscores (_) from around the parameter names when matching
+      $scope = _$rootScope_.$new();
+      $q = _$q_;
+      PlayerService = _PlayerService_;
+   });
+  });
 
   describe('getListOfPlaylists', function(){
 
