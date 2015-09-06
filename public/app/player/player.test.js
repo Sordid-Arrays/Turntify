@@ -142,22 +142,7 @@ describe('PlayerService', function(){
       });
     });
 
-    // it('should update the queue', function(){
-    //   PlayerController.selectedPlaylist = '{"name":"Sample","playlistId":"5zA1FfniCXXT2e7gLu8igS"}';
-    //   // promisify PlayerController.updateQueue instead of using setTimeout
-    //   (function(){
-    //     return $q(function(resolve, reject){
-    //       resolve(PlayerController.updateQueue());
-    //     });
-    //   })().then(function(){
-    //     // console.log('player controller queue:',PlayerController.queue);
-    //     return PlayerController.queue;
-    //   }).should.eventually.equal(PlayerServiceMock.queue);
-    //   // Whenever creating Promises in a test, 
-    //   // you must trigger a digest cycle in order for that promise to be resolved
-    //   $scope.$digest();
 
-    // });
 
   });
 
