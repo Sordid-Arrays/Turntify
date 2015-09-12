@@ -148,8 +148,6 @@ var refreshToken = function (refreshToken) {
 * insert song to particular user playlist
 */
 var insertSong = function(token, userId, playlistId, songId) {
-  // convert string of comma-seperated songURI's to an array
-  songId = songId.split(',');
 
   var option = {
     url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
