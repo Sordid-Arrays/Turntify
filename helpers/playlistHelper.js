@@ -8,6 +8,8 @@ var GhettoNest = require('../models/ghettoNest.js');
 
 var UNKNOWN = 'unknown';
 
+
+
 ////////////////////////////////////////////////////
 ////  for getting tracks of playlists           ////
 ////////////////////////////////////////////////////
@@ -26,6 +28,8 @@ function mapUris(playlist) {
   .value();
 }
 
+
+
 /*
 *  call spotify API to get tracks in the playlist
 */
@@ -40,6 +44,8 @@ function getSpotifySongs(userId, playlistId, index, req) {
     });
   });
 }
+
+
 
 /*
 *  function to get data of songs
@@ -103,6 +109,8 @@ function getEchonestData (playlistSongs) {
   });
 }
 
+
+
 /*
 *  Map the response form Echo Nest API and save it in DB
 *  1) called with update = false in getPlaylistTracks
@@ -148,6 +156,8 @@ function saveGhettonest(echonestSongs, update) {
   return newGhettoNests;
 }
 
+
+
 /*
 *  Make up Ghettonest data from Spotify data
 */
@@ -178,6 +188,9 @@ function makeUpGhettonest (remainderUris, spotifyDatas) {
   console.log('madeUpGhettoNests: ', newGhettoNests.length);
   return newGhettoNests;
 }
+
+
+
 
 /*
 *  1) Get Spotify URIs of songs in a playlist
@@ -249,6 +262,8 @@ function getPlaylistTracks(userId, playlistId, req) {
     get100Tracks(0, true);
   });
 }
+
+
 
 
 ////////////////////////////////////////////////////
@@ -333,10 +348,6 @@ var addToSpotifyPlaylist = function(token, userId, playlistId, songIdArray){
   recurse();
   return;
 };
-
-
-
-
 
 
 
