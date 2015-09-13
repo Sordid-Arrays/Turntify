@@ -302,6 +302,46 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
 };
 
 
+
+/*
+* Spotify limits adding 100 songs at a time to a playlist
+* This function calls spotify.insertSong w/ max 100 songs at a time
+*/
+var addToSpotifyPlaylist = function(token, userId, playlistId, songId){
+  var numSongs = songId.length;
+  var songIdIndex = 0;
+  var songIdSub;
+
+  var recurse = function(){
+    console.log(songIdIndex);
+    if(songIdIndex >= numSongs){
+      return
+    }
+    songIdSub = songId.slice(songIdIndex, Math.min(songIdIndex+100, numSongs))
+    songIdIndex = songIdIndex+100;
+
+    spotify.insertSong(token, userId, playlistId, songIdSub).then(function(){
+      recurse();
+    })
+    .catch(function (err) {
+      console.log('INSIDE ERROR SPOTIFY.JS');
+      if (err.statusCode === 401) {
+        throw new OldTokenError();
+      }
+      throw err;
+    });
+  }
+  recurse();
+  return;
+};
+
+
+
+
+
+
+
+
 ////////////////////////////////////////////////////
 //// for getting songs of an artist from Echo Nest//
 ////////////////////////////////////////////////////
@@ -368,5 +408,6 @@ var getArtistTracks = function (artistId) {
 module.exports = {
   getPlaylistTracks: getPlaylistTracks,
   getEmptyPlaylist: getEmptyPlaylist,
-  getArtistTracks: getArtistTracks
+  getArtistTracks: getArtistTracks,
+  addToSpotifyPlaylist: addToSpotifyPlaylist
 };

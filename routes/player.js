@@ -98,7 +98,7 @@ router.post('/saveplaylist/:playlistName', function(req, res) {
       return song.spotify_id;
     });
     
-    return spotify.insertSong(req.session.user.access_token, userId, playlistIdToPass, songUris);
+    return helper.addToSpotifyPlaylist(req.session.user.access_token, userId, playlistIdToPass, songUris);
   })
   .then(function(done) {
     res.json({success: true});

@@ -149,47 +149,24 @@ var refreshToken = function (refreshToken) {
 * insert song to particular user playlist
 */
 var insertSong = function(token, userId, playlistId, songId) {
-  var numSongs = songId.length;
-  var songIdIndex = 0;
-  var songIdSub;
-  var promises = [];
-
-  // while(songIdIndex < numSongs){
-  var recurse = function(){
-    console.log(songIdIndex);
-    if(songIdIndex >= numSongs){
-      return
-    }
-    songIdSub = songId.slice(songIdIndex, Math.min(songIdIndex+100, numSongs))
-    songIdIndex = songIdIndex+100;
 
     var option = {
       url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
       headers: { 'Authorization': 'Bearer ' + token },
       body:{
-        uris: songIdSub
+        uris: songId
       },
       json: true
     };
 
-    request.post(option).then(function(){
-      recurse();
-    }).catch(function (err) {
+    return request.post(option)
+    .catch(function (err) {
       console.log('INSIDE ERROR SPOTIFY.JS');
       if (err.statusCode === 401) {
         throw new OldTokenError();
       }
-      console.log(JSON.stringify(err.response.body.error));
       throw err;
     });
-
-    // promises.push(request.post(option).catch(function(err){console.log('PROMISE ARRAY'); console.log(err);}));
-  }
-  recurse();
-
-  // Promise.all(promises).then(function(done){
-    return;
-  // })
   
 };
 
