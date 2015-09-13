@@ -150,23 +150,23 @@ var refreshToken = function (refreshToken) {
 */
 var insertSong = function(token, userId, playlistId, songIdArray) {
 
-    var option = {
-      url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
-      headers: { 'Authorization': 'Bearer ' + token },
-      body:{
-        uris: songIdArray
-      },
-      json: true
-    };
+  var option = {
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
+    headers: { 'Authorization': 'Bearer ' + token },
+    body:{
+      uris: songIdArray
+    },
+    json: true
+  };
 
-    return request.post(option)
-    .catch(function (err) {
-      console.log('INSIDE ERROR SPOTIFY.JS');
-      if (err.statusCode === 401) {
-        throw new OldTokenError();
-      }
-      throw err;
-    });
+  return request.post(option)
+  .catch(function (err) {
+    console.log('INSIDE ERROR SPOTIFY.JS');
+    if (err.statusCode === 401) {
+      throw new OldTokenError();
+    }
+    throw err;
+  });
   
 };
 
