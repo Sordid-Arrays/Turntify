@@ -307,29 +307,28 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
 * Spotify limits adding 100 songs at a time to a playlist
 * This function calls spotify.insertSong w/ max 100 songs at a time
 */
-var addToSpotifyPlaylist = function(token, userId, playlistId, songId){
-  var numSongs = songId.length;
-  var songIdIndex = 0;
-  var songIdSub;
+var addToSpotifyPlaylist = function(token, userId, playlistId, songIdArray){
+  var numSongs = songIdArray.length;
+  var subArrStartIndex = 0;
+  var songIdSubArray;
 
+  // must recurse only after succesful spotify post
+  // b/c spotify throws error if sending many requests at once
   var recurse = function(){
-    console.log(songIdIndex);
-    if(songIdIndex >= numSongs){
-      return
+    console.log(subArrStartIndex);
+    // if we've passed in all songs, exit function
+    if(subArrStartIndex >= numSongs){
+      return;
     }
-    songIdSub = songId.slice(songIdIndex, Math.min(songIdIndex+100, numSongs))
-    songIdIndex = songIdIndex+100;
+    // create sub-array from starting point to min(start+100, or last song)
+    songIdSubArray = songIdArray.slice(subArrStartIndex, Math.min(subArrStartIndex+100, numSongs))
+    subArrStartIndex = subArrStartIndex+100;
 
-    spotify.insertSong(token, userId, playlistId, songIdSub).then(function(){
+    // add 100 songs to spotify playlist
+    spotify.insertSong(token, userId, playlistId, songIdSubArray).then(function(){
+      // on success, do the next 100 songs
       recurse();
     })
-    .catch(function (err) {
-      console.log('INSIDE ERROR SPOTIFY.JS');
-      if (err.statusCode === 401) {
-        throw new OldTokenError();
-      }
-      throw err;
-    });
   }
   recurse();
   return;
