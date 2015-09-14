@@ -1,5 +1,6 @@
 var request = require('request-promise');
 var queryString = require('query-string');
+var Promise = require('bluebird');
 var _ = require('underscore');
 
 if(process.env.SPOTIFY_CLIENT_ID){
@@ -145,22 +146,20 @@ var refreshToken = function (refreshToken) {
 };
 
 /**
-* insert song to particular user playlist
+* insert songs to particular user playlist
 */
-var insertSong = function(token, userId, playlistId, songId) {
-  var query = queryString.stringify({
-    //position: 0,
-    uris: songId
-  });
+var insertSong = function(token, userId, playlistId, songIdArray) {
 
   var option = {
-    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?' + query ,
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
     headers: { 'Authorization': 'Bearer ' + token },
+    body:{
+      uris: songIdArray
+    },
     json: true
   };
 
   return request.post(option)
-
   .catch(function (err) {
     console.log('INSIDE ERROR SPOTIFY.JS');
     if (err.statusCode === 401) {
@@ -168,6 +167,7 @@ var insertSong = function(token, userId, playlistId, songId) {
     }
     throw err;
   });
+  
 };
 
 /**
