@@ -159,6 +159,9 @@ md-dialog-content h2{
   max-height: 510px;
   margin-bottom: 20px;
 }
+.checkboxWrapper .playlistCheckContainer{
+  min-height: 43px;
+}
 md-checkbox md-progress-circular{
   float: right;
   margin-top: -24px;
