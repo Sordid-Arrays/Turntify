@@ -40,6 +40,21 @@ bower install
 nodemon
 ```
 
+##Tests
+To run front-end tests
+```sh
+gulp test-client
+```
+To run back-end tests
+```sh
+gulp test-server
+```
+To run all tests
+```sh
+gulp test
+```
+
+
 ## Contributing
 
 See [_CONTRIBUTING.md](_CONTRIBUTING.md) for contribution guidelines.
