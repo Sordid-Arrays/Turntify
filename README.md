@@ -41,15 +41,15 @@ nodemon
 ```
 
 ##Tests
-- Front-end Tests
+To run front-end tests
 ```sh
 gulp test-client
 ```
-- Back-end Tests
+To run back-end tests
 ```sh
 gulp test-server
 ```
-- All Tests
+To run all tests
 ```sh
 gulp test
 ```
