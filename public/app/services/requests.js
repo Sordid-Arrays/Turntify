@@ -71,10 +71,12 @@ angular.module('turntify.services', [])
   };
 
   var getArtistSongs = function (artistUri) {
+    console.log('artistUri ', artistUri);
     return $http({
       method: 'GET',
       url: 'song/artist/' + artistUri
     }).then(function (res) {
+      console.log('artist-res ', res);
       return res.data;
     }).catch(function (error) {
       console.log(error);
