@@ -55,10 +55,24 @@ GET searchartist?:qs
 * You will send the artist in req.query.artist
 * Returns array of objects with artist name spotify-artist-URI [ { artist_name: <str>, artist_uri: <str> } ]
 
-to get songs from specific artist
-'/song/artist/:artistId'
-artistId will be in req.params.artistId
-this is a get
+GET /song/artist/:artistUri
+* To get songs by a specific artist
+* artistUri is the spotify-uri of the artist
+* artistUri will be in req.params.artistId
+* Returns array of song objects [
+  {
+    spotify_id: { type: String, required: true},
+    echonest_id: { type: String, required: true},
+    artist_name: { type: String, required: false},
+    title: { type: String, required: false},
+    danceability: { type: Number, required: false},
+    energy: { type: Number, required: false},
+    duration: { type: Number, required: false},
+    album_name: { type: String, required: false},
+    turnt_bucket: {type: Number, required: false},
+    turntness: {type: Number, required: false}
+  }
+]
 
 
 
