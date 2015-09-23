@@ -2,12 +2,14 @@
 the base CSS template file, so it takes priority over the generic
 template (NOT BOOTSTRAP) without modifying the template file*/
 
+$primaryBGcolor: #303030;
+
 body{
   height: 100%;
-  background-color: #303030;
+  background-color: $primaryBGcolor;
 }
 md-content{
-  background-color: #303030;
+  background-color: $primaryBGcolor;
 }
 .bodyContainer, .viewContainer, .playerUIview{
   height: 100%;
