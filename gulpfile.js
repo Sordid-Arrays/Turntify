@@ -6,7 +6,8 @@ var gulp = require('gulp'),
   rename = require('gulp-rename'),
   del = require('del'),
   mocha = require('gulp-mocha')
-  server = require('karma').server;
+  server = require('karma').server
+  sass = require('gulp-sass');
 
 
 
@@ -23,7 +24,8 @@ gulp.task('lint', function(){
 
 gulp.task('styles', function(){
   return gulp
-    .src('./public/assets/css/*.css')
+    .src('./public/assets/css/*.scss')
+    .pipe(sass().on('error', sass.logError))
     .pipe(autoprefix(['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12.1']))
     .pipe(minifyCSS())
     .pipe(rename({'suffix': '.min'}))
