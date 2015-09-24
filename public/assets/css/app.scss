@@ -1,0 +1,364 @@
+/* This contains our App-Specific CSS. it will be loaded AFTER
+the base CSS template file, so it takes priority over the generic
+template (NOT BOOTSTRAP) without modifying the template file*/
+
+$primaryBGcolor: #303030;
+
+body{
+  height: 100%;
+  background-color: $primaryBGcolor;
+}
+md-content{
+  background-color: $primaryBGcolor;
+}
+.bodyContainer, .viewContainer, .playerUIview{
+  height: 100%;
+}
+.loginContainer{
+  padding-top: 1px;
+  height: 100%;
+  background: url("../images/milford_sound.jpg") no-repeat center 0% fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+
+  .appTitleContainer{
+    text-align: center;
+    color: #fff;
+  }
+  .appTitleContainer h1{
+    font-family: 'Fugaz One', cursive;
+    color: #fff;
+    font-size: 90px;
+    margin-top: 14%;
+    margin-bottom: 0;
+  }
+  .appTitleContainer p{
+    margin-top: -6px;
+    margin-bottom: 20px;
+  }
+}
+.loginButtonContainer{
+  text-align: center;
+}
+.playerContainer{
+  max-width: 100%;
+  margin: 0 auto;
+}
+.playerContainer>.playerRow{
+  height: 100%;
+      width: 80%;
+    margin: 0 auto;
+}
+.playerColumn{
+  padding: 8px;
+}
+.leftToolBar, rightToolBar, md-sideNav, md-sideNav md-content{
+      background-color: rgb(49, 49, 49);
+}
+md-sidenav {
+  height: 100%;
+  transition: all 1s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.md-sidenav-left>md-content{
+  padding-left: 20px;
+}
+.matchParamsWrapper {
+  md-content md-slider{
+        margin: 0 25px;
+  }
+  .sliderTitle{
+    margin-bottom: 12px;
+  }
+  .sliderLabel.lowEnd, .sliderLabel.highEnd{
+    margin-top: 0px;
+    margin-bottom: 14px;
+    float: left;
+  }
+  .sliderLabel.highEnd{
+    float: right;
+  }
+}
+md-slider.md-min .md-thumb:after {
+    background-color: #424242;
+}
+.customPlaylistContainer md-list-item .material-icons{
+      font-size: 18px;
+    height: 18px;
+    width: 18px;
+}
+.widgetContainer{
+  text-align: center;
+}
+.navContainer{
+  background-color: #212121;
+  color: #fff;
+}
+.navInnerContainer{
+  width: 80%;
+  margin: 0 auto;
+}
+.navInnerContainer h3{
+  float: left;
+  margin: 8px;
+  font-family: 'Fugaz One', cursive;
+  font-size: 22px;
+}
+.logoutButton{
+  float: right;
+}
+
+[ng-drag] {
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+[ng-drag].drag-over {
+  border: solid 1px red;
+}
+
+[ng-drag].dragging {
+  opacity: 0.5;
+}
+
+[ng-drop].drag-enter {
+  border: solid 5px red;
+}
+
+[ng-drop] div {
+  width: 100%;
+  position: relative;
+  z-index: 2;
+}
+
+.customPlaylistContainer{
+  padding-left: 15px;
+}
+.customPlaylistContainer .md-button.md-fab.md-mini{
+      line-height: 30px;
+      min-height: 0px;
+        width: 30px;
+    height: 30px;
+    float: right;
+    visibility: hidden;
+    background-color: rgb(74,74,74);
+}
+.customPlaylist, .checkboxWrapper, .turntometerWrapper{
+  background-color: rgb(66,66,66);
+}
+.turntometerWrapper{
+  margin-bottom: 20px;
+  clear: both;
+}
+.customPlaylist{
+  max-height: 374px;
+}
+md-dialog-content h2{
+  color: #fff;
+}
+.checkboxWrapper{
+  max-height: 510px;
+  margin-bottom: 20px;
+}
+.checkboxWrapper .playlistCheckContainer{
+  min-height: 43px;
+}
+md-checkbox md-progress-circular{
+  float: right;
+  margin-top: -24px;
+  top: 12px;
+}
+.songList md-list-item{
+  position: relative;
+  padding: 0 16px;
+}
+.songList md-list-item h3{
+  font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin: 0 0 6px 0;
+    line-height: 0.75em;
+}
+.songList md-list-item p{
+      font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    margin: 0 0 0 0;
+    line-height: 1.6em;
+        color: rgba(255,255,255,0.7);
+}
+md-list-item:hover .md-button.md-fab.md-mini{
+  visibility: visible;
+}
+md-list-item:hover .md-button.md-fab.md-mini:hover{
+  background-color: rgb(233,30,99);
+}
+.playlistControlContainer{
+  padding-right: 15px;
+}
+
+.playlistControlContainer h2{
+  margin-bottom: 12px;
+}
+.playlistControlContainer h4{
+  margin-top: 0px;
+  margin-bottom: 14px;
+}
+md-input-container label, md-input-container .md-placeholder{
+      color: rgba(255, 255, 255, 0.49);
+}
+
+.artist{
+  cursor: default;
+}
+.artist:hover{
+  /*background-color: SteelBlue;*/
+  background-color: #696969;
+}
+.autocomplete{
+  margin: 8px;
+}
+.artistSearchContain md-input-container{
+  padding-bottom: 2px;
+}
+.artistSearchContain md-list-item, .artistSearchContain md-list-item .md-list-item-inner{
+  min-height: 36px;
+}
+.widgetWrapper{
+  min-height: 384px;
+  min-width: 300px;
+}
+.exitIframeModal a.md-button.md-fab, .exitIframeModal  .md-button.md-fab{
+    position: absolute;
+    right: 0;
+    top: 0px;
+    background-color: rgb(74,74,74);
+}
+md-dialog .md-actions .md-button{
+  color: #fff;
+}
+
+/*.fade.ng-enter {
+  transition:0.5s linear all;
+  opacity:0;
+}
+
+.fade.ng-enter.ng-enter-active {
+  opacity:1;
+}
+
+.fade.ng-leave {
+  transition:0.5s linear all;
+  opacity:1;
+}
+.fade.ng-leave.ng-leave-active {
+  opacity:0;
+}*/
+
+
+
+/*.fade.ng-enter,
+.fade.ng-leave {
+    -webkit-transition: 1000ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -moz-transition: 1000ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -ms-transition: 1000ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    -o-transition: 1000ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+    transition: 1000ms cubic-bezier(0.250, 0.250, 0.750, 0.750) all;
+}
+
+.fade.ng-leave.ng-leave-active,
+.fade.ng-enter {
+    -webkit-transform: rotateX(-180deg) translatez(30px);
+    -moz-transform: rotateX(-180deg) translatez(30px);
+    -ms-transform: rotateX(-180deg) translatez(30px);
+    -o-transform: rotateX(-180deg) translatez(30px);
+    transform: rotateX(-180deg) translatez(30px);
+}
+
+.fade.ng-enter.ng-enter-active,
+.fade.ng-leave {
+    -webkit-transform: rotateX(0deg) translatez(30px);
+    -moz-transform: rotateX(0deg) translatez(30px);
+    -ms-transform: rotateX(0deg) translatez(30px);
+    -o-transform: rotateX(0deg) translatez(30px);
+    transform: rotateX(0deg) translatez(30px);
+}*/
+
+
+/*.fade.ng-enter {
+    -webkit-animation: enter 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    animation: enter 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    display: block;
+    position: relative;
+}
+@-webkit-keyframes enter {
+    from {
+        opacity: 0;
+        height: 0px;
+        left: -70px;
+    }
+    75% {
+        left: 15px;
+    }
+    to {
+        opacity: 1;
+        height: 30px;
+        left: 0px;
+    }
+}
+@keyframes enter {
+    from {
+        opacity: 0;
+        height: 0px;
+        left: -70px;
+    }
+    75% {
+        left: 15px;
+    }
+    to {
+        opacity: 1;
+        height: 30px;
+        left: 0px;
+    }
+}
+
+.fade.ng-leave {
+    -webkit-animation: leave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    animation: leave 600ms cubic-bezier(0.445, 0.050, 0.550, 0.950);
+    display: block;
+    position: relative;
+}
+@-webkit-keyframes leave {
+    to {
+        opacity: 0;
+        height: 0px;
+        left: -70px;
+    }
+    25% {
+        left: 15px;
+    }
+    from {
+        opacity: 1;
+        height: 30px;
+        left: 0px;
+    }
+}
+@keyframes leave {
+    to {
+        opacity: 0;
+        height: 0px;
+        left: -70px;
+    }
+    25% {
+        left: 15px;
+    }
+    from {
+        opacity: 1;
+        height: 30px;
+        left: 0px;
+    }
+}*/
