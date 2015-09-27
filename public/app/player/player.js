@@ -58,4 +58,19 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
   });
 
   vm.init();
+})
+
+.directive('existingPlaylist', function(){
+  var controller = function(){
+    var vm = this;
+  };
+
+  return {};
+
 });
+
+
+
+\
+
+
