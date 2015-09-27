@@ -65,12 +65,21 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
     var vm = this;
   };
 
-  return {};
+  return {
+    restrict: 'EA',
+    templateUrl: '/app/player/existingPlaylist.html',
+    scope: {},
+    controller: controller,
+    controllerAs: 'existingPlaylist',
+    bindToController: true,
+    link: function(){
+      console.log('existingPlaylist directive');
+    }
+  };
 
 });
 
 
 
-\
 
 
