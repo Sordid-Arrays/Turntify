@@ -78,9 +78,6 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
     controller: controller,
     controllerAs: 'existingPlaylist',
     bindToController: true,
-    link: function(scope, element, attrs, controller){
-      console.log('existingPlaylist directive', attrs.playlist);
-    }
   };
 
 });
