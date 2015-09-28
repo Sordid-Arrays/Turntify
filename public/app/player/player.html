@@ -21,20 +21,10 @@
 
         <div ng-hide="player.isPlaylistExist">Please make one or more playlists public.</div>
         <md-content class="checkboxWrapper md-whiteframe-z2" layout="column">
-          <div flex ng-repeat="playlist in player.playlists" class="playlistCheckContainer">
-            <md-checkbox ng-model="playlist.checked" ng-click="player.toggleCheck(playlist, !playlist.checked)">
-              {{ playlist.name }}
-              <md-progress-circular class="md-accent" md-diameter="20" md-mode="indeterminate" ng-if="playlist.loading"></md-progress-circular>
-            </md-checkbox>
-            <div class="playlistSpinnerWrapper" >
-            </div>
+          <div flex ng-repeat="playlst in player.playlists" class="playlistCheckContainer">
+            <existing-playlist playlist="playlst"></existing-playlist>
           </div>
 
-          <!-- loading-spinner -->
-<!--           <div class="playlistSpinnerWrapper" ng-if="player.playlistLoading">
-            <h4>Grabbing your playlist!</h4>
-            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
-          </div> -->
           <div ui-view="search"></div>
         </md-content>
     </md-content>
