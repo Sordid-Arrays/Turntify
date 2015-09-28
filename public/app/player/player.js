@@ -61,19 +61,25 @@ angular.module('turntify.player', ['ngMaterial', 'ngAnimate'])
 })
 
 .directive('existingPlaylist', function(){
-  var controller = function(){
+  var controller = function(PlayerService){
     var vm = this;
+    vm.toggleCheck = function(playlist, checked){
+      console.log('playlist: ', playlist);
+      PlayerService.toggleCheck(playlist, checked);
+    };
   };
 
   return {
     restrict: 'EA',
     templateUrl: '/app/player/existingPlaylist.html',
-    scope: {},
+    scope: {
+      playlist: '='
+    },
     controller: controller,
     controllerAs: 'existingPlaylist',
     bindToController: true,
-    link: function(){
-      console.log('existingPlaylist directive');
+    link: function(scope, element, attrs, controller){
+      console.log('existingPlaylist directive', attrs.playlist);
     }
   };
 

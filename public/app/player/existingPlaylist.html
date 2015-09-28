@@ -1,0 +1,4 @@
+<md-checkbox ng-model="existingPlaylist.playlist.checked" ng-click="existingPlaylist.toggleCheck(existingPlaylist.playlist, !existingPlaylist.playlist.checked)">
+  playlist: {{ existingPlaylist.playlist.name }}
+  <md-progress-circular class="md-accent" md-diameter="20" md-mode="indeterminate" ng-if="existingPlaylist.playlist.loading"></md-progress-circular>
+</md-checkbox>
