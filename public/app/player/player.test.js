@@ -27,6 +27,7 @@ describe('PlayerController', function(){
           });
         }),
 
+        // this func was moved to the existing-playlist directive
         toggleCheck: sinon.spy(function(){
           $scope.$broadcast('playlistCollectionUpdated');
         }),
@@ -71,20 +72,23 @@ describe('PlayerController', function(){
   });
 
 
-  describe('toggleCheck', function(){
-    it('should call PlayerService.toggleCheck', function(){
-      PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
-      expect(PlayerServiceMock.toggleCheck.calledOnce).to.equal(true);
-    });
+  // TOGGLE CHECK WAS MOVED TO THE EXISTING-PLAYLIST DIRECTIVE
+  // TODO: CREATE TESTS FOR THIS FUNCTION ALONG WITH THE REST OF THE DIRECTIVE
 
-    // updates playlistCounter after hearing broadcasted event from PlayerService
-    it('should update playlistCounter', function(){
-      PlayerServiceMock.playlistCounter++;
-      PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
-      expect(PlayerController.playlistCounter).to.equal(1);
-    });
+  // describe('toggleCheck', function(){
+  //   it('should call PlayerService.toggleCheck', function(){
+  //     PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
+  //     expect(PlayerServiceMock.toggleCheck.calledOnce).to.equal(true);
+  //   });
 
-  });
+  //   // updates playlistCounter after hearing broadcasted event from PlayerService
+  //   it('should update playlistCounter', function(){
+  //     PlayerServiceMock.playlistCounter++;
+  //     PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
+  //     expect(PlayerController.playlistCounter).to.equal(1);
+  //   });
+
+  // });
 
 
 });
