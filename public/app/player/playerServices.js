@@ -11,6 +11,8 @@ angular.module('turntify.player')
   PlayerService.playlistCollection = {};
   PlayerService.turntness = 1;
   PlayerService.customPlaylist = [];
+  PlayerService.username = "";
+  PlayerService.playlistCounter = 0;
 
 /**
 * PLAYER CONTROLLER services:
@@ -19,9 +21,11 @@ angular.module('turntify.player')
   PlayerService.getListOfPlaylists = function(){
     var context = this;
     return RequestService.getListOfPlaylists().then(function(data){
-      context.playlists = data;
-      console.log("playlists: ", context.playlists);
-      console.log("playlists type: ", typeof context.playlists[0]);
+     console.log("data: ", data);
+     context.playlists = data.playlists;
+     context.username = data.username;
+     console.log("playlists: ", context.playlists);
+     // console.log("playlists type: ", typeof context.playlists[0]);
     });
   };
 
@@ -53,14 +57,16 @@ angular.module('turntify.player')
     } else {
       this.playlistCollection[playlist.name] = { checked: true , songs: [] };
       this.getPlaylist(playlist);
-    };
+    }
   };
 
   //CALL THIS from param view, passing in the selected playlist and the checked property
   PlayerService.toggleCheck = function(playlist, checked){
     if(checked){
+      this.playlistCounter++;
       this.addPlaylist(playlist);
     } else {
+      this.playlistCounter--;
       this.removePlaylist(playlist);
     }
   };
@@ -94,7 +100,7 @@ angular.module('turntify.player')
   PlayerService.updateTurntness = function(turntness){
     if(arguments.length > 0){
       this.turntness = turntness;
-    };
+    }
     this.customPlaylist = turntToFilter(this.basePlaylist, this.turntness);
     $rootScope.$broadcast('playlistCollectionUpdated', this.turntness);
   };
@@ -107,7 +113,7 @@ angular.module('turntify.player')
         console.log("this.playlistCollection[key]: ", this.playlistCollection[key]);
         allBeforeUniq = allBeforeUniq.concat(this.playlistCollection[key].songs);
       }
-    };
+    }
     console.log("allBeforeUniq: ", allBeforeUniq);
     this.basePlaylist = _.uniq(allBeforeUniq);
     console.log("this.baseplaylist in customPlaylist: ", this.basePlaylist);
@@ -120,7 +126,7 @@ angular.module('turntify.player')
   };
   PlayerService.destroyExtras = function(){
     $rootScope.$broadcast('playlistCollectionUpdated');
-  }
+  };
   // PlayerService.addMatches = function(matches){
   //   this.customPlaylist = _.uniq(this.customPlaylist.concat(matches));
   //   console.log("current playlist: ", this.customPlaylist);
@@ -137,7 +143,9 @@ angular.module('turntify.player')
   /**
   * TODO: refactor 'generateWidget' into a custom directive. Perhaps it gets called from here?
   */
-  PlayerService.generateWidget = function(name){
+  PlayerService.generateWidget = function(){
+
+    console.log("turntness in widg: ", PlayerService.turntness);
     var el = angular.element(document.querySelector('.widgetWrapper'));
     el.empty();
     var trackIds = [];
@@ -146,7 +154,7 @@ angular.module('turntify.player')
     for(var i=0; i<length; i++){
       trackIds.push(playlist[i]['spotify_id'].slice(14));
     }
-    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset:'+name+':'+trackIds+'" frameborder="0" allowtransparency="true"></iframe>');
+    el.append('<iframe src="https://embed.spotify.com/?uri=spotify:trackset: Preview for energy level '+PlayerService.turntness+':'+trackIds+'&view=coverart" width="300" height="380" frameborder="0" allowtransparency="true"></iframe>');
   };
 
   // add an artist playlist on playlist list and load song to custom playlist
@@ -162,6 +170,7 @@ angular.module('turntify.player')
 
     var artistPlaylist = {name: artist.artist_name, spotify_id: artist.artist_uri, checked: true, loading: true};
     context.playlists.push(artistPlaylist);
+    this.playlistCounter++;
     context.playlistCollection[artist.artist_name] = {checked: true,
                                                       songs: []};
     RequestService.getArtistSongs(artist.artist_uri)

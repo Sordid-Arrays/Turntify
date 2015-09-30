@@ -38,7 +38,7 @@ function mockGetUser() {
 
 function mockGetUserPlaylists(userId) {
   return nock('https://api.spotify.com')
-  .get('/v1/users/' + userId + '/playlists')
+  .get('/v1/users/' + userId + '/playlists?' + queryString.stringify({limit: 50}))
   .reply(200, {
     items: [
       {
@@ -129,46 +129,6 @@ function mockSearchArtist(searchWords) {
   });
 }
 
-// /**
-// * !! FOR INTEGRATION TESTING !!
-// * get new token
-// */
-// var getTestingToken = function () {
-//   var authOptions = {
-//     url: 'https://accounts.spotify.com/api/token',
-//     form: {
-//       grant_type: 'client_credentials'
-//     },
-//     headers: {
-//       'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64'))
-//     },
-//     json: true
-//   };
-//
-//   //request to get the actual token
-//   return new Promise(function (resolve, reject) {
-//     request.post(authOptions, function(error, response, body) {
-//       if (error || response.statusCode !== 200) {
-//         reject(error);
-//         return;
-//       }
-//       resolve(body);
-//     });
-//   });
-// };
-//
-// beforeEach(function (done) {
-//   getTestingToken()
-//   .then(function (body) {
-//     console.log('GOT TOKEN', accessToken);
-//     accessToken = body.access_token;
-//     done();
-//   })
-//   .catch(function (err) {
-//     console.error(err);
-//   });
-// });
-
 describe('getUser', function () {
   it('should return Promise', function (done) {
     api = mockGetUser();
@@ -212,7 +172,7 @@ describe('getUserPlaylist', function () {
     });
   });
   it('should throw OldTokenError when the token is expired', function (done) {
-    api = mockOldToken('/v1/users/' + userId + '/playlists');
+    api = mockOldToken('/v1/users/' + userId + '/playlists?' + queryString.stringify({limit: 50}));
     spotify.getUserPlaylist(userId, oldToken)
     .catch(function (err) {
       expect(err).to.be.instanceof(spotify.OldTokenError);
@@ -285,23 +245,9 @@ describe('refresh token', function () {
   });
 });
 
-describe('insert song', function() {
+describe('insertSong', function() {
   it('should insert song to playlist', function (done) {
-    var songsStr = [
-      {
-        "_id":"any id",
-        "spotify_id":"spotify id",
-        "echonest_id":"echonest id",
-        "artist_name":"artist name",
-        "title":"song name",
-        "danceability":0.5,
-        "energy":0.477005,
-        "duration":284.89333,
-        "album_name":"album name",
-        "turnt_bucket":4,
-        "__v":0
-      }
-    ];
+    var songsStr = 'uri1, uri2';
     api = mockInsertSong(userId, playlistId, songsStr);
     spotify.insertSong(accessToken, userId, playlistId, songsStr)
     .then(function (result) {
@@ -312,8 +258,8 @@ describe('insert song', function() {
   });
 });
 
-describe('create spotify playlist', function() {
-  it('should create new playlist', function (done) {
+describe('createPlaylist', function() {
+  it('should get new playlist id', function (done) {
     var playlistName = 'NameOfPlaylist';
 
     api = mockCreatePlaylist(userId, playlistName);
@@ -325,26 +271,12 @@ describe('create spotify playlist', function() {
   });
 });
 
-describe('remove tracks from spotify playlist', function() {
+describe('removeTracks', function() {
   it('should delete tracks from spotify playlist', function(done) {
-    var songsStr = [
-      {
-        "_id":"any id",
-        "spotify_id":"spotify id",
-        "echonest_id":"echonest id",
-        "artist_name":"artist name",
-        "title":"song name",
-        "danceability":0.5,
-        "energy":0.477005,
-        "duration":284.89333,
-        "album_name":"album name",
-        "turnt_bucket":4,
-        "__v":0
-      }
-    ];
+    var songUris = ['uri1', 'uri2'];
 
-    api = mockRemoveTracks(userId, playlistId, songsStr);
-    spotify.removeTracks(userId, playlistId, accessToken, songsStr)
+    api = mockRemoveTracks(userId, playlistId, songUris);
+    spotify.removeTracks(userId, playlistId, accessToken, songUris)
     .then(function(result) {
       //spotify will return object result with snapshot_id if remove successful
       expect(result.snapshot_id).to.be.a('string');
@@ -353,12 +285,9 @@ describe('remove tracks from spotify playlist', function() {
   });
 });
 
-describe('search artists', function() {
+describe('searchArtist', function() {
   var searchWords = ['any', 'word'];
 
-  if(typeof searchWords === 'string'){
-    searchWords = [searchWords];
-  }
   it('should return Promise', function (done) {
     api = mockSearchArtist(searchWords);
     spotify.searchArtist(searchWords, accessToken)

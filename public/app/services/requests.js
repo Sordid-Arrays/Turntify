@@ -78,8 +78,8 @@ angular.module('turntify.services', [])
       return res.data;
     }).catch(function (error) {
       console.log(error);
-    })
-  }
+    });
+  };
 
 /**
 * Dummy request to practice to testing the mock backend.

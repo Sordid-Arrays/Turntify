@@ -4,10 +4,11 @@ var Promise = require('bluebird');
 var spotify = require('../middlewares/spotify.js');
 var echonest = require('../middlewares/echonest.js');
 var util = require('../helpers/util');
-var Songs = require('../models/songs.js');
 var GhettoNest = require('../models/ghettoNest.js');
 
 var UNKNOWN = 'unknown';
+
+
 
 ////////////////////////////////////////////////////
 ////  for getting tracks of playlists           ////
@@ -27,6 +28,8 @@ function mapUris(playlist) {
   .value();
 }
 
+
+
 /*
 *  call spotify API to get tracks in the playlist
 */
@@ -41,6 +44,8 @@ function getSpotifySongs(userId, playlistId, index, req) {
     });
   });
 }
+
+
 
 /*
 *  function to get data of songs
@@ -104,6 +109,8 @@ function getEchonestData (playlistSongs) {
   });
 }
 
+
+
 /*
 *  Map the response form Echo Nest API and save it in DB
 *  1) called with update = false in getPlaylistTracks
@@ -149,6 +156,8 @@ function saveGhettonest(echonestSongs, update) {
   return newGhettoNests;
 }
 
+
+
 /*
 *  Make up Ghettonest data from Spotify data
 */
@@ -180,6 +189,9 @@ function makeUpGhettonest (remainderUris, spotifyDatas) {
   return newGhettoNests;
 }
 
+
+
+
 /*
 *  1) Get Spotify URIs of songs in a playlist
 *  2) Get Echo Nest data
@@ -200,7 +212,7 @@ function getPlaylistTracks(userId, playlistId, req) {
     * keep getting spotify URIs synchronously until get all songs in the playlist
     * and get Echo Nest data asynchronously
     */
-    function makeRequest(index, first) {
+    function get100Tracks(index, first) {
       reqCount ++;
       getSpotifySongs(userId, playlistId, index, req)
       .then(function (playlistSongs) {
@@ -216,7 +228,7 @@ function getPlaylistTracks(userId, playlistId, req) {
           // Spotify send back 100 songs at most for 1 request
           index += 100;
           // recurse with second argument false not to get into this loop again
-          makeRequest(index, false);
+          get100Tracks(index, false);
         }
 
         return getEchonestData(playlistSongs);
@@ -247,9 +259,11 @@ function getPlaylistTracks(userId, playlistId, req) {
       });
     }
 
-    makeRequest(0, true);
+    get100Tracks(0, true);
   });
 }
+
+
 
 
 ////////////////////////////////////////////////////
@@ -303,6 +317,41 @@ var getEmptyPlaylist = function(req, userId, playlistName, playlists) {
 };
 
 
+
+/*
+* Spotify limits adding 100 songs at a time to a playlist
+* This function calls spotify.insertSong w/ max 100 songs at a time
+*/
+var addToSpotifyPlaylist = function(token, userId, playlistId, songIdArray){
+  var numSongs = songIdArray.length;
+  var subArrStartIndex = 0;
+  var songIdSubArray;
+
+  // must recurse only after succesful spotify post
+  // b/c spotify throws error if sending many requests at once
+  var recurse = function(){
+    console.log(subArrStartIndex);
+    // if we've passed in all songs, exit function
+    if(subArrStartIndex >= numSongs){
+      return;
+    }
+    // create sub-array from starting point to min(start+100, or last song)
+    songIdSubArray = songIdArray.slice(subArrStartIndex, Math.min(subArrStartIndex+100, numSongs))
+    subArrStartIndex = subArrStartIndex+100;
+
+    // add 100 songs to spotify playlist
+    spotify.insertSong(token, userId, playlistId, songIdSubArray).then(function(){
+      // on success, do the next 100 songs
+      recurse();
+    })
+  }
+  recurse();
+  return;
+};
+
+
+
+
 ////////////////////////////////////////////////////
 //// for getting songs of an artist from Echo Nest//
 ////////////////////////////////////////////////////
@@ -327,8 +376,7 @@ var getArtistTracks = function (artistId) {
       console.log('total: ', total);
       // make requests asynchronously to get all songs
       while (reqCount ===0 || index < total) {
-        echonestRequest(index);
-        // Echo Nest sends back 100 songs at most for 1 request
+        get100Tracks(index);
         index += 100;
       }
     })
@@ -338,7 +386,7 @@ var getArtistTracks = function (artistId) {
 
     // Internal function
     // Make an API request and  wait for all responses come back
-    function echonestRequest (index) {
+    function get100Tracks (index) {
       reqCount ++;
       echonest.getArtistTracks(artistId, index)
 
@@ -370,5 +418,6 @@ var getArtistTracks = function (artistId) {
 module.exports = {
   getPlaylistTracks: getPlaylistTracks,
   getEmptyPlaylist: getEmptyPlaylist,
-  getArtistTracks: getArtistTracks
+  getArtistTracks: getArtistTracks,
+  addToSpotifyPlaylist: addToSpotifyPlaylist
 };

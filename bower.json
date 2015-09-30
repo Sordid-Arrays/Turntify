@@ -18,13 +18,14 @@
     "angular": "~1.4.3",
     "angular-ui-router": "~0.2.15",
     "angular-cookies": "~1.4.3",
-    "angular-material": "~0.10.1-rc5",
+    "angular-material": "master",
     "angular-messages": "~1.4.4",
     "bower": "*",
     "install": "~1.0.4",
     "console.loge": "https://github.com/toddmotto/console.loge.git#~1.0.0",
     "underscore": "~1.8.3",
-    "ngDraggable": "~0.1.8"
+    "ngDraggable": "~0.1.8",
+    "angular-material-clone": "https://github.com/Sordid-Arrays/Angular-Material.git"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.3"

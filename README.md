@@ -1,6 +1,6 @@
-# Project Name
+# Atuned
 
-> Pithy project description
+> Atuned is a tool for building and listening to Spotify playlists, sonically-tailored to your energy level
 
 ## Team
 
@@ -14,21 +14,18 @@
 1. [Requirements](#requirements)
 1. [Development](#development)
     1. [Installing Dependencies](#installing-dependencies)
-    1. [Tasks](#tasks)
 1. [Team](#team)
 1. [Contributing](#contributing)
 
 ## Usage
 
-> Some usage instructions
+> You must have a Spotify-premium account to use this app.
 
 ## Requirements
 
-- Node 0.10.x
-- Redis 2.6.x
-- Postgresql 9.1.x
-- etc
-- etc
+- Node 0.12.x
+- npm 2.x
+- MongoDB 3.x
 
 ## Development
 
@@ -40,13 +37,25 @@ From within the root directory:
 sudo npm install -g bower
 npm install
 bower install
+nodemon
 ```
 
-### Roadmap
-
-View the project roadmap [here](LINK_TO_PROJECT_ISSUES)
+##Tests
+To run front-end tests
+```sh
+gulp test-client
+```
+To run back-end tests
+```sh
+gulp test-server
+```
+To run all tests
+```sh
+gulp test
+```
 
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for contribution guidelines.
+See [_CONTRIBUTING.md](_CONTRIBUTING.md) for contribution guidelines.
+See [_STYLE-GUIDE.md](_STYLE-GUIDE.md) for style guidelines.

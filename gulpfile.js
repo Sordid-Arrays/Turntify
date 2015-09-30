@@ -4,7 +4,10 @@ var gulp = require('gulp'),
   autoprefix = require('gulp-autoprefixer'),
   minifyCSS = require('gulp-minify-css'),
   rename = require('gulp-rename'),
-  del = require('del');
+  del = require('del'),
+  mocha = require('gulp-mocha')
+  server = require('karma').server
+  sass = require('gulp-sass');
 
 
 
@@ -21,12 +24,40 @@ gulp.task('lint', function(){
 
 gulp.task('styles', function(){
   return gulp
-    .src('./public/assets/css/*.css')
+    .src('./public/assets/css/*.scss')
+    .pipe(sass().on('error', sass.logError))
     .pipe(autoprefix(['> 1%', 'last 3 versions', 'Firefox ESR', 'Opera 12.1']))
     .pipe(minifyCSS())
     .pipe(rename({'suffix': '.min'}))
     .pipe(gulp.dest('./public/assets/css/min/'));
 });
 
+// second arg tells gulp that test-client must complete before test-server can run
+gulp.task('test-server', ['test-client'], function(){
+  return gulp.src(['tests/db/*.js', 'tests/server/**/*.js'], { read: false })
+    .pipe(mocha({
+      reporter: 'spec'
+    }))
+    // make sure test suite exits once complete
+    .once('error', function () {
+        process.exit(1);
+    })
+    .once('end', function () {
+        process.exit();
+    });
+});
+
+// takes in a callback (done) so the engine knows when this task is done
+gulp.task('test-client', function(done) {
+  server.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, function(exitCode) {
+    console.log('Karma has exited with ' + exitCode);
+    done(exitCode);
+  });
+});
+
+gulp.task('test', ['test-client','test-server']);
 
 gulp.task('default', ['deleteMin', 'styles', 'lint']);

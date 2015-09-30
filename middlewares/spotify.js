@@ -1,5 +1,6 @@
 var request = require('request-promise');
 var queryString = require('query-string');
+var Promise = require('bluebird');
 var _ = require('underscore');
 
 if(process.env.SPOTIFY_CLIENT_ID){
@@ -145,55 +146,20 @@ var refreshToken = function (refreshToken) {
 };
 
 /**
-* get 10 songs related to the search
+* insert songs to particular user playlist
 */
-var searchSong = function(searchWords, token, numSongToGet) {
-  var qs = queryString.stringify({
-    type: 'track',
-    limit: numSongToGet
-  });
-  qs += '&q=' + searchWords.join('+') + '*';
-  var option = {
-    url: 'https://api.spotify.com/v1/search?' + qs,
-    headers: { 'Authorization': 'Bearer ' + token },
-    json: true
-  };
-
-  return request.get(option)
-
-  .catch(function (err) {
-    if (err.statusCode === 401) {
-      throw new OldTokenError();
-    }
-    console.error(err);
-    throw err;
-  });
-};
-
-/**
-* insert song to particular user playlist
-*/
-var insertSong = function(token, userId, playlistId, songId) {
-  // console.log('SONGID: ', songId);
-  // console.log('OWNERID: ', ownerId);
-  // console.log('PLAYLISTID: ', playlistId);
-  // console.log('TOKEN: ', token);
-  var query = queryString.stringify({
-    //position: 0,
-    uris: songId
-    //uris: 'spotify:track:40riOy7x9W7GXjyGp4pjAv,spotify:track:5bC230viUaRu4uXGQkQDRV'
-  });
+var insertSong = function(token, userId, playlistId, songIdArray) {
 
   var option = {
-    //url: 'https://api.spotify.com/v1/users/' + ownerId + '/playlists/' + playlistId + '/tracks?position=0&uris=' + songId ,
-    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks?' + query ,
+    url: 'https://api.spotify.com/v1/users/' + userId + '/playlists/' + playlistId + '/tracks',
     headers: { 'Authorization': 'Bearer ' + token },
+    body:{
+      uris: songIdArray
+    },
     json: true
   };
-  console.log(option.url);
 
   return request.post(option)
-
   .catch(function (err) {
     console.log('INSIDE ERROR SPOTIFY.JS');
     if (err.statusCode === 401) {
@@ -201,13 +167,13 @@ var insertSong = function(token, userId, playlistId, songId) {
     }
     throw err;
   });
+  
 };
 
 /**
 * create playlist in spotify
 */
 var createPlaylist = function(token, userId, playlistName) {
-  console.log("args in createPlaylist: ", token, userId, playlistName);
   var option = {
     url: 'https://api.spotify.com/v1/users/' + userId + '/playlists' ,
     headers: { 'Authorization': 'Bearer ' + token },
@@ -261,6 +227,7 @@ var searchArtist = function(searchWords, token) {
     type: 'artist',
     limit: 10
   });
+  // do not escape "+" and "*" with queryString
   qs += '&q=' + searchWords.join('+') + '*';
   var option = {
     url: 'https://api.spotify.com/v1/search?' + qs,
@@ -286,7 +253,6 @@ module.exports = {
   getToken: getToken,
   refreshToken: refreshToken,
   OldTokenError: OldTokenError,
-  searchSong: searchSong,
   insertSong: insertSong,
   createPlaylist: createPlaylist,
   removeTracks: removeTracks,
