@@ -15,7 +15,8 @@ beforeEach( function() {
     });
   });
 
-
+  // load the templates
+  module('app/existing_playlist/existingPlaylist.html');
 
   inject(function(_$rootScope_, _$compile_, _$q_){
 
@@ -25,7 +26,7 @@ beforeEach( function() {
     var $q = _$q_;
     var $compile = _$compile_;
 
-    var container = $('<existing-playlist playlist="{"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}"></existing-playlist>');
+    var container = angular.element('<existing-playlist playlist="{"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}"></existing-playlist>');
 
     $compile(container)($scope);
     $scope.$digest();
