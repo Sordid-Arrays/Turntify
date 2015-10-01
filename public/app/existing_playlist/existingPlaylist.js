@@ -11,7 +11,7 @@ angular.module('turntify.player')
 
   return {
     restrict: 'EA',
-    templateUrl: '/app/existing_playlist/existingPlaylist.html',
+    templateUrl: 'app/existing_playlist/existingPlaylist.html',
     scope: {
       playlist: '='
     },

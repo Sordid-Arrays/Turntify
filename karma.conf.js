@@ -70,7 +70,7 @@ module.exports = function(config) {
       //   if you'd like to generate modules dynamically
       //   htmlPath is a originalPath stripped and/or prepended
       //   with all provided suffixes and prefixes
-      // moduleName: 'foo'
+      moduleName: 'foo'
     },
 
 
