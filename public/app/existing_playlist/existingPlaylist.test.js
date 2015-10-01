@@ -30,8 +30,8 @@ describe('existingPlaylistDirective', function(){
       $q = _$q_;
       $compile = _$compile_;
 
-      mockPlaylist = {"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"};
-      container = angular.element('<existing-playlist playlist=""></existing-playlist>');
+      mockPlaylist = JSON.stringify({'name':'hip-hop-party','playlistId':'21eoa7xkMxlfjluPVlublp'});
+      container = angular.element('<existing-playlist playlist='+mockPlaylist +'></existing-playlist>');
 
       $compile(container)($scope);
       $scope.$digest();
