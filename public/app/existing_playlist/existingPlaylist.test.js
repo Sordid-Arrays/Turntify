@@ -15,12 +15,12 @@ describe('existingPlaylistDirective', function(){
             $scope.$broadcast('playlistCollectionUpdated');
           }),
 
-          };
+        };
       });
     });
 
     // load the templates
-    module('foo');
+    module('directiveTemplates');
 
     inject(function(_$rootScope_, _$compile_, _$q_){
 
@@ -39,12 +39,17 @@ describe('existingPlaylistDirective', function(){
   });
 
 
-  it('should run the tests', function(){
-    
-      console.log('from existing playlist ',container);
-
+  it('should contain an md-checkbox element', function(){
+    var checkbox = container.find('md-checkbox');
+    expect(checkbox[0]).to.exist;
+      console.log('from existing playlist ', container);
   });
 
+  it('should print the playlist name', function(){
+    var playlistName = container.find('span').html();
+    console.log('PLAYLIST NAME', playlistName);
+    expect(playlistName).to.have.string('hip-hop-party');
+  });
 
 
 });

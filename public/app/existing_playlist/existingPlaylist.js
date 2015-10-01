@@ -17,10 +17,7 @@ angular.module('turntify.player')
     },
     controller: controller,
     controllerAs: 'existingPlaylist',
-    bindToController: true,
-    link: function(scope, element, attr){
-      console.log('link-test thing', PlayerService.toggleCheck);
-    }
+    bindToController: true
   };
 
 })
