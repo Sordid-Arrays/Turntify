@@ -1,6 +1,6 @@
 
 angular.module('turntify.player')
-.directive('existingPlaylist', function(){
+.directive('existingPlaylist', function(PlayerService){
   var controller = function(PlayerService){
     var vm = this;
     vm.toggleCheck = function(playlist, checked){
@@ -17,7 +17,10 @@ angular.module('turntify.player')
     },
     controller: controller,
     controllerAs: 'existingPlaylist',
-    bindToController: true
+    bindToController: true,
+    link: function(scope, element, attr){
+      console.log('link-test thing', PlayerService.toggleCheck);
+    }
   };
 
 })
