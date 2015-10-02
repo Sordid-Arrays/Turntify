@@ -4,7 +4,7 @@ angular.module('turntify.player')
   var controller = function(PlayerService){
     var vm = this;
     vm.toggleCheck = function(playlist, checked){
-      console.log('playlist: ', playlist);
+      // console.log('playlist: ', playlist);
       PlayerService.toggleCheck(playlist, checked);
     };
   };
@@ -20,4 +20,4 @@ angular.module('turntify.player')
     bindToController: true
   };
 
-})
+});

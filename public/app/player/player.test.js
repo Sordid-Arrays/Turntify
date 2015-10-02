@@ -76,15 +76,9 @@ describe('PlayerController', function(){
   // TODO: CREATE TESTS FOR THIS FUNCTION ALONG WITH THE REST OF THE DIRECTIVE
 
   describe('udpatePlaylistCounter', function(){
-  //   it('should call PlayerService.toggleCheck', function(){
-  //     PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
-  //     expect(PlayerServiceMock.toggleCheck.calledOnce).to.equal(true);
-  //   });
 
-    // updates playlistCounter after hearing broadcasted event from PlayerService
     it('should update playlistCounter on broadcasted event', function(){
       PlayerServiceMock.playlistCounter++;
-      // PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
       $scope.$broadcast('playlistCollectionUpdated');
       expect(PlayerController.playlistCounter).to.equal(1);
     });

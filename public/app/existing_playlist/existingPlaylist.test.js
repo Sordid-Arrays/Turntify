@@ -11,7 +11,6 @@ describe('existingPlaylistDirective', function(){
         return {
 
           toggleCheck: sinon.spy(function(){
-            console.log('mock playerservice togglecheck works!!!!');
             $scope.$broadcast('playlistCollectionUpdated');
           }),
 
@@ -43,7 +42,7 @@ describe('existingPlaylistDirective', function(){
   it('should contain an md-checkbox element', function(){
     var checkbox = container.find('md-checkbox');
     expect(checkbox[0]).to.exist;
-    console.log('from existing playlist ', container);
+    // console.log('from existing playlist ', container);
   });
 
   it('should print the playlist name', function(){
