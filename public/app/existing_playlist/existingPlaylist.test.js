@@ -24,14 +24,14 @@ describe('existingPlaylistDirective', function(){
 
     inject(function(_$rootScope_, _$compile_, _$q_){
 
-
       // The injector unwraps the underscores (_) from around the parameter names when matching
       $scope = _$rootScope_.$new();
       $q = _$q_;
       $compile = _$compile_;
 
-      mockPlaylist = JSON.stringify({'name':'hip-hop-party','playlistId':'21eoa7xkMxlfjluPVlublp'});
-      container = angular.element('<existing-playlist playlist='+mockPlaylist +'></existing-playlist>');
+      $scope.mockPlaylist = {'name':'hip hop party','playlistId':'21eoa7xkMxlfjluPVlublp'};
+
+      container = angular.element('<existing-playlist playlist="mockPlaylist"></existing-playlist>');
 
       $compile(container)($scope);
       $scope.$digest();
@@ -47,8 +47,7 @@ describe('existingPlaylistDirective', function(){
 
   it('should print the playlist name', function(){
     var playlistName = container.find('span').html();
-    console.log('PLAYLIST NAME', playlistName);
-    expect(playlistName).to.have.string('hip-hop-party');
+    expect(playlistName).to.have.string('hip hop party');
   });
 
 
