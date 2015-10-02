@@ -1,17 +1,17 @@
 
 angular.module('turntify.player')
-.directive('existingPlaylist', function(){
+.directive('existingPlaylist', function(PlayerService){
   var controller = function(PlayerService){
     var vm = this;
     vm.toggleCheck = function(playlist, checked){
-      console.log('playlist: ', playlist);
+      // console.log('playlist: ', playlist);
       PlayerService.toggleCheck(playlist, checked);
     };
   };
 
   return {
     restrict: 'EA',
-    templateUrl: '/app/existing_playlist/existingPlaylist.html',
+    templateUrl: 'app/existing_playlist/existingPlaylist.html',
     scope: {
       playlist: '='
     },
@@ -20,4 +20,4 @@ angular.module('turntify.player')
     bindToController: true
   };
 
-})
+});

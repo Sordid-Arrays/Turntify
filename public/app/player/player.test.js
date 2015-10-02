@@ -27,6 +27,7 @@ describe('PlayerController', function(){
           });
         }),
 
+        // this func was moved to the existing-playlist directive
         toggleCheck: sinon.spy(function(){
           $scope.$broadcast('playlistCollectionUpdated');
         }),
@@ -71,16 +72,14 @@ describe('PlayerController', function(){
   });
 
 
-  describe('toggleCheck', function(){
-    it('should call PlayerService.toggleCheck', function(){
-      PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
-      expect(PlayerServiceMock.toggleCheck.calledOnce).to.equal(true);
-    });
+  // TOGGLE CHECK WAS MOVED TO THE EXISTING-PLAYLIST DIRECTIVE
+  // TODO: CREATE TESTS FOR THIS FUNCTION ALONG WITH THE REST OF THE DIRECTIVE
 
-    // updates playlistCounter after hearing broadcasted event from PlayerService
-    it('should update playlistCounter', function(){
+  describe('udpatePlaylistCounter', function(){
+
+    it('should update playlistCounter on broadcasted event', function(){
       PlayerServiceMock.playlistCounter++;
-      PlayerController.toggleCheck({"name":"hip hop party","playlistId":"21eoa7xkMxlfjluPVlublp"}, true);
+      $scope.$broadcast('playlistCollectionUpdated');
       expect(PlayerController.playlistCounter).to.equal(1);
     });
 
