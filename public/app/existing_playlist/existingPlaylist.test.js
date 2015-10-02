@@ -51,7 +51,7 @@ describe('existingPlaylistDirective', function(){
     expect(playlistName).to.have.string('hip hop party');
   });
 
-  it('should call PlayerService.togglecheck on click', function(){
+  it('should call PlayerService.toggleCheck on click', function(){
     var checkbox = container.find('md-checkbox')[0];
     checkbox.click();
     expect(PlayerServiceMock.toggleCheck.calledOnce).to.equal(true);
