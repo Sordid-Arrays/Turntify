@@ -1,15 +1,15 @@
-var gulp = require('gulp'),
-  jshint = require('gulp-jshint'),
-  stylish = require('jshint-stylish'),
-  autoprefix = require('gulp-autoprefixer'),
-  minifyCSS = require('gulp-minify-css'),
-  rename = require('gulp-rename'),
-  del = require('del'),
-  mocha = require('gulp-mocha'),
-  server = require('karma').server,
-  sass = require('gulp-sass');
+import gulp from 'gulp';
+import jshint from 'gulp-jshint';
+import stylish from 'jshint-stylish';
+import autoprefix from 'gulp-autoprefixer';
+import minifyCSS from 'gulp-minify-css';
+import rename from 'gulp-rename';
+import del from 'del';
+import mocha from 'gulp-mocha';
+import karma from 'karma';
+import sass from 'gulp-sass';
 
-
+var server = karma.server;
 
 gulp.task('deleteMin', function(){
   del(['./public/assets/css/min/*'], function(err){});
