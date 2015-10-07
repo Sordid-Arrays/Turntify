@@ -69,7 +69,7 @@ describe('sortByTurntness', function () {
 });
 
 describe('solveDuplication', function () {
-  playlistItems = [{
+  var playlistItems = [{
     track: {
       id: '1Oy7KTvDoZKtozZnznYObC',
       name: 'Killer Cars',

@@ -5,8 +5,8 @@ var gulp = require('gulp'),
   minifyCSS = require('gulp-minify-css'),
   rename = require('gulp-rename'),
   del = require('del'),
-  mocha = require('gulp-mocha')
-  server = require('karma').server
+  mocha = require('gulp-mocha'),
+  server = require('karma').server,
   sass = require('gulp-sass');
 
 
@@ -39,11 +39,12 @@ gulp.task('test-server', ['test-client'], function(){
       reporter: 'spec'
     }))
     // make sure test suite exits once complete
-    .once('error', function () {
-        process.exit(1);
+    .once('error', function (err) {
+      console.log('error & exit');
+      process.exit();
     })
     .once('end', function () {
-        process.exit();
+      process.exit();
     });
 });
 
