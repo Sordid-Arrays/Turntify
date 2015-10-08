@@ -11,18 +11,18 @@ import sass from 'gulp-sass';
 
 var server = karma.server;
 
-gulp.task('deleteMin', function(){
+gulp.task('deleteMin', () => {
   del(['./public/assets/css/min/*'], function(err){});
 });
 
-gulp.task('lint', function(){
+gulp.task('lint', () => {
   return  gulp
     .src(['./public/app/**/*.js', './app.js', './controller/*.js', './models/*.js', './middlewares/*.js'])
     .pipe(jshint())
     .pipe(jshint.reporter(stylish));
 });
 
-gulp.task('styles', function(){
+gulp.task('styles', () => {
   return gulp
     .src('./public/assets/css/*.scss')
     .pipe(sass().on('error', sass.logError))
@@ -33,27 +33,27 @@ gulp.task('styles', function(){
 });
 
 // second arg tells gulp that test-client must complete before test-server can run
-gulp.task('test-server', ['test-client'], function(){
+gulp.task('test-server', ['test-client'], () => {
   return gulp.src(['tests/db/*.js', 'tests/server/**/*.js'], { read: false })
     .pipe(mocha({
       reporter: 'spec'
     }))
     // make sure test suite exits once complete
-    .once('error', function (err) {
+    .once('error', (err) => {
       console.log('error & exit');
       process.exit();
     })
-    .once('end', function () {
+    .once('end', () => {
       process.exit();
     });
 });
 
 // takes in a callback (done) so the engine knows when this task is done
-gulp.task('test-client', function(done) {
+gulp.task('test-client', (done) =>  {
   server.start({
     configFile: __dirname + '/karma.conf.js',
     singleRun: true
-  }, function(exitCode) {
+  }, (exitCode) => {
     console.log('Karma has exited with ' + exitCode);
     done(exitCode);
   });
